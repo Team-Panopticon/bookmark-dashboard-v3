@@ -12,10 +12,9 @@ class BookmarkApi {
     return bookMarks[0];
   }
 
-  static async getTree(): Promise<Item> {
+  static async getTree(): Promise<Item | undefined> {
     const bookMarks = await chrome.bookmarks.getTree();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [main, _] = bookMarks[0].children || [];
+    const [main] = bookMarks[0].children || [];
     return main;
   }
 
