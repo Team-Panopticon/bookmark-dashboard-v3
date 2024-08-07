@@ -18,7 +18,7 @@ type Actions = {
   setTooltipOn: (on: boolean) => void;
 };
 
-export const useModalStore = create<State & Actions>()((set) => ({
+export const tooltipStore = create<State & Actions>()((set) => ({
   tooltipPosition: { x: 0, y: 0 },
   tooltipText: "",
   tooltipShow: false,
