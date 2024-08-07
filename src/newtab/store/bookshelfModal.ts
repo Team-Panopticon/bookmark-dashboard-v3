@@ -1,10 +1,5 @@
 import { create } from "zustand";
 
-export interface BookshelfModalParams {
-  id: string;
-  zIndex: number;
-}
-
 export interface State {
   currentZIndex: number;
   bookshelfModals: BookshelfModals;
@@ -20,7 +15,7 @@ export interface BookshelfModals {
   [key: string]: { zIndex: number; id: string };
 }
 interface Actions {
-  openBookshelfModal: (bookshelfModalData: BookshelfModalParams) => void;
+  openBookshelfModal: (modalId: string) => void;
   focusBookshelfModal: (timeStampId: string) => void;
   closeBookshelfModal: (timeStampId: string) => void;
   closeBookshelfModalById: (id: string) => void;
@@ -39,8 +34,7 @@ export const bookshelfModalStore = create<State & Actions>((set, get) => ({
   bookshelfModals: {},
   currentPosition: { top: 0, right: 0 },
 
-  openBookshelfModal: (bookshelfModalData) => {
-    const { id } = bookshelfModalData;
+  openBookshelfModal: (id) => {
     const timeStampId = new Date().toString();
     set((state) => ({
       bookshelfModals: {
