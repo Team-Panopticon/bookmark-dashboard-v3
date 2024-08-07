@@ -1,5 +1,3 @@
-// import { Item, FolderItem } from "@/shared/types/store";
-
 import { FolderItem, Item } from "../../types/store";
 
 class BookmarkApi {
