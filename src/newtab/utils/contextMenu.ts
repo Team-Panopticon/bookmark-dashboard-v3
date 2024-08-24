@@ -1,7 +1,7 @@
 import { ContextMenuTarget, contextMenuStore } from "../store/contextMenu";
 
 export const openContextMenu = (
-  event: PointerEvent,
+  event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   target: ContextMenuTarget
 ): void => {
   const { setTarget, setPosition, setShow } = contextMenuStore();

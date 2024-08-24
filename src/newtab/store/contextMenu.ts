@@ -7,7 +7,7 @@ export type Position = {
 };
 
 export type ContextMenuTarget = {
-  item: Item;
+  item?: Item;
   type: "FILE" | "FOLDER" | "BACKGROUND";
 };
 

@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { Item } from "../../types/store";
 import { tooltipStore } from "../store/tooltip";
 import BookmarkApi from "../utils/bookmarkApi";
@@ -13,10 +12,11 @@ import { refreshTargetStore } from "../store/refreshTarget";
 interface Props {
   openUrl: (url: string) => void;
   onClickFolder: (item: Item) => void;
+  originGridContainer?: HTMLDivElement | null;
 }
 
 export const useDragAndDrop = (props: Props) => {
-  const { openUrl, onClickFolder } = props;
+  const { openUrl, onClickFolder, originGridContainer } = props;
   const { setTooltipOn } = tooltipStore();
   const { updateRecentRefreshTimes } = refreshTargetStore();
 
@@ -61,15 +61,17 @@ export const useDragAndDrop = (props: Props) => {
   let originCol = -1;
   let holderRow: number | string = -1;
   let holderCol: number | string = -1;
-  const originGridContainerRef = useRef<HTMLElement>();
-  const mousedownHandler = async (item: Item, mousedown: MouseEvent) => {
+  const mousedownHandler = async (item: Item, mousedown: React.MouseEvent) => {
     offTooltip();
     mousedown.preventDefault();
     originRow = originCol = holderRow = holderCol = -1;
 
-    const gridContainerEl = originGridContainerRef.current as HTMLElement;
-    originGridContainerId = gridContainerEl.dataset.parentId;
-    prevVisitedContainerTimestamp = gridContainerEl.dataset.timestamp;
+    if (!originGridContainer) {
+      return;
+    }
+
+    originGridContainerId = originGridContainer.dataset.parentId;
+    prevVisitedContainerTimestamp = originGridContainer.dataset.timestamp;
 
     const startTime = new Date().getTime();
     const { pageX: startX, pageY: startY } = mousedown;
@@ -99,7 +101,7 @@ export const useDragAndDrop = (props: Props) => {
     positionHolderEl.classList.add("positionHolderEl-component");
 
     changingEl.classList.remove("btn-wrapper");
-    gridContainerEl.insertBefore(positionHolderEl, changingEl);
+    originGridContainer.insertBefore(positionHolderEl, changingEl);
     changingEl.style.zIndex = "9999";
     changingEl.style.left = `${startX - offsetX}px`;
     changingEl.style.top = `${startY - offsetY}px`;
@@ -115,7 +117,7 @@ export const useDragAndDrop = (props: Props) => {
       const targetGridContainerEl = getContainerEl(e.pageX, e.pageY);
 
       if (!targetGridContainerEl) {
-        gridContainerEl.insertBefore(positionHolderEl, null);
+        originGridContainer.insertBefore(positionHolderEl, null);
         positionHolderEl.style.gridColumn = String(originCol);
         positionHolderEl.style.gridRow = String(originRow);
         return;
@@ -128,7 +130,7 @@ export const useDragAndDrop = (props: Props) => {
 
       const isDragOverBetweenContainer =
         targetGridContainerTimestamp !== prevVisitedContainerTimestamp;
-      const isWithinContainer = targetGridContainerEl === gridContainerEl;
+      const isWithinContainer = targetGridContainerEl === originGridContainer;
 
       if (isDragOverBetweenContainer) {
         positionHolderEl.remove();
@@ -249,7 +251,8 @@ export const useDragAndDrop = (props: Props) => {
           return;
         }
 
-        const isBetweenContainer = targetGridContainerEl !== gridContainerEl;
+        const isBetweenContainer =
+          targetGridContainerEl !== originGridContainer;
         const isWithinContainer = !isBetweenContainer;
         const isInPadding = holderRow === "auto" || holderCol === "auto";
 
@@ -298,7 +301,7 @@ export const useDragAndDrop = (props: Props) => {
 
           // 같은 폴더 모달 간에 이동하는 경우 refresh
           if (
-            targetGridContainerParentId === gridContainerEl.dataset.parentId
+            targetGridContainerParentId === originGridContainer.dataset.parentId
           ) {
             updateRecentRefreshTimes([originGridContainerId || ""]);
           }
@@ -403,7 +406,5 @@ export const useDragAndDrop = (props: Props) => {
 
   return {
     mousedownHandler,
-    /** @TODO react의 useRef로도 동작 가능한지 확인 */
-    originGridContainerRef,
   };
 };

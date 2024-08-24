@@ -8,9 +8,6 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 interface Props {
   id: string;
   /** Vue의 Ref를 사용해서 넘겨주고 있었음 */
-  folderItem: Item;
-  setFolderItem: Dispatch<SetStateAction<Item>>;
-  /** Vue의 Ref를 사용해서 넘겨주고 있었음 */
   itemRefs: HTMLDivElement[];
 }
 
@@ -30,12 +27,11 @@ export const useBookshelfLayout = (props: Props) => {
   const {
     id,
     /** @TODO folder을 주입받을지, 여기서 생성해서 관리할지, Store로 만들지 고민 필요 */
-    folderItem,
-    setFolderItem,
     itemRefs,
   } = props;
   const { recentRefreshTimes } = refreshTargetStore();
   const [lastRefreshTime, setLastRefreshTime] = useState(new Date().getTime());
+  const [folderItem, setFolderItem] = useState<Item>();
 
   /**
    * Data
@@ -83,7 +79,7 @@ export const useBookshelfLayout = (props: Props) => {
       Math.floor((elItem.offsetTop - GRID_CONTAINER_PADDING) / itemHeight) + 1;
 
     // 저장된 초기 row, col 값을 folderItem에 반영
-    const originalItem: Item | undefined = folderItem.children?.find(
+    const originalItem: Item | undefined = folderItem?.children?.find(
       (item) => item.id === id
     );
 
@@ -103,5 +99,10 @@ export const useBookshelfLayout = (props: Props) => {
       originalItem.row = row;
       originalItem.col = col;
     }
+  };
+
+  return {
+    folderItem,
+    setFolderItem,
   };
 };
