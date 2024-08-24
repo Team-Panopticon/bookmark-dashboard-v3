@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.positionHolderEl-component {
+  opacity: 0.5;
+}
+
+#root {
+  height: 100vh;
+}
+
+html {
+  overflow-y: auto !important;
+}

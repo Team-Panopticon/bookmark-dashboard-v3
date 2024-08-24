@@ -16,6 +16,9 @@ module.exports = {
       { allowConstantExport: true },
     ],
     "@typescript-eslint/no-unused-vars": "warn",
-    "tailwindcss/no-custom-classname": ["warn", { whitelist: ["btn-wrapper"] }],
+    "tailwindcss/no-custom-classname": [
+      "warn",
+      { whitelist: ["grid-container", "btn-wrapper"] },
+    ],
   },
 };

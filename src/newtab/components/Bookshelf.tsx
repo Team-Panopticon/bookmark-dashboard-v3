@@ -4,7 +4,7 @@ import type { FolderItem, Item } from "../../types/store";
 import { useBookshelfAction } from "../hooks/useBookshelfAction";
 import { useBookshelfLayout } from "../hooks/useBookshelfLayout";
 import { useDragAndDrop } from "../hooks/useDragAndDrop";
-import { ITEM_WIDTH } from "../utils/constant";
+import { ITEM_HEIGHT, ITEM_WIDTH } from "../utils/constant";
 
 export interface DarkModeEvent {
   darkMode: boolean;
@@ -73,8 +73,11 @@ const Bookshelf: FC<Props> = (props) => {
 
   return (
     <div
-      // eslint-disable-next-line tailwindcss/no-custom-classname
-      className="grid-container relative grid size-full overflow-y-auto"
+      className="grid-container relative grid size-full overflow-y-auto p-gridContainerPadding"
+      style={{
+        gridTemplateColumns: `repeat(auto-fill, ${ITEM_WIDTH}px)`,
+        gridAutoRows: `${ITEM_HEIGHT}px`,
+      }}
       ref={originGridContainerRef}
       data-parent-id={id}
       data-timestamp={Date.now()}
@@ -88,7 +91,7 @@ const Bookshelf: FC<Props> = (props) => {
         <>
           {item.children ? (
             <div
-              className="btn-wrapper flex h-item w-item justify-center bg-none"
+              className="btn-wrapper flex justify-center bg-none"
               //
               data-id={item.id}
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -102,11 +105,20 @@ const Bookshelf: FC<Props> = (props) => {
               data-col={item?.col}
               onClick={(e) => mousedownHandler(item, e)}
             >
-              폴더 : {item.title}
+              <div className="flex h-full  flex-col items-center gap-2">
+                <button className="h-item w-item">
+                  <div className="text-[50px] text-yellow-500">
+                    {item.title.charAt(0)}
+                  </div>
+                  <p className="line-clamp-2 transform-none overflow-hidden text-ellipsis break-words text-xs leading-5 tracking-[.2px]">
+                    {item.title}
+                  </p>
+                </button>
+              </div>
             </div>
           ) : (
             <div
-              className="btn-wrapper flex h-item w-item justify-center bg-none"
+              className="btn-wrapper flex justify-center bg-none"
               data-id={item.id}
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
@@ -119,7 +131,16 @@ const Bookshelf: FC<Props> = (props) => {
               data-col={item?.col}
               onMouseDown={(e) => mousedownHandler(item, e)}
             >
-              파일 : {item.title}
+              <div className="flex h-full  flex-col items-center gap-2">
+                <button className="h-item w-item">
+                  <div className="text-[50px] text-yellow-500">
+                    {item.title.charAt(0)}
+                  </div>
+                  <p className="line-clamp-2 transform-none overflow-hidden text-ellipsis break-words text-xs leading-5 tracking-[.2px]">
+                    {item.title}
+                  </p>
+                </button>
+              </div>
             </div>
           )}
         </>
