@@ -4,6 +4,7 @@ import type { FolderItem, Item } from "../../types/store";
 import { useBookshelfAction } from "../hooks/useBookshelfAction";
 import { useBookshelfLayout } from "../hooks/useBookshelfLayout";
 import { useDragAndDrop } from "../hooks/useDragAndDrop";
+import { ITEM_WIDTH } from "../utils/constant";
 
 export interface DarkModeEvent {
   darkMode: boolean;
@@ -87,7 +88,8 @@ const Bookshelf: FC<Props> = (props) => {
         <>
           {item.children ? (
             <div
-              className="btn-wrapper"
+              className="btn-wrapper flex h-item w-item justify-center bg-none"
+              //
               data-id={item.id}
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
@@ -104,7 +106,7 @@ const Bookshelf: FC<Props> = (props) => {
             </div>
           ) : (
             <div
-              className="btn-wrapper"
+              className="btn-wrapper flex h-item w-item justify-center bg-none"
               data-id={item.id}
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
