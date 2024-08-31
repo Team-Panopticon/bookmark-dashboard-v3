@@ -67,8 +67,13 @@ const Bookshelf: FC<Props> = (props) => {
   /**
    * @TODO
    *
-   * tailwindcss를 이용한 스타일링
-   * - CSS, DOM구조 맞추기
+   * - Modal 구현
+   *
+   *
+   * - react-draggable을 이용, 드래그 구현
+   *
+   * - react-moveable 살펴보기
+   *   https://www.npmjs.com/package/react-moveable
    */
 
   return (
@@ -92,7 +97,6 @@ const Bookshelf: FC<Props> = (props) => {
           {item.children ? (
             <div
               className="btn-wrapper flex justify-center bg-none"
-              //
               data-id={item.id}
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
@@ -103,7 +107,10 @@ const Bookshelf: FC<Props> = (props) => {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               data-col={item?.col}
-              onClick={(e) => mousedownHandler(item, e)}
+              onMouseDown={(e) => {
+                //left
+                e.button === 0 && mousedownHandler(item, e);
+              }}
             >
               <div className="flex h-full  flex-col items-center gap-2">
                 <button className="h-item w-item">

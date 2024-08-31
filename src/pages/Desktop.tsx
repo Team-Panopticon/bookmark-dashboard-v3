@@ -2,6 +2,7 @@ import { FC, useCallback, useEffect } from "react";
 import { refreshTargetStore } from "../newtab/store/refreshTarget";
 import { Item } from "../types/store";
 import Bookshelf from "../newtab/components/Bookshelf";
+import BookshelfModalContainer from "../newtab/components/BookshelfModalContainer";
 
 const Desktop: FC = () => {
   const { updateRecentRefreshTimes } = refreshTargetStore();
@@ -33,7 +34,7 @@ const Desktop: FC = () => {
     <div className="size-full">
       <Bookshelf id="1"></Bookshelf>
       {/* <CreateFolderModal></CreateFolderModal> */}
-      {/* <BookshelfModalContainer></BookshelfModalContainer> */}
+      <BookshelfModalContainer></BookshelfModalContainer>
       {/* <ContextMenuContainer /> */}
       {/* <UpdateModal /> */}
       {/* <Tooltip /> */}
