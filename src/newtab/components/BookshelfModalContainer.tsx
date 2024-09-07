@@ -13,6 +13,7 @@ const BookshelfModalContainer: FC = () => {
           <BookshelfModal
             key={timestampId}
             id={value.id}
+            zIndex={value.zIndex}
             timestampId={timestampId}
           />
         );
@@ -23,18 +24,23 @@ const BookshelfModalContainer: FC = () => {
 
 const BookshelfModal = ({
   id,
+  zIndex,
   timestampId,
 }: {
   id: string;
+  zIndex: number;
   timestampId: string;
 }) => {
   const targetRef = useRef<HTMLDivElement>(null);
   const dragTargetRef = useRef<HTMLDivElement>(null);
-  const { closeBookshelfModal } = bookshelfModalStore();
+  const { closeBookshelfModal, focusBookshelfModal } = bookshelfModalStore();
 
   return (
-    <div className={"container"}>
+    <div className="container">
       <div
+        onMouseDown={() => {
+          focusBookshelfModal(timestampId);
+        }}
         className="absolute flex size-[500px] flex-col rounded-lg border bg-neutral-50 shadow-2xl"
         style={{
           top: "10px",
@@ -43,6 +49,7 @@ const BookshelfModal = ({
           maxHeight: "auto",
           minWidth: "auto",
           minHeight: "auto",
+          zIndex,
         }}
         ref={targetRef}
       >
