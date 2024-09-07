@@ -16,8 +16,8 @@ export interface BookshelfModals {
 }
 interface Actions {
   openBookshelfModal: (modalId: string) => void;
-  focusBookshelfModal: (timeStampId: string) => void;
-  closeBookshelfModal: (timeStampId: string) => void;
+  focusBookshelfModal: (timestampId: string) => void;
+  closeBookshelfModal: (timestampId: string) => void;
   closeBookshelfModalById: (id: string) => void;
   updateBookshelfModalCurrentPosition: (position: Position) => void;
   getBookshelfModalCurrentPosition: (
@@ -35,44 +35,48 @@ export const bookshelfModalStore = create<State & Actions>((set, get) => ({
   currentPosition: { top: 0, right: 0 },
 
   openBookshelfModal: (id) => {
-    const timeStampId = new Date().toString();
+    const timestampId = new Date().toString();
     set((state) => ({
       bookshelfModals: {
         ...state.bookshelfModals,
-        [timeStampId]: { id, zIndex: state.currentZIndex + OFFSET },
+        [timestampId]: {
+          id,
+          zIndex: state.currentZIndex + OFFSET,
+        },
       },
       currentZIndex: state.currentZIndex + OFFSET,
     }));
-    console.debug("open bookshelfModal >> ", timeStampId);
+    console.debug("open bookshelfModal >> ", timestampId);
   },
 
-  focusBookshelfModal: (timeStampId) => {
+  focusBookshelfModal: (timestampId) => {
     set((state) => {
       const newBookshelfModals = { ...state.bookshelfModals };
-      newBookshelfModals[timeStampId].zIndex = state.currentZIndex + OFFSET;
+      newBookshelfModals[timestampId].zIndex = state.currentZIndex + OFFSET;
       return {
         bookshelfModals: newBookshelfModals,
         currentZIndex: state.currentZIndex + OFFSET,
       };
     });
-    console.debug("focus bookshelfModal >> ", timeStampId);
+    console.debug("focus bookshelfModal >> ", timestampId);
   },
 
-  closeBookshelfModal: (timeStampId) => {
+  closeBookshelfModal: (timestampId) => {
     set((state) => {
       const newBookshelfModals = { ...state.bookshelfModals };
-      delete newBookshelfModals[timeStampId];
+      delete newBookshelfModals[timestampId];
       return { bookshelfModals: newBookshelfModals };
     });
-    console.debug("close bookshelfModal >> ", timeStampId);
+    console.debug("close bookshelfModal >> ", timestampId);
   },
 
+  /** @TODO 미사용?  */
   closeBookshelfModalById: (id) => {
     set((state) => {
       const newBookshelfModals = Object.keys(state.bookshelfModals)
-        .filter((timeStampId) => state.bookshelfModals[timeStampId].id !== id)
-        .reduce((acc, timeStampId) => {
-          acc[timeStampId] = state.bookshelfModals[timeStampId];
+        .filter((timestampId) => state.bookshelfModals[timestampId].id !== id)
+        .reduce((acc, timestampId) => {
+          acc[timestampId] = state.bookshelfModals[timestampId];
           return acc;
         }, {} as BookshelfModals);
       return { bookshelfModals: newBookshelfModals };
