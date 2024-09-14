@@ -21,7 +21,7 @@ export const isDarkModeEvent = (event: any): event is DarkModeEvent => {
 type Props = {
   id: string;
   folderItems?: FolderItem[];
-  routeInFolder: (id: string, title: string) => void;
+  routeInFolder?: (id: string, title: string) => void;
 };
 
 const Bookshelf: FC<Props> = (props) => {

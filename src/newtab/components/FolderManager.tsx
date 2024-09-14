@@ -1,16 +1,17 @@
-import { useRef, type FC } from "react";
-import { bookshelfModalStore } from "../store/bookshelfModal";
+import { useRef, useState, type FC } from "react";
+import { folderStore } from "../store/folder";
 import Bookshelf from "./Bookshelf";
 import Moveable from "react-moveable";
+import { FolderItem } from "../../types/store";
 
-const BookshelfModalContainer: FC = () => {
-  const { bookshelfModals } = bookshelfModalStore();
+const FolderManager: FC = () => {
+  const { folders } = folderStore();
 
   return (
     <div>
-      {Object.entries(bookshelfModals).map(([timestampId, value]) => {
+      {Object.entries(folders).map(([timestampId, value]) => {
         return (
-          <BookshelfModal
+          <Folder
             key={timestampId}
             id={value.id}
             zIndex={value.zIndex}
@@ -22,7 +23,7 @@ const BookshelfModalContainer: FC = () => {
   );
 };
 
-const BookshelfModal = ({
+const Folder = ({
   id,
   zIndex,
   timestampId,
@@ -33,7 +34,17 @@ const BookshelfModal = ({
 }) => {
   const targetRef = useRef<HTMLDivElement>(null);
   const dragTargetRef = useRef<HTMLDivElement>(null);
-  const { closeBookshelfModal, focusBookshelfModal } = bookshelfModalStore();
+  const { closeFolder, focusFolder } = folderStore();
+
+  /**
+   * @TODO
+   * BookshelfModal에서 북마크에 대한 정보를 가지고 있어야함.
+   *    - 모달에서 헤더를 그리고 있는데 자기 자신의 title도 모름
+   * action layout drag&drop -> 부모에서 가져야할 것과 자식이 가져야할 것을 나눈다.
+   *
+   * 1. Chrome bookmark api를 사용하는 곳을 부모 컴포넌트(BookshelfModal)로 옮긴다.
+   * 2. 자식 컴포넌트(ex. Bookshelf)는 받아온 데이터를 가지고 layout, drag&drop, action을 처리한다.
+   */
 
   const [folderItems, setFolderItems] = useState<FolderItem[]>([]);
   const bookshelfId = folderItems[folderItems.length - 1]?.id || id;
@@ -54,7 +65,7 @@ const BookshelfModal = ({
     <div className="container">
       <div
         onMouseDown={() => {
-          focusBookshelfModal(timestampId);
+          focusFolder(timestampId);
         }}
         className="absolute flex size-[500px] flex-col rounded-lg border bg-neutral-50 shadow-2xl"
         style={{
@@ -75,7 +86,7 @@ const BookshelfModal = ({
           <div>{folderItems.map((item) => item.title).join(" / ")}</div>
           <button
             onClick={() => {
-              closeBookshelfModal(timestampId);
+              closeFolder(timestampId);
             }}
             className="aspect-square size-4 rounded-full bg-red-500 text-center text-[10px]"
           ></button>
@@ -108,4 +119,4 @@ const BookshelfModal = ({
   );
 };
 
-export default BookshelfModalContainer;
+export default FolderManager;

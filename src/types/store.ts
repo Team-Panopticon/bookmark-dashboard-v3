@@ -6,7 +6,7 @@ export interface Item extends chrome.bookmarks.BookmarkTreeNode {
 
 export type modalInfo = {
   folderItem: Item;
-  showBookshelfModal: boolean;
+  showFolder: boolean;
   zIndex: number;
 };
 

@@ -1,11 +1,11 @@
 import { Item } from "../../types/store";
 import { openContextMenu } from "../utils/contextMenu";
 import { tooltipStore } from "../store/tooltip";
-import { bookshelfModalStore } from "../store/bookshelfModal";
+import { folderStore } from "../store/folder";
 
 interface Props {
   folderItem?: Item;
-  routeInFolder: (id: string, title: string) => void;
+  routeInFolder?: (id: string, title: string) => void;
   /** @TODO 리액트 식으로 처리 */
   // context: SetupContext<Record<string, any>>;
 }
@@ -15,7 +15,7 @@ export const useBookshelfAction = (props: Props) => {
 
   const { setTooltipPosition, setTooltipShow, setTooltipText } = tooltipStore();
 
-  const { openBookshelfModal } = bookshelfModalStore();
+  const { openFolder } = folderStore();
 
   const openTooltip = (title: string, event: MouseEvent) => {
     const targetElement = event.target as HTMLElement;
@@ -46,9 +46,9 @@ export const useBookshelfAction = (props: Props) => {
     const isDesktop = folderItem?.parentId === "0";
     const { id, title } = item;
     if (isDesktop) {
-      openBookshelfModal(id);
+      openFolder(id);
     } else {
-      routeInFolder(id, title);
+      routeInFolder?.(id, title);
     }
     setTooltipShow(false);
   };
