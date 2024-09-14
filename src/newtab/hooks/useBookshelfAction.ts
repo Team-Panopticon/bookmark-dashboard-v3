@@ -5,12 +5,13 @@ import { bookshelfModalStore } from "../store/bookshelfModal";
 
 interface Props {
   folderItem?: Item;
+  routeInFolder: (id: string, title: string) => void;
   /** @TODO 리액트 식으로 처리 */
   // context: SetupContext<Record<string, any>>;
 }
 
 export const useBookshelfAction = (props: Props) => {
-  const { folderItem } = props;
+  const { folderItem, routeInFolder } = props;
 
   const { setTooltipPosition, setTooltipShow, setTooltipText } = tooltipStore();
 
@@ -43,12 +44,11 @@ export const useBookshelfAction = (props: Props) => {
 
   const onClickFolder = (item: Item): void => {
     const isDesktop = folderItem?.parentId === "0";
-    const { id } = item;
+    const { id, title } = item;
     if (isDesktop) {
       openBookshelfModal(id);
     } else {
-      /** @TODO 리액트 식으로 처리 */
-      // context.emit("routeInFolder", id);
+      routeInFolder(id, title);
     }
     setTooltipShow(false);
   };

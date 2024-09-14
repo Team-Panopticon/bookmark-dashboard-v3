@@ -21,10 +21,11 @@ export const isDarkModeEvent = (event: any): event is DarkModeEvent => {
 type Props = {
   id: string;
   folderItems?: FolderItem[];
+  routeInFolder: (id: string, title: string) => void;
 };
 
 const Bookshelf: FC<Props> = (props) => {
-  const { id } = props;
+  const { id, routeInFolder } = props;
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("darkMode") === "true" || false
   );
@@ -38,7 +39,7 @@ const Bookshelf: FC<Props> = (props) => {
   });
 
   const { openTooltip, closeTooltip, openUrl, openContextMenu, onClickFolder } =
-    useBookshelfAction({ folderItem });
+    useBookshelfAction({ folderItem, routeInFolder });
 
   const { mousedownHandler } = useDragAndDrop({
     openUrl,
@@ -67,13 +68,10 @@ const Bookshelf: FC<Props> = (props) => {
   /**
    * @TODO
    *
-   * - Modal 구현
-   *
-   *
-   * - react-draggable을 이용, 드래그 구현
-   *
-   * - react-moveable 살펴보기
+   * - react-moveable 사용
    *   https://www.npmjs.com/package/react-moveable
+   *
+   * - 아이콘 위치가 텍스트의 길이 (1줄, 2줄) 에 따라 다르다
    */
 
   return (

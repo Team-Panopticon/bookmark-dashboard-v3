@@ -35,6 +35,21 @@ const BookshelfModal = ({
   const dragTargetRef = useRef<HTMLDivElement>(null);
   const { closeBookshelfModal, focusBookshelfModal } = bookshelfModalStore();
 
+  const [folderItems, setFolderItems] = useState<FolderItem[]>([]);
+  const bookshelfId = folderItems[folderItems.length - 1]?.id || id;
+  // folderRoute(): BreadCrumb[] {
+  //   return this.folderItems.map((item) => ({
+  //     disabled: false,
+  //     text: item.title,
+  //     "data-id": item.id,
+  //   }));
+  // },
+  const routeInFolder = (id: string, title: string) => {
+    setFolderItems((prev) => [...prev, { id, title }]);
+    // 해줘야하는가?
+    // await this.routePathRefresh();
+  };
+
   return (
     <div className="container">
       <div
@@ -57,7 +72,7 @@ const BookshelfModal = ({
           ref={dragTargetRef}
           className="flex h-12 w-full items-center justify-between rounded-t-lg bg-neutral-300 p-2 hover:border-b "
         >
-          <div>HEADER</div>
+          <div>{folderItems.map((item) => item.title).join(" / ")}</div>
           <button
             onClick={() => {
               closeBookshelfModal(timestampId);
@@ -65,7 +80,11 @@ const BookshelfModal = ({
             className="aspect-square size-4 rounded-full bg-red-500 text-center text-[10px]"
           ></button>
         </div>
-        <Bookshelf id={id} />
+        <Bookshelf
+          id={bookshelfId}
+          key={bookshelfId}
+          routeInFolder={routeInFolder}
+        />
       </div>
       <Moveable
         target={targetRef}
