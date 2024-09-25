@@ -1,14 +1,16 @@
 import { FC, useCallback, useEffect } from "react";
 import { refreshTargetStore } from "../newtab/store/refreshTarget";
-import { Item } from "../types/store";
+import { File } from "../types/store";
 import Bookshelf from "../newtab/components/Bookshelf";
 import FolderManager from "../newtab/components/FolderManager";
+import { useFolder } from "../newtab/hooks/useBookshelfLayout";
 
 const Desktop: FC = () => {
   const { updateRecentRefreshTimes } = refreshTargetStore();
+  const { folder } = useFolder("1");
 
   const setBookmarksEventHandlers = useCallback(() => {
-    chrome.bookmarks.onCreated.addListener((_, bookmark: Item) => {
+    chrome.bookmarks.onCreated.addListener((_, bookmark: File) => {
       const { parentId } = bookmark;
       parentId && updateRecentRefreshTimes([parentId]);
     });
@@ -32,7 +34,7 @@ const Desktop: FC = () => {
 
   return (
     <div className="size-full">
-      <Bookshelf id="1"></Bookshelf>
+      {folder && <Bookshelf id="1" folder={folder}></Bookshelf>}
       {/* <CreateFolderModal></CreateFolderModal> */}
       <FolderManager></FolderManager>
       {/* <ContextMenuContainer /> */}

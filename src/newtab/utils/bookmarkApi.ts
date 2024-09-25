@@ -1,18 +1,18 @@
-import { FolderItem, Item } from "../../types/store";
+import { File } from "../../types/store";
 
 class BookmarkApi {
-  static async get(ids: string[]): Promise<FolderItem[]> {
+  static async get(ids: string[]): Promise<File[]> {
     const bookMarks = await chrome.bookmarks.get(ids);
 
     return bookMarks;
   }
 
-  static async getSubTree(id: string): Promise<Item> {
+  static async getSubTree(id: string): Promise<File> {
     const bookMarks = await chrome.bookmarks.getSubTree(id);
     return bookMarks[0];
   }
 
-  static async getTree(): Promise<Item | undefined> {
+  static async getTree(): Promise<File | undefined> {
     const bookMarks = await chrome.bookmarks.getTree();
     const [main] = bookMarks[0].children || [];
     return main;
