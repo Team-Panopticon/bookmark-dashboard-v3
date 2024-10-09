@@ -1,17 +1,17 @@
-import { Item } from "../../types/store";
+import { File } from "../../types/store";
 import { openContextMenu } from "../utils/contextMenu";
 import { tooltipStore } from "../store/tooltip";
 import { folderStore } from "../store/folder";
 
 interface Props {
-  folderItem?: Item;
-  routeInFolder?: (id: string, title: string) => void;
+  folder?: File;
+  routeInFolder?: (file: File) => void;
   /** @TODO 리액트 식으로 처리 */
   // context: SetupContext<Record<string, any>>;
 }
 
 export const useBookshelfAction = (props: Props) => {
-  const { folderItem, routeInFolder } = props;
+  const { folder, routeInFolder } = props;
 
   const { setTooltipPosition, setTooltipShow, setTooltipText } = tooltipStore();
 
@@ -42,13 +42,13 @@ export const useBookshelfAction = (props: Props) => {
     setTooltipShow(false);
   };
 
-  const onClickFolder = (item: Item): void => {
-    const isDesktop = folderItem?.parentId === "0";
-    const { id, title } = item;
+  const onClickFolder = (file: File): void => {
+    const isDesktop = folder?.parentId === "0";
+    const { id } = file;
     if (isDesktop) {
       openFolder(id);
     } else {
-      routeInFolder?.(id, title);
+      routeInFolder?.(file);
     }
     setTooltipShow(false);
   };

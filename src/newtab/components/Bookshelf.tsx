@@ -1,10 +1,11 @@
 import type { FC } from "react";
 import { useEffect, useRef, useState } from "react";
-import type { FolderItem, Item } from "../../types/store";
+import { FileType, type File } from "../../types/store";
 import { useBookshelfAction } from "../hooks/useBookshelfAction";
-import { useBookshelfLayout } from "../hooks/useBookshelfLayout";
+import { useFolderLayout } from "../hooks/useBookshelfLayout";
 import { useDragAndDrop } from "../hooks/useDragAndDrop";
 import { ITEM_HEIGHT, ITEM_WIDTH } from "../utils/constant";
+import { layoutDB, LayoutMap } from "../utils/layoutDB";
 
 export interface DarkModeEvent {
   darkMode: boolean;
@@ -20,26 +21,27 @@ export const isDarkModeEvent = (event: any): event is DarkModeEvent => {
 
 type Props = {
   id: string;
-  folderItems?: FolderItem[];
-  routeInFolder?: (id: string, title: string) => void;
+  folder: File;
+  routeInFolder?: (file: File) => void;
 };
 
+/** @TODO: 폴더로 넣는 경우 두개씩 사라지는 현상 발생. */
+
 const Bookshelf: FC<Props> = (props) => {
-  const { id, routeInFolder } = props;
+  const { id, routeInFolder, folder } = props;
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("darkMode") === "true" || false
   );
   const originGridContainerRef = useRef<HTMLDivElement>(null);
 
-  const { folderItem, setFolderItem } = useBookshelfLayout({
-    id,
-    itemRefs:
-      (originGridContainerRef.current
-        ?.children as unknown as HTMLDivElement[]) || [],
-  });
+  const { files } = useFolderLayout(
+    folder,
+    (originGridContainerRef.current?.children as unknown as HTMLDivElement[]) ||
+      []
+  );
 
   const { openTooltip, closeTooltip, openUrl, openContextMenu, onClickFolder } =
-    useBookshelfAction({ folderItem, routeInFolder });
+    useBookshelfAction({ folder, routeInFolder });
 
   const { mousedownHandler } = useDragAndDrop({
     openUrl,
@@ -65,15 +67,6 @@ const Bookshelf: FC<Props> = (props) => {
     };
   }, []);
 
-  /**
-   * @TODO
-   *
-   * - react-moveable 사용
-   *   https://www.npmjs.com/package/react-moveable
-   *
-   * - 아이콘 위치가 텍스트의 길이 (1줄, 2줄) 에 따라 다르다
-   */
-
   return (
     <div
       className="grid-container relative grid size-full overflow-y-auto p-gridContainerPadding"
@@ -87,14 +80,19 @@ const Bookshelf: FC<Props> = (props) => {
       onContextMenu={(event) => {
         event.preventDefault();
         event.stopPropagation();
-        openContextMenu(event, { item: folderItem, type: "BACKGROUND" });
+        openContextMenu(event, { item: folder, type: "BACKGROUND" });
       }}
     >
-      {folderItem?.children?.map((item) => (
+      {files.map((item) => (
         <>
           {item.children ? (
             <div
               className="btn-wrapper flex justify-center bg-none"
+              data-parent-id={id}
+              style={{
+                gridRow: item.row || "auto",
+                gridColumn: item.col || "auto",
+              }}
               data-id={item.id}
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
@@ -111,8 +109,16 @@ const Bookshelf: FC<Props> = (props) => {
               }}
             >
               <div className="flex h-full  flex-col items-center gap-2">
-                <button className="h-item w-item">
-                  <div className="text-[50px] text-yellow-500">
+                <button
+                  className="h-item w-item"
+                  style={{
+                    padding: "8px",
+                    border: "1px solid transparent",
+                    width: "70px",
+                    height: "90px",
+                  }}
+                >
+                  <div className="text-[48px] text-yellow-500">
                     {item.title.charAt(0)}
                   </div>
                   <p className="line-clamp-2 transform-none overflow-hidden text-ellipsis break-words text-xs leading-5 tracking-[.2px]">
@@ -124,6 +130,11 @@ const Bookshelf: FC<Props> = (props) => {
           ) : (
             <div
               className="btn-wrapper flex justify-center bg-none"
+              style={{
+                gridRow: item.row || "auto",
+                gridColumn: item.col || "auto",
+              }}
+              data-parent-id={id}
               data-id={item.id}
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
@@ -136,9 +147,17 @@ const Bookshelf: FC<Props> = (props) => {
               data-col={item?.col}
               onMouseDown={(e) => mousedownHandler(item, e)}
             >
-              <div className="flex h-full  flex-col items-center gap-2">
-                <button className="h-item w-item">
-                  <div className="text-[50px] text-yellow-500">
+              <div className="flex h-full flex-col items-center gap-2">
+                <button
+                  className="h-item w-item"
+                  style={{
+                    padding: "8px",
+                    border: "1px solid transparent",
+                    width: "70px",
+                    height: "90px",
+                  }}
+                >
+                  <div className="text-[48px] text-yellow-500">
                     {item.title.charAt(0)}
                   </div>
                   <p className="line-clamp-2 transform-none overflow-hidden text-ellipsis break-words text-xs leading-5 tracking-[.2px]">

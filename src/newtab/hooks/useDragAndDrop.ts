@@ -1,4 +1,4 @@
-import { Item } from "../../types/store";
+import { File, FileType } from "../../types/store";
 import { tooltipStore } from "../store/tooltip";
 import BookmarkApi from "../utils/bookmarkApi";
 import {
@@ -11,7 +11,7 @@ import { refreshTargetStore } from "../store/refreshTarget";
 
 interface Props {
   openUrl: (url: string) => void;
-  onClickFolder: (item: Item) => void;
+  onClickFolder: (item: File) => void;
   originGridContainer?: HTMLDivElement | null;
 }
 
@@ -61,7 +61,7 @@ export const useDragAndDrop = (props: Props) => {
   let originCol = -1;
   let holderRow: number | string = -1;
   let holderCol: number | string = -1;
-  const mousedownHandler = async (item: Item, mousedown: React.MouseEvent) => {
+  const mousedownHandler = async (item: File, mousedown: React.MouseEvent) => {
     offTooltip();
     mousedown.preventDefault();
     originRow = originCol = holderRow = holderCol = -1;
@@ -188,7 +188,7 @@ export const useDragAndDrop = (props: Props) => {
         positionHolderEl.style.gridRow = String(originRow);
       }
 
-      if (targetEl?.dataset.type === "FOLDER") {
+      if (targetEl?.dataset.type === FileType.FOLDER) {
         innerBtn?.focus();
       } else {
         const activeElement = document.activeElement;
@@ -197,7 +197,7 @@ export const useDragAndDrop = (props: Props) => {
         }
       }
 
-      if (targetEl?.dataset.type === "FILE") {
+      if (targetEl?.dataset.type === FileType.BOOKMARK) {
         if (
           targetGridContainerParentId &&
           originGridContainerId &&
@@ -275,10 +275,10 @@ export const useDragAndDrop = (props: Props) => {
             return;
           }
 
-          const targetElType = targetEl.dataset.type as "FOLDER" | "FILE";
+          const targetElType = targetEl.dataset.type;
 
           // 폴더 위
-          if (targetElType === "FOLDER" && changingElId !== targetElId) {
+          if (targetElType === FileType.FOLDER && changingElId !== targetElId) {
             await layoutDB.deleteItemLayoutById(changingElId);
             await BookmarkApi.move(changingElId, targetElId);
             changingEl.remove();
@@ -286,7 +286,7 @@ export const useDragAndDrop = (props: Props) => {
           }
 
           // 파일 위
-          if (targetElType === "FILE") {
+          if (targetElType === FileType.BOOKMARK) {
             throw new Error("컨테이너 내부 >> 파일 위에 옮기는 경우");
           }
         }
@@ -336,24 +336,24 @@ export const useDragAndDrop = (props: Props) => {
             return;
           }
 
-          const targetElType = targetEl.dataset.type as "FOLDER" | "FILE";
+          const targetElType = targetEl.dataset.type;
 
           if (
-            targetElType === "FOLDER" &&
+            targetElType === FileType.FOLDER &&
             targetElId === originGridContainerId
           ) {
             throw new Error("컨테이너 간 >> Item을 같은 폴더로 이동시킬경우");
           }
 
           // 폴더 위
-          if (targetElType === "FOLDER" && changingElId !== targetElId) {
+          if (targetElType === FileType.FOLDER && changingElId !== targetElId) {
             await layoutDB.deleteItemLayoutById(changingElId);
             await BookmarkApi.move(changingElId, targetElId);
             return;
           }
 
           // 파일 위
-          if (targetElType === "FILE") {
+          if (targetElType === FileType.BOOKMARK) {
             await layoutDB.deleteItemLayoutById(changingElId);
             await BookmarkApi.move(changingElId, targetGridContainerParentId);
             return;
@@ -367,13 +367,6 @@ export const useDragAndDrop = (props: Props) => {
         changingEl.style.gridRow = String(originRow);
         fixDom(changingEl);
       }
-
-      /**
-       * @TODO
-       * switch문으로 리팩토링
-       * setup으로 빼기
-       * 폴더생성 / 삭제시 새로고침
-       */
 
       function saveLayoutToDB(row: number, col: number) {
         layoutDB.setItemLayoutById({

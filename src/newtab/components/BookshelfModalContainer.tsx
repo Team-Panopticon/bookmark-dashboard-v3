@@ -35,11 +35,21 @@ const Folder = ({
 }) => {
   const targetRef = useRef<HTMLDivElement>(null);
   const dragTargetRef = useRef<HTMLDivElement>(null);
-  const { folder } = useFolder(id);
   const { closeFolder, focusFolder } = folderStore();
-  const childItems = folder?.children || [];
+  const { folder } = useFolder(id);
 
-  const bookshelfId = childItems[childItems.length - 1]?.id || id;
+  /**
+   * @TODO
+   * BookshelfModal에서 북마크에 대한 정보를 가지고 있어야함.
+   *    - 모달에서 헤더를 그리고 있는데 자기 자신의 title도 모름
+   * action layout drag&drop -> 부모에서 가져야할 것과 자식이 가져야할 것을 나눈다.
+   *
+   * 1. Chrome bookmark api를 사용하는 곳을 부모 컴포넌트(BookshelfModal)로 옮긴다.
+   * 2. 자식 컴포넌트(ex. Bookshelf)는 받아온 데이터를 가지고 layout, drag&drop, action을 처리한다.
+   */
+
+  const [folderItems, setFolderItems] = useState<File[]>([]);
+  const bookshelfId = folderItems[folderItems.length - 1]?.id || id;
   // folderRoute(): BreadCrumb[] {
   //   return this.folderItems.map((item) => ({
   //     disabled: false,
@@ -48,7 +58,7 @@ const Folder = ({
   //   }));
   // },
   const routeInFolder = (file: File) => {
-    // setFolderItems((prev) => [...prev, { id, title }]);
+    setFolderItems((prev) => [...prev, file]);
     // 해줘야하는가?
     // await this.routePathRefresh();
   };
@@ -75,9 +85,7 @@ const Folder = ({
           ref={dragTargetRef}
           className="flex h-12 w-full items-center justify-between rounded-t-lg bg-neutral-300 p-2 hover:border-b "
         >
-          <div>
-            {[{ title: "Header" }].map((item) => item.title).join(" / ")}
-          </div>
+          <div>{folderItems.map((item) => item.title).join(" / ")}</div>
           <button
             onClick={() => {
               closeFolder(timestampId);
@@ -86,7 +94,12 @@ const Folder = ({
           ></button>
         </div>
         {folder && (
-          <Bookshelf id={bookshelfId} key={bookshelfId} folder={folder} />
+          <Bookshelf
+            id={bookshelfId}
+            key={bookshelfId}
+            routeInFolder={routeInFolder}
+            folder={folder}
+          />
         )}
       </div>
       <Moveable

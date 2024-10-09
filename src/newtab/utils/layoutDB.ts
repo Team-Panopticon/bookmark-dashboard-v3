@@ -1,6 +1,6 @@
 import { openDB, IDBPDatabase } from "idb";
 
-interface LayoutMap {
+export interface LayoutMap {
   [id: string]: ItemLayout; // key는 Item의 id, desktop === 1
 }
 

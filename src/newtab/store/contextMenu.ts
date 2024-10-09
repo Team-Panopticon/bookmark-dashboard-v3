@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Item } from "../../types/store";
+import { File } from "../../types/store";
 
 export type Position = {
   x: number;
@@ -7,7 +7,7 @@ export type Position = {
 };
 
 export type ContextMenuTarget = {
-  item?: Item;
+  item?: File;
   type: "FILE" | "FOLDER" | "BACKGROUND";
 };
 
