@@ -15,3 +15,5 @@ export type modalInfo = {
   showFolder: boolean;
   zIndex: number;
 };
+
+export type Bookshelf = File;

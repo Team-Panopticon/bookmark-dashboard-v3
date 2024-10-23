@@ -9,13 +9,6 @@ import { layoutDB, LayoutMap } from "../utils/layoutDB";
 import { refreshTargetStore } from "../store/refreshTarget";
 import { useCallback, useEffect, useState } from "react";
 
-interface Props {
-  id: string;
-  /** Vue의 Ref를 사용해서 넘겨주고 있었음 */
-  itemRefs: HTMLDivElement[];
-  folder: File;
-}
-
 export const useFolder = (id: string) => {
   const [folder, setFolder] = useState<File>(); // -> 부모 // 자식들folderItem
   const [lastRefreshTime, setLastRefreshTime] = useState(new Date().getTime());
@@ -45,8 +38,8 @@ export const useFolder = (id: string) => {
 };
 
 // row, col이 DB에 없는 애들의 row, col을 계산해서 DB에 저장해줌 + 스타일 추가 (위치 고정)
-const setRowCol = async (elItem: HTMLDivElement, folder?: File) => {
-  const id = elItem.dataset.id as string;
+const setRowCol = async (id: string, elItem: HTMLDivElement, folder: File) => {
+  const parentId = folder.id;
   const itemLayout = await layoutDB.getItemLayoutById(id);
 
   if (itemLayout) {
@@ -59,17 +52,6 @@ const setRowCol = async (elItem: HTMLDivElement, folder?: File) => {
     Math.floor((elItem.offsetLeft - GRID_CONTAINER_PADDING) / ITEM_WIDTH) + 1;
   const row =
     Math.floor((elItem.offsetTop - GRID_CONTAINER_PADDING) / ITEM_HEIGHT) + 1;
-
-  // 저장된 초기 row, col 값을 folderItem에 반영
-  const originalItem: File | undefined = folder?.children?.find(
-    (item) => item.id === id
-  );
-
-  if (!originalItem) {
-    return;
-  }
-
-  const parentId = originalItem.parentId as string;
 
   layoutDB.setItemLayoutById({ id, parentId, row, col });
 };
@@ -94,20 +76,24 @@ const makeFile = (
 
 export const useFolderLayout = (folder: File, itemRefs: HTMLDivElement[]) => {
   const [layoutMap, setLayoutMap] = useState<LayoutMap>();
-  const [_, forceUpdate] = useState(1);
-  const { updateRecentRefreshTimes } = refreshTargetStore();
+  const { updateRecentRefreshTimes, recentRefreshTimes } = refreshTargetStore();
   const files = (folder?.children || []).map((child) => {
     return makeFile(child, layoutMap);
   });
 
   useEffect(() => {
-    [...itemRefs].forEach((el) => setRowCol(el, folder));
-    // forceUpdate(Math.random());
+    [...itemRefs].forEach((el, index) =>
+      setRowCol(files[index]?.id, el, folder)
+    );
+
+    /**
+     * @TODO: dependency 배열에 files, folder가 있으면 updateRecentRefreshTimes가 돌면서 또 files, folder가 업데이트 되면서 무한루프.
+     * 로직의 수정이 필요.
+     */
     updateRecentRefreshTimes([folder.id]);
   }, [itemRefs]);
 
   useEffect(() => {
-    console.log(folder);
     getLayoutMap(folder).then((map) => setLayoutMap(map));
   }, [folder]);
 
