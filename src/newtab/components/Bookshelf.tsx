@@ -1,12 +1,10 @@
 import type { FC } from "react";
-import { useEffect, useRef, useState } from "react";
-import { FileType, type File } from "../../types/store";
-import { useBookshelfAction } from "../hooks/useBookshelfAction";
+import { useRef } from "react";
+import { type File } from "../../types/store";
 import { useFolderLayout } from "../hooks/useBookshelfLayout";
-import { useDragAndDrop } from "../hooks/useDragAndDrop";
 import { ITEM_HEIGHT, ITEM_WIDTH } from "../utils/constant";
-import { layoutDB, LayoutMap } from "../utils/layoutDB";
 import { useMouseDown } from "../hooks/useMouseDown";
+import { useMouseUp } from "../hooks/useMouseUp";
 
 export interface DarkModeEvent {
   darkMode: boolean;
@@ -38,6 +36,7 @@ const Bookshelf: FC<Props> = (props) => {
   );
 
   const { mouseDownHandler } = useMouseDown({ bookshelf: folder });
+  const { mouseUpHandler } = useMouseUp();
 
   return (
     <div
@@ -47,11 +46,16 @@ const Bookshelf: FC<Props> = (props) => {
         gridAutoRows: `${ITEM_HEIGHT}px`,
       }}
       ref={originGridContainerRef}
+      onMouseUp={mouseUpHandler}
     >
       {files.map((file) => (
         <div
-          onMouseDown={({ currentTarget }) => {
-            mouseDownHandler({ currentTarget, file });
+          onMouseDown={(e) => {
+            mouseDownHandler({
+              currentTarget: e.currentTarget,
+              file,
+              point: { x: e.pageX, y: e.pageY },
+            });
           }}
         >
           {file.type === "FOLDER" ? (

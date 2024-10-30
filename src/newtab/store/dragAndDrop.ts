@@ -21,6 +21,7 @@ export type State = {
   mouseDownAt?: number;
   bookshelfAtMouseDown?: Bookshelf;
   bookshelfAtMouseMove?: Bookshelf;
+  startPoint?: { x: number; y: number };
 };
 
 export interface Actions {
@@ -30,6 +31,7 @@ export interface Actions {
   setBookshelfAtMouseDown: (bookshelf: Bookshelf) => void;
   setBookshelfAtMouseMove: (bookshelf: Bookshelf) => void;
   setMouseDownAt: (time: number) => void;
+  setStartPoint: (point: { x: number; y: number }) => void;
 }
 
 export const dragAndDropStore = create<State & Actions>((set, get) => ({
@@ -41,4 +43,5 @@ export const dragAndDropStore = create<State & Actions>((set, get) => ({
   setBookshelfAtMouseMove: (bookshelf: Bookshelf) =>
     set({ bookshelfAtMouseMove: bookshelf }),
   setMouseDownAt: (time) => set({ mouseDownAt: time }),
+  setStartPoint: ({ x, y }) => set({ startPoint: { x, y } }),
 }));
