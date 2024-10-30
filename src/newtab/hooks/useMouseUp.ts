@@ -2,7 +2,7 @@ import { dragAndDropStore } from "../store/dragAndDrop";
 import { folderStore } from "../store/folder";
 
 export const useMouseUp = () => {
-  const { mouseDownAt, startPoint, file } = dragAndDropStore();
+  const { mouseDownAt, startPoint, file, flush } = dragAndDropStore();
   const { openFolder } = folderStore();
 
   const mouseUpHandler = (e: React.MouseEvent) => {
@@ -21,8 +21,12 @@ export const useMouseUp = () => {
       file.type === "FOLDER"
         ? openFolder(file.id)
         : window.open(file.url, "_blank")?.focus();
+
+      flush();
       return;
     }
+
+    flush();
   };
 
   return { mouseUpHandler };
