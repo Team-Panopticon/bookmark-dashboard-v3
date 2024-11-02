@@ -1,5 +1,6 @@
 import { Bookshelf, File } from "../../types/store";
 import { dragAndDropStore } from "../store/dragAndDrop";
+import { Point } from "./useMouseMove";
 
 export const useMouseDown = ({ bookshelf }: { bookshelf: Bookshelf }) => {
   const {
@@ -9,6 +10,7 @@ export const useMouseDown = ({ bookshelf }: { bookshelf: Bookshelf }) => {
     setBookshelfAtMouseMove,
     setMouseDownAt,
     setStartPoint,
+    setOffsetBetweenStartPointAndFileLeftTop,
   } = dragAndDropStore();
 
   const mouseDownHandler = ({
@@ -26,7 +28,21 @@ export const useMouseDown = ({ bookshelf }: { bookshelf: Bookshelf }) => {
     setFileElement(currentTarget);
     setMouseDownAt(Date.now());
     setStartPoint(point);
+    const offsetBetweenStartPointAndFileLeftTop = getOffsetBetweenPoints(
+      point,
+      currentTarget?.getBoundingClientRect()
+    );
+    setOffsetBetweenStartPointAndFileLeftTop(
+      offsetBetweenStartPointAndFileLeftTop
+    );
   };
 
   return { mouseDownHandler };
 };
+
+function getOffsetBetweenPoints(p1: Point, p2: Point) {
+  return {
+    x: Math.abs(p1.x - p2.x),
+    y: Math.abs(p1.y - p2.y),
+  };
+}

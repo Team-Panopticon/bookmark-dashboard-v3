@@ -5,6 +5,9 @@ import { useFolderLayout } from "../hooks/useBookshelfLayout";
 import { ITEM_HEIGHT, ITEM_WIDTH } from "../utils/constant";
 import { useMouseDown } from "../hooks/useMouseDown";
 import { useMouseUp } from "../hooks/useMouseUp";
+import { useMouseMove } from "../hooks/useMouseMove";
+import { dragAndDropStore } from "../store/dragAndDrop";
+import FileView from "./FileView";
 
 export interface DarkModeEvent {
   darkMode: boolean;
@@ -27,6 +30,8 @@ type Props = {
 const Bookshelf: FC<Props> = (props) => {
   const { folder } = props;
 
+  const { fileElement, isDragging, file: draggingFile } = dragAndDropStore();
+
   const originGridContainerRef = useRef<HTMLDivElement>(null);
 
   const { files } = useFolderLayout(
@@ -37,6 +42,7 @@ const Bookshelf: FC<Props> = (props) => {
 
   const { mouseDownHandler } = useMouseDown({ bookshelf: folder });
   const { mouseUpHandler } = useMouseUp();
+  const { mouseMoveHandler } = useMouseMove(folder);
 
   return (
     <div
@@ -47,76 +53,43 @@ const Bookshelf: FC<Props> = (props) => {
       }}
       ref={originGridContainerRef}
       onMouseUp={mouseUpHandler}
+      onMouseMove={fileElement ? mouseMoveHandler : undefined}
     >
+      {/* @TODO: 2024-10-30 PositionHolder 구현 */}
+      {isDragging() && draggingFile && (
+        <PositionHolder
+          file={draggingFile}
+          col={draggingFile.row}
+          row={draggingFile.col}
+        />
+      )}
       {files.map((file) => (
-        <div
-          onMouseDown={(e) => {
+        <FileView
+          key={file.id}
+          file={file}
+          onMouseDown={(e) =>
             mouseDownHandler({
               currentTarget: e.currentTarget,
               file,
               point: { x: e.pageX, y: e.pageY },
-            });
-          }}
-        >
-          {file.type === "FOLDER" ? (
-            <div
-              className="flex justify-center bg-none"
-              style={{
-                gridRow: file.row || "auto",
-                gridColumn: file.col || "auto",
-              }}
-            >
-              <div className="flex h-full  flex-col items-center gap-2">
-                <button
-                  className="h-item w-item"
-                  style={{
-                    padding: "8px",
-                    border: "1px solid transparent",
-                    width: "70px",
-                    height: "90px",
-                  }}
-                >
-                  <div className="text-[48px] text-yellow-500">
-                    {file.title.charAt(0)}
-                  </div>
-                  <p className="line-clamp-2 transform-none overflow-hidden text-ellipsis break-words text-xs leading-5 tracking-[.2px]">
-                    {file.title}
-                  </p>
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div
-              className="flex justify-center bg-none"
-              style={{
-                gridRow: file.row || "auto",
-                gridColumn: file.col || "auto",
-              }}
-            >
-              <div className="flex h-full flex-col items-center gap-2">
-                <button
-                  className="h-item w-item"
-                  style={{
-                    padding: "8px",
-                    border: "1px solid transparent",
-                    width: "70px",
-                    height: "90px",
-                  }}
-                >
-                  <div className="text-[48px] text-yellow-500">
-                    {file.title.charAt(0)}
-                  </div>
-                  <p className="line-clamp-2 transform-none overflow-hidden text-ellipsis break-words text-xs leading-5 tracking-[.2px]">
-                    {file.title}
-                  </p>
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+            })
+          }
+        />
       ))}
     </div>
   );
+};
+
+const PositionHolder = ({
+  file,
+  row,
+  col,
+}: {
+  file: File;
+  row: File["row"];
+  col: File["col"];
+}) => {
+  return <FileView key={file.id} file={{ ...file, row, col }} />;
 };
 
 export default Bookshelf;
