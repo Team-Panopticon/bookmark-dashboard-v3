@@ -54,9 +54,9 @@ const DraggingFile = () => {
     dragAndDropStore();
 
   const [{ x, y }, setDraggingFilePosition] = useState<{
-    x: number;
-    y: number;
-  }>({ x: 0, y: 0 });
+    x?: number;
+    y?: number;
+  }>({ x: undefined, y: undefined });
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
@@ -77,7 +77,7 @@ const DraggingFile = () => {
 
   const { file } = dragAndDropStore();
 
-  if (!file) return null;
+  if (!file || (x === undefined && y === undefined)) return null;
 
   return (
     <FileView
