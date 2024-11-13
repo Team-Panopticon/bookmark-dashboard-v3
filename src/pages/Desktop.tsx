@@ -1,9 +1,11 @@
-import { FC, useCallback, useEffect } from "react";
+import { FC, MouseEventHandler, useCallback, useEffect, useState } from "react";
 import { refreshTargetStore } from "../newtab/store/refreshTarget";
 import { File } from "../types/store";
 import Bookshelf from "../newtab/components/Bookshelf";
 import FolderManager from "../newtab/components/FolderManager";
 import { useFolder } from "../newtab/hooks/useBookshelfLayout";
+import { dragAndDropStore } from "../newtab/store/dragAndDrop";
+import FileView from "../newtab/components/FileView";
 
 const Desktop: FC = () => {
   const { updateRecentRefreshTimes } = refreshTargetStore();
@@ -34,9 +36,10 @@ const Desktop: FC = () => {
 
   return (
     <div className="size-full">
-      {folder && <Bookshelf id="1" folder={folder}></Bookshelf>}
+      <DraggingFile />
+      {folder && <Bookshelf id="1" key={1} folder={folder}></Bookshelf>}
       {/* <CreateFolderModal></CreateFolderModal> */}
-      <FolderManager></FolderManager>
+      <FolderManager />
       {/* <ContextMenuContainer /> */}
       {/* <UpdateModal /> */}
       {/* <Tooltip /> */}
@@ -45,3 +48,45 @@ const Desktop: FC = () => {
 };
 
 export default Desktop;
+
+const DraggingFile = () => {
+  const { fileElement, offsetBetweenStartPointAndFileLeftTop } =
+    dragAndDropStore();
+
+  const [{ x, y }, setDraggingFilePosition] = useState<{
+    x: number;
+    y: number;
+  }>({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!fileElement || !offsetBetweenStartPointAndFileLeftTop) return;
+
+      setDraggingFilePosition({
+        x: event.pageX - offsetBetweenStartPointAndFileLeftTop.x,
+        y: event.pageY - offsetBetweenStartPointAndFileLeftTop.y,
+      });
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+    };
+  });
+
+  const { file } = dragAndDropStore();
+
+  if (!file) return null;
+
+  return (
+    <FileView
+      file={file}
+      style={{
+        position: "absolute",
+        top: y,
+        left: x,
+      }}
+    />
+  );
+};

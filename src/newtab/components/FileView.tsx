@@ -1,14 +1,16 @@
+import { CSSProperties } from "react";
 import { type File } from "../../types/store";
 
 type Props = {
   file: File;
   onMouseDown?: React.MouseEventHandler<HTMLElement>;
+  style?: CSSProperties;
 };
 
 /** @TODO favicon 그리기 (원래 코드에서 안옮겼음) */
-const FileView = ({ file, onMouseDown }: Props) => {
+const FileView = ({ file, onMouseDown, style }: Props) => {
   return (
-    <div onMouseDown={onMouseDown}>
+    <div onMouseDown={onMouseDown} style={style}>
       <div
         className="flex justify-center bg-none"
         style={{

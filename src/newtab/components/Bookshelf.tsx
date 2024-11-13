@@ -1,6 +1,6 @@
 import type { FC } from "react";
-import { useRef } from "react";
-import { type File } from "../../types/store";
+import { memo, useMemo, useRef } from "react";
+import { FileType, type File } from "../../types/store";
 import { useFolderLayout } from "../hooks/useBookshelfLayout";
 import { ITEM_HEIGHT, ITEM_WIDTH } from "../utils/constant";
 import { useMouseDown } from "../hooks/useMouseDown";
@@ -30,7 +30,7 @@ type Props = {
 const Bookshelf: FC<Props> = (props) => {
   const { folder } = props;
 
-  const { fileElement, isDragging, file: draggingFile } = dragAndDropStore();
+  const { file: draggingFile } = dragAndDropStore();
 
   const originGridContainerRef = useRef<HTMLDivElement>(null);
 
@@ -42,7 +42,7 @@ const Bookshelf: FC<Props> = (props) => {
 
   const { mouseDownHandler } = useMouseDown({ bookshelf: folder });
   const { mouseUpHandler } = useMouseUp();
-  const { mouseMoveHandler } = useMouseMove(folder);
+  const { mouseMoveHandler, isDraggingOn } = useMouseMove(folder);
 
   return (
     <div
@@ -53,16 +53,10 @@ const Bookshelf: FC<Props> = (props) => {
       }}
       ref={originGridContainerRef}
       onMouseUp={mouseUpHandler}
-      onMouseMove={fileElement ? mouseMoveHandler : undefined}
+      onMouseMove={mouseMoveHandler}
     >
       {/* @TODO: 2024-10-30 PositionHolder 구현 */}
-      {isDragging() && draggingFile && (
-        <PositionHolder
-          file={draggingFile}
-          col={draggingFile.row}
-          row={draggingFile.col}
-        />
-      )}
+
       {files.map((file) => (
         <FileView
           key={file.id}
@@ -76,6 +70,9 @@ const Bookshelf: FC<Props> = (props) => {
           }
         />
       ))}
+      {isDraggingOn && draggingFile && (
+        <PositionHolder file={draggingFile} col={10} row={10} />
+      )}
     </div>
   );
 };
@@ -92,4 +89,4 @@ const PositionHolder = ({
   return <FileView key={file.id} file={{ ...file, row, col }} />;
 };
 
-export default Bookshelf;
+export default memo(Bookshelf);
