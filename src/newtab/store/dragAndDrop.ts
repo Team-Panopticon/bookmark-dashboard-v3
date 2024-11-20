@@ -23,6 +23,7 @@ export type State = {
   bookshelfAtMouseMove?: Bookshelf;
   startPoint?: { x: number; y: number };
   offsetBetweenStartPointAndFileLeftTop?: { x: number; y: number };
+  positionHolder?: { row: number; col: number };
 };
 
 export interface Actions {
@@ -38,6 +39,7 @@ export interface Actions {
     y: number;
   }) => void;
   flush: () => void;
+  setPositionHolder: (position: { row: number; col: number }) => void;
 }
 
 export const dragAndDropStore = create<State & Actions>((set, get) => ({
@@ -50,9 +52,9 @@ export const dragAndDropStore = create<State & Actions>((set, get) => ({
     set({ bookshelfAtMouseMove: bookshelf }),
   setMouseDownAt: (time) => set({ mouseDownAt: time }),
   setStartPoint: ({ x, y }) => set({ startPoint: { x, y } }),
+  setPositionHolder: ({ row, col }) => set({ positionHolder: { row, col } }),
   setOffsetBetweenStartPointAndFileLeftTop: ({ x, y }) =>
     set({ offsetBetweenStartPointAndFileLeftTop: { x, y } }),
-
   flush: () => {
     set({
       file: undefined,
@@ -61,6 +63,8 @@ export const dragAndDropStore = create<State & Actions>((set, get) => ({
       bookshelfAtMouseDown: undefined,
       bookshelfAtMouseMove: undefined,
       startPoint: undefined,
+      offsetBetweenStartPointAndFileLeftTop: undefined,
+      positionHolder: undefined,
     });
   },
 }));

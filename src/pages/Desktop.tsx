@@ -1,4 +1,4 @@
-import { FC, MouseEventHandler, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { refreshTargetStore } from "../newtab/store/refreshTarget";
 import { File } from "../types/store";
 import Bookshelf from "../newtab/components/Bookshelf";
@@ -34,9 +34,10 @@ const Desktop: FC = () => {
     setBookmarksEventHandlers();
   }, [setBookmarksEventHandlers]);
 
+  const { isDragging } = dragAndDropStore();
   return (
     <div className="size-full">
-      <DraggingFile />
+      {isDragging() && <DraggingFile />}
       {folder && <Bookshelf id="1" key={1} folder={folder}></Bookshelf>}
       {/* <CreateFolderModal></CreateFolderModal> */}
       <FolderManager />
@@ -50,7 +51,7 @@ const Desktop: FC = () => {
 export default Desktop;
 
 const DraggingFile = () => {
-  const { fileElement, offsetBetweenStartPointAndFileLeftTop } =
+  const { fileElement, offsetBetweenStartPointAndFileLeftTop, file } =
     dragAndDropStore();
 
   const [{ x, y }, setDraggingFilePosition] = useState<{
@@ -59,6 +60,15 @@ const DraggingFile = () => {
   }>({ x: undefined, y: undefined });
 
   useEffect(() => {
+    const handleMouseDown = (event: MouseEvent) => {
+      if (!fileElement || !offsetBetweenStartPointAndFileLeftTop) return;
+
+      setDraggingFilePosition({
+        x: event.pageX - offsetBetweenStartPointAndFileLeftTop.x,
+        y: event.pageY - offsetBetweenStartPointAndFileLeftTop.y,
+      });
+    };
+
     const handleMouseMove = (event: MouseEvent) => {
       if (!fileElement || !offsetBetweenStartPointAndFileLeftTop) return;
 
@@ -68,16 +78,29 @@ const DraggingFile = () => {
       });
     };
 
+    const handleMouseUp = () => {
+      setDraggingFilePosition({
+        x: undefined,
+        y: undefined,
+      });
+
+      document.removeEventListener("mousedown", handleMouseDown);
+    };
+
+    document.addEventListener("mousedown", handleMouseDown);
+    document.addEventListener("mouseup", handleMouseUp);
     document.addEventListener("mousemove", handleMouseMove);
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
     };
-  });
+  }, [fileElement, offsetBetweenStartPointAndFileLeftTop]);
 
-  const { file } = dragAndDropStore();
+  if (!file) return null;
+  if (x === undefined && y === undefined) return null;
 
-  if (!file || (x === undefined && y === undefined)) return null;
+  console.debug("dragging file", x, y);
 
   return (
     <FileView

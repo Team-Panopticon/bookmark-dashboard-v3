@@ -1,4 +1,4 @@
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, useState } from "react";
 import { dragAndDropStore } from "../store/dragAndDrop";
 import {
   GRID_CONTAINER_PADDING,
@@ -30,10 +30,13 @@ export const useMouseMove = (bookshelf: Bookshelf) => {
     setBookshelfAtMouseMove,
     offsetBetweenStartPointAndFileLeftTop,
     isDragging,
+    positionHolder,
+    setPositionHolder,
   } = dragAndDropStore();
 
   const mouseMoveHandler: MouseEventHandler<HTMLDivElement> = (event) => {
     if (!fileElement || !offsetBetweenStartPointAndFileLeftTop) return;
+    console.log("==== mousemove");
 
     setBookshelfAtMouseMove(bookshelf);
     const { clientX, clientY } = event;
@@ -53,13 +56,16 @@ export const useMouseMove = (bookshelf: Bookshelf) => {
           ITEM_WIDTH
       ) + 1;
 
-    // if(row, col이 달라진 경우){
-    //     setState();
-    // }
+    if (positionHolder?.row !== row || positionHolder?.col !== col) {
+      setPositionHolder({
+        row,
+        col,
+      });
+    }
   };
 
   const isDraggingOn =
     isDragging() && bookshelfAtMouseMove?.id === bookshelf.id;
 
-  return { mouseMoveHandler, isDraggingOn };
+  return { mouseMoveHandler, isDraggingOn, positionHolder };
 };
