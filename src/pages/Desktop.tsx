@@ -1,39 +1,38 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import Bookshelf from "../newtab/components/Bookshelf";
 import FolderManager from "../newtab/components/FolderManager";
-import { useFolder } from "../newtab/hooks/useBookshelfLayout";
 import { dragAndDropStore } from "../newtab/store/dragAndDrop";
 import FileView from "../newtab/components/FileView";
+import { bookmarkStore } from "../newtab/store/bookmarkStore";
 
 const Desktop: FC = () => {
-  const { updateRecentRefreshTimes } = refreshTargetStore();
-  const { folder, refresh } = useFolder("1");
+  const { bookmark, getBookmark } = bookmarkStore();
 
   const setBookmarksEventHandlers = useCallback(() => {
     chrome.bookmarks.onCreated.addListener(() => {
-      refresh();
+      getBookmark();
     });
     chrome.bookmarks.onRemoved.addListener(() => {
-      refresh();
+      getBookmark();
     });
-    chrome.bookmarks.onMoved.addListener(
-      (_, moveInfo: chrome.bookmarks.BookmarkMoveInfo) => {
-        refresh();
-      }
-    );
+    chrome.bookmarks.onMoved.addListener(() => {
+      getBookmark();
+    });
   }, [getBookmark]);
 
   useEffect(() => {
     setBookmarksEventHandlers();
   }, [setBookmarksEventHandlers]);
 
+  useEffect(() => {
+    getBookmark();
+  }, []);
+
   const { isDragging } = dragAndDropStore();
   return (
     <div className="size-full">
       {isDragging() && <DraggingFile />}
-      {folder && (
-        <Bookshelf id="1" key={1} folder={folder} refresh={refresh}></Bookshelf>
-      )}
+      {bookmark && <Bookshelf id="1" key={1} folder={bookmark}></Bookshelf>}
       {/* <CreateFolderModal></CreateFolderModal> */}
       <FolderManager />
       {/* <ContextMenuContainer /> */}

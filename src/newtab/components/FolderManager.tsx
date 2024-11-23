@@ -4,6 +4,7 @@ import Bookshelf from "./Bookshelf";
 import Moveable from "react-moveable";
 import { File } from "../../types/store";
 import { useFolder } from "../hooks/useBookshelfLayout";
+import { bookmarkStore } from "../store/bookmarkStore";
 
 const FolderManager: FC = () => {
   const { folders } = folderStore();
@@ -33,9 +34,10 @@ const Folder = ({
   zIndex: number;
   timestampId: string;
 }) => {
+  const { getSubtree } = bookmarkStore();
+  const folder = getSubtree(id);
   const targetRef = useRef<HTMLDivElement>(null);
   const dragTargetRef = useRef<HTMLDivElement>(null);
-  const { folder, refresh } = useFolder(id);
   const { closeFolder, focusFolder } = folderStore();
   const childItems = folder?.children || [];
 
@@ -86,12 +88,7 @@ const Folder = ({
           ></button>
         </div>
         {folder && (
-          <Bookshelf
-            id={bookshelfId}
-            key={bookshelfId}
-            folder={folder}
-            refresh={refresh}
-          />
+          <Bookshelf id={bookshelfId} key={bookshelfId} folder={folder} />
         )}
       </div>
       <Moveable

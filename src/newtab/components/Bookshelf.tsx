@@ -24,7 +24,6 @@ export const isDarkModeEvent = (event: any): event is DarkModeEvent => {
 type Props = {
   id: string;
   folder: File;
-  refresh: () => void;
   routeInFolder?: (file: File) => void;
 };
 
@@ -56,9 +55,8 @@ const Bookshelf: FC<Props> = (props) => {
         gridAutoRows: `${ITEM_HEIGHT}px`,
       }}
       ref={originGridContainerRef}
-      onMouseUp={async (e) => {
-        await mouseUpHandler(e);
-        await props.refresh();
+      onMouseUp={(e) => {
+        mouseUpHandler(e);
       }}
       onMouseMove={mouseMoveHandler}
     >
