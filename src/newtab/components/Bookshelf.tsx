@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { memo, useRef } from "react";
 import { type File } from "../../types/store";
-import { useFolderLayout } from "../hooks/useBookshelfLayout";
+import { useFolder, useFolderLayout } from "../hooks/useBookshelfLayout";
 import { ITEM_HEIGHT, ITEM_WIDTH } from "../utils/constant";
 import { useMouseDown } from "../hooks/useMouseDown";
 import { useMouseUp } from "../hooks/useMouseUp";
@@ -24,6 +24,7 @@ export const isDarkModeEvent = (event: any): event is DarkModeEvent => {
 type Props = {
   id: string;
   folder: File;
+  refresh: () => void;
   routeInFolder?: (file: File) => void;
 };
 
@@ -55,7 +56,10 @@ const Bookshelf: FC<Props> = (props) => {
         gridAutoRows: `${ITEM_HEIGHT}px`,
       }}
       ref={originGridContainerRef}
-      onMouseUp={mouseUpHandler}
+      onMouseUp={async (e) => {
+        await mouseUpHandler(e);
+        await props.refresh();
+      }}
       onMouseMove={mouseMoveHandler}
     >
       {files.map((file) => {

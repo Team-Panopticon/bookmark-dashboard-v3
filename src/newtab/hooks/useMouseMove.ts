@@ -36,7 +36,6 @@ export const useMouseMove = (bookshelf: Bookshelf) => {
 
   const mouseMoveHandler: MouseEventHandler<HTMLDivElement> = (event) => {
     if (!fileElement || !offsetBetweenStartPointAndFileLeftTop) return;
-    console.log("==== mousemove");
 
     setBookshelfAtMouseMove(bookshelf);
     const { clientX, clientY } = event;

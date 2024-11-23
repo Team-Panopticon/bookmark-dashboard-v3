@@ -11,10 +11,6 @@ import { useCallback, useEffect, useState } from "react";
 
 export const useFolder = (id: string) => {
   const [folder, setFolder] = useState<File>(); // -> 부모 // 자식들folderItem
-  const [lastRefreshTime, setLastRefreshTime] = useState(new Date().getTime());
-
-  const { recentRefreshTimes } = refreshTargetStore();
-  const recentRefreshTime = recentRefreshTimes.get(id);
 
   const refresh = useCallback(async () => {
     // getSubTree로 id의 아이템과 포함된 id의 서브트리를 가져온다
@@ -23,18 +19,10 @@ export const useFolder = (id: string) => {
   }, [id]);
 
   useEffect(() => {
-    if (!recentRefreshTime) {
-      refresh();
-      return;
-    }
+    refresh();
+  }, [refresh]);
 
-    if (recentRefreshTime !== lastRefreshTime) {
-      setLastRefreshTime(recentRefreshTime);
-      refresh();
-    }
-  }, [recentRefreshTime, lastRefreshTime, refresh]);
-
-  return { folder, files: folder?.children || [] };
+  return { folder, files: folder?.children || [], refresh };
 };
 
 // row, col이 DB에 없는 애들의 row, col을 계산해서 DB에 저장해줌 + 스타일 추가 (위치 고정)

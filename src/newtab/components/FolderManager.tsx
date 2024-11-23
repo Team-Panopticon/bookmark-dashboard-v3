@@ -35,7 +35,7 @@ const Folder = ({
 }) => {
   const targetRef = useRef<HTMLDivElement>(null);
   const dragTargetRef = useRef<HTMLDivElement>(null);
-  const { folder } = useFolder(id);
+  const { folder, refresh } = useFolder(id);
   const { closeFolder, focusFolder } = folderStore();
   const childItems = folder?.children || [];
 
@@ -86,7 +86,12 @@ const Folder = ({
           ></button>
         </div>
         {folder && (
-          <Bookshelf id={bookshelfId} key={bookshelfId} folder={folder} />
+          <Bookshelf
+            id={bookshelfId}
+            key={bookshelfId}
+            folder={folder}
+            refresh={refresh}
+          />
         )}
       </div>
       <Moveable

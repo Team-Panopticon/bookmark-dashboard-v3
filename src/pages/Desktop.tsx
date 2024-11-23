@@ -9,23 +9,18 @@ import FileView from "../newtab/components/FileView";
 
 const Desktop: FC = () => {
   const { updateRecentRefreshTimes } = refreshTargetStore();
-  const { folder } = useFolder("1");
+  const { folder, refresh } = useFolder("1");
 
   const setBookmarksEventHandlers = useCallback(() => {
-    chrome.bookmarks.onCreated.addListener((_, bookmark: File) => {
-      const { parentId } = bookmark;
-      parentId && updateRecentRefreshTimes([parentId]);
+    chrome.bookmarks.onCreated.addListener(() => {
+      refresh();
     });
-    chrome.bookmarks.onRemoved.addListener(
-      (_, removeInfo: chrome.bookmarks.BookmarkRemoveInfo) => {
-        const { parentId } = removeInfo;
-        updateRecentRefreshTimes([parentId]);
-      }
-    );
+    chrome.bookmarks.onRemoved.addListener(() => {
+      refresh();
+    });
     chrome.bookmarks.onMoved.addListener(
       (_, moveInfo: chrome.bookmarks.BookmarkMoveInfo) => {
-        const { parentId, oldParentId } = moveInfo;
-        updateRecentRefreshTimes([parentId, oldParentId]);
+        refresh();
       }
     );
   }, [updateRecentRefreshTimes]);
@@ -38,7 +33,9 @@ const Desktop: FC = () => {
   return (
     <div className="size-full">
       {isDragging() && <DraggingFile />}
-      {folder && <Bookshelf id="1" key={1} folder={folder}></Bookshelf>}
+      {folder && (
+        <Bookshelf id="1" key={1} folder={folder} refresh={refresh}></Bookshelf>
+      )}
       {/* <CreateFolderModal></CreateFolderModal> */}
       <FolderManager />
       {/* <ContextMenuContainer /> */}
@@ -99,8 +96,6 @@ const DraggingFile = () => {
 
   if (!file) return null;
   if (x === undefined && y === undefined) return null;
-
-  console.debug("dragging file", x, y);
 
   return (
     <FileView

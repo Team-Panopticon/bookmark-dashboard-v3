@@ -1,11 +1,20 @@
 import { dragAndDropStore } from "../store/dragAndDrop";
 import { folderStore } from "../store/folder";
+import BookmarkApi from "../utils/bookmarkApi";
+import { layoutDB } from "../utils/layoutDB";
 
 export const useMouseUp = () => {
-  const { mouseDownAt, startPoint, file, flush } = dragAndDropStore();
+  const {
+    mouseDownAt,
+    startPoint,
+    file,
+    flush,
+    positionHolder,
+    bookshelfAtMouseMove,
+  } = dragAndDropStore();
   const { openFolder } = folderStore();
 
-  const mouseUpHandler = (e: React.MouseEvent) => {
+  const mouseUpHandler = async (e: React.MouseEvent) => {
     if (!mouseDownAt || !startPoint || !file) {
       return;
     }
@@ -25,6 +34,21 @@ export const useMouseUp = () => {
       flush();
       return;
     }
+
+    if (!positionHolder || !bookshelfAtMouseMove) return;
+
+    /* NOTE: 빈공간 : placeholder가 보이는 위치로 이동(저장)*/
+    const { id: parentId } = bookshelfAtMouseMove;
+    const { id } = file;
+    const { row, col } = positionHolder;
+
+    layoutDB.setItemLayoutById({
+      id,
+      parentId,
+      row,
+      col,
+    });
+    await BookmarkApi.move(id, parentId);
 
     flush();
   };
