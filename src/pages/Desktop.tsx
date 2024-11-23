@@ -1,6 +1,4 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import { refreshTargetStore } from "../newtab/store/refreshTarget";
-import { File } from "../types/store";
 import Bookshelf from "../newtab/components/Bookshelf";
 import FolderManager from "../newtab/components/FolderManager";
 import { useFolder } from "../newtab/hooks/useBookshelfLayout";
@@ -23,7 +21,7 @@ const Desktop: FC = () => {
         refresh();
       }
     );
-  }, [updateRecentRefreshTimes]);
+  }, [getBookmark]);
 
   useEffect(() => {
     setBookmarksEventHandlers();

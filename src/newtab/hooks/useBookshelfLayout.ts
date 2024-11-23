@@ -6,7 +6,6 @@ import {
   ITEM_WIDTH,
 } from "../utils/constant";
 import { layoutDB, LayoutMap } from "../utils/layoutDB";
-import { refreshTargetStore } from "../store/refreshTarget";
 import { useCallback, useEffect, useState } from "react";
 
 export const useFolder = (id: string) => {
@@ -64,7 +63,6 @@ const makeFile = (
 
 export const useFolderLayout = (folder: File, itemRefs: HTMLDivElement[]) => {
   const [layoutMap, setLayoutMap] = useState<LayoutMap>();
-  const { updateRecentRefreshTimes, recentRefreshTimes } = refreshTargetStore();
   const files = (folder?.children || []).map((child) => {
     return makeFile(child, layoutMap);
   });
@@ -74,11 +72,11 @@ export const useFolderLayout = (folder: File, itemRefs: HTMLDivElement[]) => {
       setRowCol(files[index]?.id, el, folder)
     );
 
-    /**
-     * @TODO: dependency 배열에 files, folder가 있으면 updateRecentRefreshTimes가 돌면서 또 files, folder가 업데이트 되면서 무한루프.
-     * 로직의 수정이 필요.
-     */
-    updateRecentRefreshTimes([folder.id]);
+    // /**
+    //  * @TODO: dependency 배열에 files, folder가 있으면 updateRecentRefreshTimes가 돌면서 또 files, folder가 업데이트 되면서 무한루프.
+    //  * 로직의 수정이 필요.
+    //  */
+    // updateRecentRefreshTimes([folder.id]);
   }, [itemRefs]);
 
   useEffect(() => {
