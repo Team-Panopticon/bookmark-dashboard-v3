@@ -8,6 +8,7 @@ export interface File extends chrome.bookmarks.BookmarkTreeNode {
   row?: number | string;
   col?: number | string;
   type?: FileType;
+  children?: File[];
 }
 
 export type modalInfo = {

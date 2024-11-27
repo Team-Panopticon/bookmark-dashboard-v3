@@ -3,7 +3,6 @@ import { folderStore } from "../store/folder";
 import Bookshelf from "./Bookshelf";
 import Moveable from "react-moveable";
 import { File } from "../../types/store";
-import { useFolder } from "../hooks/useBookshelfLayout";
 import { bookmarkStore } from "../store/bookmarkStore";
 
 const FolderManager: FC = () => {

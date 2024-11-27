@@ -3,7 +3,7 @@ import { folderStore } from "../store/folder";
 import Bookshelf from "./Bookshelf";
 import Moveable from "react-moveable";
 import { File } from "../../types/store";
-import { useFolder } from "../hooks/useBookshelfLayout";
+import { bookmarkStore } from "../store/bookmarkStore";
 
 const FolderManager: FC = () => {
   const { folders } = folderStore();
@@ -36,7 +36,7 @@ const Folder = ({
   const targetRef = useRef<HTMLDivElement>(null);
   const dragTargetRef = useRef<HTMLDivElement>(null);
   const { closeFolder, focusFolder } = folderStore();
-  const { folder } = useFolder(id);
+  const folder = bookmarkStore().getSubtree(id);
 
   /**
    * @TODO

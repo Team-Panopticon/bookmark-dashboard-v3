@@ -26,7 +26,7 @@ const Desktop: FC = () => {
 
   useEffect(() => {
     getBookmark();
-  }, []);
+  }, [getBookmark]);
 
   const { isDragging } = dragAndDropStore();
   return (

@@ -40,12 +40,8 @@ class LayoutDB {
     });
   }
 
-  async getLayout(parentId: string): Promise<LayoutMap> {
-    const result = await this.db.getAllFromIndex(
-      OBJECT_STORE_NAME,
-      "parentId",
-      parentId
-    );
+  async getAllLayout(): Promise<LayoutMap> {
+    const result = await this.db.getAll(OBJECT_STORE_NAME);
     const layoutMap = parseLayoutData(result);
 
     return layoutMap;

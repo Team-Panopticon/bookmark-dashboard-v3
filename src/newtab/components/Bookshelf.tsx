@@ -1,13 +1,14 @@
 import type { FC } from "react";
-import { memo, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { type File } from "../../types/store";
-import { useFolder, useFolderLayout } from "../hooks/useBookshelfLayout";
 import { ITEM_HEIGHT, ITEM_WIDTH } from "../utils/constant";
 import { useMouseDown } from "../hooks/useMouseDown";
 import { useMouseUp } from "../hooks/useMouseUp";
 import { useMouseMove } from "../hooks/useMouseMove";
 import { dragAndDropStore } from "../store/dragAndDrop";
 import FileView from "./FileView";
+import { getRowColUpdatedFiles } from "../utils/getRowColUpdatedFiles";
+import { bookmarkStore } from "../store/bookmarkStore";
 
 export interface DarkModeEvent {
   darkMode: boolean;
@@ -27,18 +28,21 @@ type Props = {
   routeInFolder?: (file: File) => void;
 };
 
-const Bookshelf: FC<Props> = (props) => {
-  const { folder } = props;
-
+const Bookshelf: FC<Props> = ({ folder }) => {
+  const { children: files = [] } = folder;
+  const { updateFilesLayout } = bookmarkStore();
   const { file: draggingFile } = dragAndDropStore();
 
   const originGridContainerRef = useRef<HTMLDivElement>(null);
 
-  const { files } = useFolderLayout(
-    folder,
-    (originGridContainerRef.current?.children as unknown as HTMLDivElement[]) ||
-      []
-  );
+  useEffect(() => {
+    updateFilesLayout(
+      getRowColUpdatedFiles(
+        folder,
+        originGridContainerRef.current?.children as HTMLDivElement[] | undefined
+      )
+    );
+  }, [originGridContainerRef.current?.children]);
 
   const { mouseDownHandler } = useMouseDown({
     bookshelf: folder,
