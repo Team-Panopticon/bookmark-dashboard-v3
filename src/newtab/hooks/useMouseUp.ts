@@ -1,3 +1,4 @@
+import { bookmarkStore } from "../store/bookmarkStore";
 import { dragAndDropStore } from "../store/dragAndDrop";
 import { folderStore } from "../store/folder";
 import BookmarkApi from "../utils/bookmarkApi";
@@ -13,6 +14,7 @@ export const useMouseUp = () => {
     bookshelfAtMouseMove,
   } = dragAndDropStore();
   const { openFolder } = folderStore();
+  const { refreshBookmark } = bookmarkStore();
 
   const mouseUpHandler = async (e: React.MouseEvent) => {
     if (!mouseDownAt || !startPoint || !file) {
@@ -51,6 +53,7 @@ export const useMouseUp = () => {
     await BookmarkApi.move(id, parentId);
 
     flush();
+    refreshBookmark();
   };
 
   return { mouseUpHandler };
