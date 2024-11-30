@@ -9,6 +9,7 @@ import { dragAndDropStore } from "../store/dragAndDrop";
 import FileView from "./FileView";
 import { getRowColUpdatedFiles } from "../utils/getRowColUpdatedFiles";
 import { bookmarkStore } from "../store/bookmarkStore";
+import { useFolderUp } from "../hooks/useFolderUp";
 
 export interface DarkModeEvent {
   darkMode: boolean;
@@ -50,6 +51,7 @@ const Bookshelf: FC<Props> = ({ folder }) => {
   const { mouseUpHandler } = useMouseUp();
   const { mouseMoveHandler, isDraggingOn, positionHolder } =
     useMouseMove(folder);
+  const { folderMouseUpHandler } = useFolderUp();
 
   return (
     <div
@@ -60,6 +62,7 @@ const Bookshelf: FC<Props> = ({ folder }) => {
       }}
       ref={originGridContainerRef}
       onMouseUp={(e) => {
+        console.log("mouseUp");
         mouseUpHandler(e);
       }}
       onMouseMove={mouseMoveHandler}
@@ -78,6 +81,7 @@ const Bookshelf: FC<Props> = ({ folder }) => {
                 point: { x: e.pageX, y: e.pageY },
               })
             }
+            onMouseUp={(e) => folderMouseUpHandler(e, file)}
           />
         );
       })}

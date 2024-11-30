@@ -4,14 +4,16 @@ import { type File } from "../../types/store";
 type Props = {
   file: File;
   onMouseDown?: React.MouseEventHandler<HTMLElement>;
+  onMouseUp?: React.MouseEventHandler<HTMLElement>;
   style?: CSSProperties;
 };
 
 /** @TODO favicon 그리기 (원래 코드에서 안옮겼음) */
-const FileView = ({ file, onMouseDown, style }: Props) => {
+const FileView = ({ file, onMouseDown, onMouseUp, style }: Props) => {
   return (
     <div
       onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
       style={{
         ...style,
         gridRow: file.row || "auto",
@@ -26,7 +28,8 @@ const FileView = ({ file, onMouseDown, style }: Props) => {
         }}
       >
         <div className="flex  flex-[2] items-center text-[48px] leading-[48px] text-yellow-500">
-          {file.title.charAt(0)}
+          {/* {file.title.charAt(0)} */}
+          {file.id}
         </div>
         <p className="line-clamp-2 flex-[1] transform-none overflow-hidden text-ellipsis break-words px-2 pb-1 text-xs leading-5 tracking-[.2px]">
           {file.title}

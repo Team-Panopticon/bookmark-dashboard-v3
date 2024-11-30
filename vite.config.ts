@@ -10,6 +10,7 @@ export default defineConfig({
         newtab: "./newtab.html",
       },
     },
+    minify: false,
   },
   plugins: [react()],
   css: {

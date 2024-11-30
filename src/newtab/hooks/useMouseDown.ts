@@ -22,6 +22,7 @@ export const useMouseDown = ({ bookshelf }: { bookshelf: Bookshelf }) => {
     file: File;
     point: { x: number; y: number };
   }) => {
+    console.log("mousedown", file);
     setFile(file);
     setBookshelfAtMouseDown(bookshelf);
     setBookshelfAtMouseMove(bookshelf);
