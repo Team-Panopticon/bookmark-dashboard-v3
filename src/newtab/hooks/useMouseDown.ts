@@ -1,13 +1,12 @@
+import { Point } from "../../types/Point";
 import { Bookshelf, File } from "../../types/store";
 import { dragAndDropStore } from "../store/dragAndDrop";
-import { Point } from "./useMouseMove";
 
 export const useMouseDown = ({ bookshelf }: { bookshelf: Bookshelf }) => {
   const {
     setFile,
     setFileElement,
     setBookshelfAtMouseDown,
-    setBookshelfAtMouseMove,
     setMouseDownAt,
     setStartPoint,
     setOffsetBetweenStartPointAndFileLeftTop,
@@ -22,9 +21,9 @@ export const useMouseDown = ({ bookshelf }: { bookshelf: Bookshelf }) => {
     file: File;
     point: { x: number; y: number };
   }) => {
+    console.log("mousedown >> ", file);
     setFile(file);
     setBookshelfAtMouseDown(bookshelf);
-    setBookshelfAtMouseMove(bookshelf);
     setFileElement(currentTarget);
     setMouseDownAt(Date.now());
     setStartPoint(point);

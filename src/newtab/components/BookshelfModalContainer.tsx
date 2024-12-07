@@ -93,14 +93,7 @@ const Folder = ({
             className="aspect-square size-4 rounded-full bg-red-500 text-center text-[10px]"
           ></button>
         </div>
-        {folder && (
-          <Bookshelf
-            id={bookshelfId}
-            key={bookshelfId}
-            routeInFolder={routeInFolder}
-            folder={folder}
-          />
-        )}
+        {folder && <Bookshelf routeInFolder={routeInFolder} folder={folder} />}
       </div>
       <Moveable
         target={targetRef}

@@ -2,16 +2,20 @@ import { bookmarkStore } from "../store/bookmarkStore";
 import { dragAndDropStore } from "../store/dragAndDrop";
 import { folderStore } from "../store/folder";
 import BookmarkApi from "../utils/bookmarkApi";
+import {
+  GRID_CONTAINER_PADDING,
+  ITEM_HEIGHT,
+  ITEM_WIDTH,
+} from "../utils/constant";
 import { layoutDB } from "../utils/layoutDB";
 
-export const useMouseUp = () => {
+export const useMouseUp = ({ parentId }: { parentId: string }) => {
   const {
     mouseDownAt,
     startPoint,
     file,
     flush,
-    positionHolder,
-    bookshelfAtMouseMove,
+    offsetBetweenStartPointAndFileLeftTop,
   } = dragAndDropStore();
   const { openFolder } = folderStore();
   const { refreshBookmark } = bookmarkStore();
@@ -37,12 +41,25 @@ export const useMouseUp = () => {
       return;
     }
 
-    if (!positionHolder || !bookshelfAtMouseMove) return;
+    if (!offsetBetweenStartPointAndFileLeftTop) return;
 
-    /* NOTE: 빈공간 : placeholder가 보이는 위치로 이동(저장)*/
-    const { id: parentId } = bookshelfAtMouseMove;
+    const { clientX, clientY } = e;
+    const { x: bookshelfX, y: bookshelfY } =
+      e.currentTarget.getBoundingClientRect();
+    const { scrollTop, scrollLeft } = e.currentTarget;
+
     const { id } = file;
-    const { row, col } = positionHolder;
+    const row =
+      Math.floor(
+        (clientY + scrollTop - bookshelfY - GRID_CONTAINER_PADDING) /
+          ITEM_HEIGHT
+      ) + 1;
+
+    const col =
+      Math.floor(
+        (clientX + scrollLeft - bookshelfX - GRID_CONTAINER_PADDING) /
+          ITEM_WIDTH
+      ) + 1;
 
     layoutDB.setItemLayoutById({
       id,

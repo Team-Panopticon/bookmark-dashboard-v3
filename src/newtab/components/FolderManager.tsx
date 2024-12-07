@@ -38,9 +38,7 @@ const Folder = ({
   const targetRef = useRef<HTMLDivElement>(null);
   const dragTargetRef = useRef<HTMLDivElement>(null);
   const { closeFolder, focusFolder } = folderStore();
-  const childItems = folder?.children || [];
 
-  const bookshelfId = childItems[childItems.length - 1]?.id || id;
   // folderRoute(): BreadCrumb[] {
   //   return this.folderItems.map((item) => ({
   //     disabled: false,
@@ -86,9 +84,7 @@ const Folder = ({
             className="aspect-square size-4 rounded-full bg-red-500 text-center text-[10px]"
           ></button>
         </div>
-        {folder && (
-          <Bookshelf id={bookshelfId} key={bookshelfId} folder={folder} />
-        )}
+        {folder && <Bookshelf folder={folder} />}
       </div>
       <Moveable
         target={targetRef}

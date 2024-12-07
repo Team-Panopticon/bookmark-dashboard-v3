@@ -20,10 +20,8 @@ export type State = {
   fileElement?: HTMLElement;
   mouseDownAt?: number;
   bookshelfAtMouseDown?: Bookshelf;
-  bookshelfAtMouseMove?: Bookshelf;
   startPoint?: { x: number; y: number };
   offsetBetweenStartPointAndFileLeftTop?: { x: number; y: number };
-  positionHolder?: { row: number; col: number };
 };
 
 export interface Actions {
@@ -31,7 +29,6 @@ export interface Actions {
   setFile: (file: File) => void;
   setFileElement: (element: HTMLElement) => void;
   setBookshelfAtMouseDown: (bookshelf: Bookshelf) => void;
-  setBookshelfAtMouseMove: (bookshelf: Bookshelf) => void;
   setMouseDownAt: (time: number) => void;
   setStartPoint: (point: { x: number; y: number }) => void;
   setOffsetBetweenStartPointAndFileLeftTop: (point: {
@@ -39,7 +36,6 @@ export interface Actions {
     y: number;
   }) => void;
   flush: () => void;
-  setPositionHolder: (position: { row: number; col: number }) => void;
 }
 
 export const dragAndDropStore = create<State & Actions>((set, get) => ({
@@ -48,11 +44,8 @@ export const dragAndDropStore = create<State & Actions>((set, get) => ({
   setFileElement: (element: HTMLElement) => set({ fileElement: element }),
   setBookshelfAtMouseDown: (bookshelf: Bookshelf) =>
     set({ bookshelfAtMouseDown: bookshelf }),
-  setBookshelfAtMouseMove: (bookshelf: Bookshelf) =>
-    set({ bookshelfAtMouseMove: bookshelf }),
   setMouseDownAt: (time) => set({ mouseDownAt: time }),
   setStartPoint: ({ x, y }) => set({ startPoint: { x, y } }),
-  setPositionHolder: ({ row, col }) => set({ positionHolder: { row, col } }),
   setOffsetBetweenStartPointAndFileLeftTop: ({ x, y }) =>
     set({ offsetBetweenStartPointAndFileLeftTop: { x, y } }),
   flush: () => {
@@ -61,10 +54,8 @@ export const dragAndDropStore = create<State & Actions>((set, get) => ({
       fileElement: undefined,
       mouseDownAt: undefined,
       bookshelfAtMouseDown: undefined,
-      bookshelfAtMouseMove: undefined,
       startPoint: undefined,
       offsetBetweenStartPointAndFileLeftTop: undefined,
-      positionHolder: undefined,
     });
   },
 }));

@@ -1,14 +1,14 @@
 import type { FC } from "react";
-import { memo, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { type File } from "../../types/store";
 import { ITEM_HEIGHT, ITEM_WIDTH } from "../utils/constant";
 import { useMouseDown } from "../hooks/useMouseDown";
 import { useMouseUp } from "../hooks/useMouseUp";
-import { useMouseMove } from "../hooks/useMouseMove";
 import { dragAndDropStore } from "../store/dragAndDrop";
 import FileView from "./FileView";
 import { getRowColUpdatedFiles } from "../utils/getRowColUpdatedFiles";
 import { bookmarkStore } from "../store/bookmarkStore";
+import { useFolderUp } from "../hooks/useFolderUp";
 
 export interface DarkModeEvent {
   darkMode: boolean;
@@ -23,7 +23,6 @@ export const isDarkModeEvent = (event: any): event is DarkModeEvent => {
 };
 
 type Props = {
-  id: string;
   folder: File;
   routeInFolder?: (file: File) => void;
 };
@@ -47,9 +46,8 @@ const Bookshelf: FC<Props> = ({ folder }) => {
   const { mouseDownHandler } = useMouseDown({
     bookshelf: folder,
   });
-  const { mouseUpHandler } = useMouseUp();
-  const { mouseMoveHandler, isDraggingOn, positionHolder } =
-    useMouseMove(folder);
+  const { mouseUpHandler } = useMouseUp({ parentId: folder.id });
+  const { folderMouseUpHandler } = useFolderUp();
 
   return (
     <div
@@ -62,7 +60,6 @@ const Bookshelf: FC<Props> = ({ folder }) => {
       onMouseUp={(e) => {
         mouseUpHandler(e);
       }}
-      onMouseMove={mouseMoveHandler}
     >
       {files.map((file) => {
         if (draggingFile?.id === file.id) return;
@@ -78,36 +75,15 @@ const Bookshelf: FC<Props> = ({ folder }) => {
                 point: { x: e.pageX, y: e.pageY },
               })
             }
+            onMouseUp={(e) => {
+              // TODO: 동작 확인 필요, 부모 이벤트에 먹힘
+              folderMouseUpHandler(e, file);
+            }}
           />
         );
       })}
-      {isDraggingOn && draggingFile && positionHolder && (
-        <PositionHolder
-          file={draggingFile}
-          col={positionHolder.col}
-          row={positionHolder.row}
-        />
-      )}
     </div>
   );
 };
 
-const PositionHolder = ({
-  file,
-  row,
-  col,
-}: {
-  file: File;
-  row: File["row"];
-  col: File["col"];
-}) => {
-  return (
-    <FileView
-      style={{ opacity: 0.6 }}
-      key={file.id}
-      file={{ ...file, row, col }}
-    />
-  );
-};
-
-export default memo(Bookshelf);
+export default Bookshelf;

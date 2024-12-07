@@ -4,6 +4,7 @@ import FolderManager from "../newtab/components/FolderManager";
 import { dragAndDropStore } from "../newtab/store/dragAndDrop";
 import FileView from "../newtab/components/FileView";
 import { bookmarkStore } from "../newtab/store/bookmarkStore";
+import { useFolderUp } from "../newtab/hooks/useFolderUp";
 
 const Desktop: FC = () => {
   const { bookmark, getBookmark } = bookmarkStore();
@@ -32,7 +33,7 @@ const Desktop: FC = () => {
   return (
     <div className="size-full">
       {isDragging() && <DraggingFile />}
-      {bookmark && <Bookshelf id="1" key={1} folder={bookmark}></Bookshelf>}
+      {bookmark && <Bookshelf folder={bookmark}></Bookshelf>}
       {/* <CreateFolderModal></CreateFolderModal> */}
       <FolderManager />
       {/* <ContextMenuContainer /> */}
@@ -47,6 +48,7 @@ export default Desktop;
 const DraggingFile = () => {
   const { fileElement, offsetBetweenStartPointAndFileLeftTop, file } =
     dragAndDropStore();
+  const { folderMouseUpHandler } = useFolderUp();
 
   const [{ x, y }, setDraggingFilePosition] = useState<{
     x?: number;
@@ -101,6 +103,12 @@ const DraggingFile = () => {
         position: "absolute",
         top: y,
         left: x,
+        zIndex: 99999,
+        pointerEvents: "none",
+      }}
+      onMouseUp={(e) => {
+        console.log("draging file mouse up");
+        folderMouseUpHandler(e, file);
       }}
     />
   );
