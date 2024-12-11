@@ -62,8 +62,6 @@ const Bookshelf: FC<Props> = ({ folder }) => {
       }}
     >
       {files.map((file) => {
-        if (draggingFile?.id === file.id) return;
-
         return (
           <FileView
             key={file.id}
@@ -78,6 +76,9 @@ const Bookshelf: FC<Props> = ({ folder }) => {
             onMouseUp={(e) => {
               // TODO: 동작 확인 필요, 부모 이벤트에 먹힘
               folderMouseUpHandler(e, file);
+            }}
+            style={{
+              background: draggingFile?.id === file.id ? "#eee" : "",
             }}
           />
         );
