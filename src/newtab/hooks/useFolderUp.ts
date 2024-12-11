@@ -82,13 +82,22 @@ export const useFolderUp = () => {
             ITEM_WIDTH
         ) + 1;
 
+      /**
+       * 북마크인 경우: 레이아웃을 업데이트.
+       * 북마크가 아닌 경우: 레이아웃을 삭제.
+       */
+      const updateLayoutOrDelete =
+        folder.type === FileType.BOOKMARK
+          ? layoutDB.setItemLayoutById({
+              id: draggingFileId,
+              parentId: folderId,
+              col,
+              row,
+            })
+          : layoutDB.deleteItemLayoutById(draggingFileId);
+
       await Promise.all([
-        layoutDB.setItemLayoutById({
-          id: draggingFileId,
-          parentId: folderId,
-          col,
-          row,
-        }),
+        updateLayoutOrDelete,
         BookmarkApi.move(draggingFileId, folderId),
       ]);
     } catch {
