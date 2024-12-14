@@ -12,16 +12,16 @@
   "dependencies": {
     "eslint-plugin-tailwindcss": "^3.17.4",
     "idb": "^8.0.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "run": "^1.5.0",
     "tailwind": "^4.0.0",
-    "zustand": "^4.5.4"
+    "zustand": "^5.0.2"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.269",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.2",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
     "@typescript-eslint/parser": "^7.15.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
