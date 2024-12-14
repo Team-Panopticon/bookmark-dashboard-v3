@@ -1,4 +1,4 @@
-import { useRef, useState, type FC } from "react";
+import { useEffect, useRef, useState, type FC } from "react";
 import { folderStore } from "../store/folder";
 import Bookshelf from "./Bookshelf";
 import Moveable from "react-moveable";
@@ -34,23 +34,40 @@ const Folder = ({
   timestampId: string;
 }) => {
   const { getSubtree } = bookmarkStore();
-  const folder = getSubtree(id);
+  // const folder = getSubtree(id);
   const targetRef = useRef<HTMLDivElement>(null);
   const dragTargetRef = useRef<HTMLDivElement>(null);
   const { closeFolder, focusFolder } = folderStore();
 
-  // folderRoute(): BreadCrumb[] {
-  //   return this.folderItems.map((item) => ({
-  //     disabled: false,
-  //     text: item.title,
-  //     "data-id": item.id,
-  //   }));
-  // },
-  const routeInFolder = (file: File) => {
-    // setFolderItems((prev) => [...prev, { id, title }]);
-    // 해줘야하는가?
-    // await this.routePathRefresh();
+  const [history, setHistory] = useState<string[]>([id]);
+  const [folder, setFolder] = useState<File | null>(null);
+  const [historyCursor, setHistoryCursor] = useState<number>(0); // 현재 위치 인덱스
+
+  // "뒤로 가기" 기능
+  const goBack = () => {
+    // check : ui에서도 막아줘야함.
+    if (historyCursor > 0) {
+      setHistoryCursor(historyCursor - 1);
+    }
   };
+
+  // "앞으로 가기" 기능
+  const goForward = () => {
+    if (historyCursor < history.length - 1) {
+      setHistoryCursor(historyCursor + 1);
+    }
+  };
+
+  // 폴더 이동 시 호출
+  const navigateTo = ({ id: folderId }: File) => {
+    const newHistory = history.slice(0, historyCursor + 1); // 현재 이후 기록 제거
+    setHistory([...newHistory, folderId]);
+    setHistoryCursor(newHistory.length); // 새로운 위치로 이동
+  };
+
+  useEffect(() => {
+    setFolder(getSubtree(history[historyCursor]));
+  }, [historyCursor, getSubtree, setFolder, history]);
 
   return (
     <div className="container">
@@ -74,8 +91,14 @@ const Folder = ({
           ref={dragTargetRef}
           className="flex h-12 w-full items-center justify-between rounded-t-lg bg-neutral-300 p-2 hover:border-b "
         >
-          <div>
-            {[{ title: "Header" }].map((item) => item.title).join(" / ")}
+          <div className="flex">
+            <button className="w-4 border-none bg-none" onClick={goBack}>
+              {"<"}
+            </button>
+            <button className="w-4 border-none bg-none" onClick={goForward}>
+              {">"}
+            </button>
+            <div>{folder?.title}</div>
           </div>
           <button
             onClick={() => {
@@ -84,7 +107,7 @@ const Folder = ({
             className="aspect-square size-4 rounded-full bg-red-500 text-center text-[10px]"
           ></button>
         </div>
-        {folder && <Bookshelf folder={folder} />}
+        {folder && <Bookshelf folder={folder} navigateTo={navigateTo} />}
       </div>
       <Moveable
         target={targetRef}

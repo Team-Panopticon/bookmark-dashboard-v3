@@ -5,11 +5,18 @@ type Props = {
   file: File;
   onMouseDown?: React.MouseEventHandler<HTMLElement>;
   onMouseUp?: React.MouseEventHandler<HTMLElement>;
+  onDoubleClick?: (file: File) => void;
   style?: CSSProperties;
 };
 
 /** @TODO favicon 그리기 (원래 코드에서 안옮겼음) */
-const FileView = ({ file, onMouseDown, onMouseUp, style }: Props) => {
+const FileView = ({
+  file,
+  onMouseDown,
+  onMouseUp,
+  onDoubleClick,
+  style,
+}: Props) => {
   return (
     <div
       onMouseDown={onMouseDown}
@@ -20,6 +27,7 @@ const FileView = ({ file, onMouseDown, onMouseUp, style }: Props) => {
         gridColumn: file.col || "auto",
       }}
       className="h-item w-item"
+      onDoubleClick={() => onDoubleClick?.(file)}
     >
       <button
         className="flex size-full flex-col items-center"

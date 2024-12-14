@@ -6,7 +6,11 @@ import BookmarkApi from "../utils/bookmarkApi";
 import { getRowColFromMouseEvent } from "../utils/getRowColUpdatedFiles";
 import { layoutDB } from "../utils/layoutDB";
 
-export const useFolderUp = () => {
+export const useFolderUp = ({
+  navigateTo,
+}: {
+  navigateTo?: (file: File) => void;
+}) => {
   const {
     mouseDownAt,
     startPoint,
@@ -18,27 +22,22 @@ export const useFolderUp = () => {
 
   const { refreshBookmark } = bookmarkStore();
 
-  const folderMouseUpHandler = async (e: React.MouseEvent, file: File) => {
-    console.log("folderUP");
-
-    if (!mouseDownAt || !startPoint) return;
-
-    const moveX = Math.abs(startPoint.x - e.pageX);
-    const moveY = Math.abs(startPoint.y - e.pageY);
-
-    const isClick =
-      new Date().getTime() - mouseDownAt < 150 && moveX + moveY < 20;
-
-    if (isClick) {
-      /** @TODO 클릭 시 툴팁 처리? */
-      file.type === "FOLDER"
-        ? openFolder(file.id)
-        : window.open(file.url, "_blank")?.focus();
-
-      flush();
+  const doubleClickHandler = (file: File) => {
+    if (file.type === FileType.FOLDER && navigateTo) {
+      navigateTo(file);
       return;
     }
 
+    /** @NOTE: Desktop인 경우 */
+    if (file.type === FileType.FOLDER) {
+      openFolder(file.id);
+      return;
+    }
+
+    window.open(file.url, "_blank")?.focus();
+  };
+
+  const folderMouseUpHandler = async (e: React.MouseEvent, file: File) => {
     if (
       !mouseDownAt ||
       !startPoint ||
@@ -88,7 +87,7 @@ export const useFolderUp = () => {
     }
   };
 
-  return { folderMouseUpHandler };
+  return { folderMouseUpHandler, doubleClickHandler };
 };
 
 // 모달 => 모달

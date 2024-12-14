@@ -48,7 +48,7 @@ export default Desktop;
 const DraggingFile = () => {
   const { fileElement, offsetBetweenStartPointAndFileLeftTop, file } =
     dragAndDropStore();
-  const { folderMouseUpHandler } = useFolderUp();
+  const { folderMouseUpHandler } = useFolderUp({});
 
   const [{ x, y }, setDraggingFilePosition] = useState<{
     x?: number;

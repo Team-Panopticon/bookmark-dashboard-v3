@@ -24,10 +24,10 @@ export const isDarkModeEvent = (event: any): event is DarkModeEvent => {
 
 type Props = {
   folder: File;
-  routeInFolder?: (file: File) => void;
+  navigateTo?: (file: File) => void;
 };
 
-const Bookshelf: FC<Props> = ({ folder }) => {
+const Bookshelf: FC<Props> = ({ folder, navigateTo }) => {
   const { children: files = [] } = folder;
   const { updateFilesLayout } = bookmarkStore();
   const { file: draggingFile } = dragAndDropStore();
@@ -47,7 +47,9 @@ const Bookshelf: FC<Props> = ({ folder }) => {
     bookshelf: folder,
   });
   const { mouseUpHandler } = useMouseUp({ parentId: folder.id });
-  const { folderMouseUpHandler } = useFolderUp();
+  const { folderMouseUpHandler, doubleClickHandler } = useFolderUp({
+    navigateTo,
+  });
 
   return (
     <div
@@ -58,6 +60,7 @@ const Bookshelf: FC<Props> = ({ folder }) => {
       }}
       ref={originGridContainerRef}
       onMouseUp={(e) => {
+        console.log("Bookshelf mouse up");
         mouseUpHandler(e);
       }}
     >
@@ -75,8 +78,10 @@ const Bookshelf: FC<Props> = ({ folder }) => {
             }
             onMouseUp={(e) => {
               // TODO: 동작 확인 필요, 부모 이벤트에 먹힘
+              console.log("fileview mouse up");
               folderMouseUpHandler(e, file);
             }}
+            onDoubleClick={doubleClickHandler}
             style={{
               background: draggingFile?.id === file.id ? "#eee" : "",
             }}
