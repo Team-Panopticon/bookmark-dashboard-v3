@@ -7,6 +7,7 @@ type Props = {
   onMouseUp?: React.MouseEventHandler<HTMLElement>;
   onDoubleClick?: (file: File) => void;
   style?: CSSProperties;
+  focused?: boolean;
 };
 
 /** @TODO favicon 그리기 (원래 코드에서 안옮겼음) */
@@ -16,6 +17,7 @@ const FileView = ({
   onMouseUp,
   onDoubleClick,
   style,
+  focused,
 }: Props) => {
   return (
     <div
@@ -25,6 +27,7 @@ const FileView = ({
         ...style,
         gridRow: file.row || "auto",
         gridColumn: file.col || "auto",
+        border: focused ? "1px solid black" : "",
       }}
       className="h-item w-item"
       onDoubleClick={() => onDoubleClick?.(file)}

@@ -1,6 +1,7 @@
 import { Point } from "../../types/Point";
 import { Bookshelf, File } from "../../types/store";
 import { dragAndDropStore } from "../store/dragAndDrop";
+import useFocusStore from "../store/focusStore";
 
 export const useMouseDown = ({ bookshelf }: { bookshelf: Bookshelf }) => {
   const {
@@ -12,15 +13,24 @@ export const useMouseDown = ({ bookshelf }: { bookshelf: Bookshelf }) => {
     setOffsetBetweenStartPointAndFileLeftTop,
   } = dragAndDropStore();
 
+  const { addFocus, clearFocus } = useFocusStore();
+
   const mouseDownHandler = ({
-    currentTarget,
+    event,
     file,
     point,
   }: {
-    currentTarget: HTMLElement;
+    event: React.MouseEvent<HTMLElement, MouseEvent>;
     file: File;
     point: { x: number; y: number };
   }) => {
+    event.stopPropagation();
+    const { currentTarget, ctrlKey, shiftKey } = event;
+    if (!(ctrlKey || shiftKey)) {
+      clearFocus();
+    }
+    addFocus([file.id]);
+
     console.log("mousedown >> ", file);
     setFile(file);
     setBookshelfAtMouseDown(bookshelf);

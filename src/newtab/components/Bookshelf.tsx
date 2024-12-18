@@ -9,6 +9,7 @@ import FileView from "./FileView";
 import { getRowColUpdatedFiles } from "../utils/getRowColUpdatedFiles";
 import { bookmarkStore } from "../store/bookmarkStore";
 import { useFolderUp } from "../hooks/useFolderUp";
+import useFocusStore from "../store/focusStore";
 
 export interface DarkModeEvent {
   darkMode: boolean;
@@ -31,7 +32,7 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo }) => {
   const { children: files = [] } = folder;
   const { updateFilesLayout } = bookmarkStore();
   const { file: draggingFile } = dragAndDropStore();
-
+  const { focusedIds, clearFocus } = useFocusStore();
   const originGridContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -63,15 +64,20 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo }) => {
         console.log("Bookshelf mouse up");
         mouseUpHandler(e);
       }}
+      onMouseDown={() => {
+        console.log("Bookshelf mouse down");
+        clearFocus();
+      }}
     >
       {files.map((file) => {
         return (
           <FileView
             key={file.id}
             file={file}
+            focused={focusedIds.has(file.id)}
             onMouseDown={(e) =>
               mouseDownHandler({
-                currentTarget: e.currentTarget,
+                event: e,
                 file,
                 point: { x: e.pageX, y: e.pageY },
               })
