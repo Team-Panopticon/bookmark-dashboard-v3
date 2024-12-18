@@ -9,7 +9,7 @@ import FileView from "./FileView";
 import { getRowColUpdatedFiles } from "../utils/getRowColUpdatedFiles";
 import { bookmarkStore } from "../store/bookmarkStore";
 import { useFolderUp } from "../hooks/useFolderUp";
-import useFocusStore from "../store/focusStore";
+import focusStore from "../store/focusStore";
 
 export interface DarkModeEvent {
   darkMode: boolean;
@@ -32,7 +32,7 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo }) => {
   const { children: files = [] } = folder;
   const { updateFilesLayout } = bookmarkStore();
   const { file: draggingFile } = dragAndDropStore();
-  const { focusedIds, clearFocus } = useFocusStore();
+  const { focusedIds, clearFocus } = focusStore();
   const originGridContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

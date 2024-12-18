@@ -10,7 +10,7 @@ type Actions = {
   clearFocus: () => void; // 모든 focus 초기화
 };
 
-const useFocusStore = create<States & Actions>((set, get) => ({
+const focusStore = create<States & Actions>((set, get) => ({
   focusedIds: new Set(),
 
   addFocus: (ids: string[]) => {
@@ -35,4 +35,4 @@ const useFocusStore = create<States & Actions>((set, get) => ({
   clearFocus: () => set({ focusedIds: new Set() }),
 }));
 
-export default useFocusStore;
+export default focusStore;

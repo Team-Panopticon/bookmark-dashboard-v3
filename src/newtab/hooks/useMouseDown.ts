@@ -1,7 +1,7 @@
 import { Point } from "../../types/Point";
 import { Bookshelf, File, FileType } from "../../types/store";
 import { dragAndDropStore } from "../store/dragAndDrop";
-import useFocusStore from "../store/focusStore";
+import focusStore from "../store/focusStore";
 
 const MOUSE_CLICK = {
   LEFT: 0,
@@ -18,7 +18,7 @@ export const useMouseDown = ({ bookshelf }: { bookshelf: Bookshelf }) => {
     setOffsetBetweenStartPointAndFileLeftTop,
   } = dragAndDropStore();
 
-  const { addFocus, clearFocus } = useFocusStore();
+  const { addFocus, clearFocus } = focusStore();
 
   const mouseDownHandler = ({
     event,
