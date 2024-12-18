@@ -64,9 +64,11 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo }) => {
         console.log("Bookshelf mouse up");
         mouseUpHandler(e);
       }}
-      onMouseDown={() => {
+      onMouseDown={({ ctrlKey, shiftKey }) => {
         console.log("Bookshelf mouse down");
-        clearFocus();
+        if (!(ctrlKey || shiftKey)) {
+          clearFocus();
+        }
       }}
     >
       {files.map((file) => {
