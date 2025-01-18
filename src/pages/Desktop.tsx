@@ -2,7 +2,7 @@ import { FC, useCallback, useEffect, useState } from "react";
 import Bookshelf from "../newtab/components/Bookshelf";
 import FolderManager from "../newtab/components/FolderManager";
 import { dragAndDropStore } from "../newtab/store/dragAndDrop";
-import FileView from "../newtab/components/FileView";
+import BookmarkView from "../newtab/components/BookmarkView";
 import { bookmarkStore } from "../newtab/store/bookmarkStore";
 import { useFolderUp } from "../newtab/hooks/useFolderUp";
 import ContextMenu from "../newtab/components/ContextMenu";
@@ -48,7 +48,7 @@ export default Desktop;
 
 const DraggingFile = () => {
   // todo : rootStore 에서 값 가져오는걸로 변경
-  const { fileElement, offsetBetweenStartPointAndFileLeftTop, file } =
+  const { fileElement, offsetBetweenStartPointAndFileLeftTop, bookmark } =
     dragAndDropStore();
   const { folderMouseUpHandler } = useFolderUp({});
 
@@ -95,12 +95,12 @@ const DraggingFile = () => {
     };
   }, [fileElement, offsetBetweenStartPointAndFileLeftTop]);
 
-  if (!file) return null;
+  if (!bookmark) return null;
   if (x === undefined && y === undefined) return null;
 
   return (
-    <FileView
-      file={file}
+    <BookmarkView
+      bookmark={bookmark}
       style={{
         position: "absolute",
         top: y,
@@ -110,7 +110,7 @@ const DraggingFile = () => {
       }}
       onMouseUp={(e) => {
         console.log("draging file mouse up");
-        folderMouseUpHandler(e, file);
+        folderMouseUpHandler(e, bookmark);
       }}
     />
   );

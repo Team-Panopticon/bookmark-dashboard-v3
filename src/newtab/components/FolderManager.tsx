@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type FC } from "react";
 import { folderStore } from "../store/folder";
 import Bookshelf from "./Bookshelf";
 import Moveable from "react-moveable";
-import { File } from "../../types/store";
+import { Bookmark } from "../../types/store";
 import { bookmarkStore } from "../store/bookmarkStore";
 
 const FolderManager: FC = () => {
@@ -40,7 +40,7 @@ const Folder = ({
   const { closeFolder, focusFolder } = folderStore();
 
   const [history, setHistory] = useState<string[]>([id]);
-  const [folder, setFolder] = useState<File | null>(null);
+  const [folder, setFolder] = useState<Bookmark | null>(null);
   const [historyCursor, setHistoryCursor] = useState<number>(0); // 현재 위치 인덱스
 
   // "뒤로 가기" 기능
@@ -59,7 +59,7 @@ const Folder = ({
   };
 
   // 폴더 이동 시 호출
-  const navigateTo = ({ id: folderId }: File) => {
+  const navigateTo = ({ id: folderId }: Bookmark) => {
     const newHistory = history.slice(0, historyCursor + 1); // 현재 이후 기록 제거
     setHistory([...newHistory, folderId]);
     setHistoryCursor(newHistory.length); // 새로운 위치로 이동

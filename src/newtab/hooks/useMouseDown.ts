@@ -1,5 +1,5 @@
 import { Point } from "../../types/Point";
-import { Bookshelf, File, FileType } from "../../types/store";
+import { Bookshelf, Bookmark } from "../../types/store";
 import contextMenuStore from "../store/contextMenuStore";
 import { dragAndDropStore } from "../store/dragAndDrop";
 import focusStore from "../store/focusStore";
@@ -11,8 +11,8 @@ const MOUSE_CLICK = {
 
 export const useMouseDown = ({ bookshelf }: { bookshelf: Bookshelf }) => {
   const {
-    setFile,
-    setFileElement,
+    setBookmark: setFile,
+    setBookmarkElement: setFileElement,
     setBookshelfAtMouseDown,
     setMouseDownAt,
     setStartPoint,
@@ -25,16 +25,16 @@ export const useMouseDown = ({ bookshelf }: { bookshelf: Bookshelf }) => {
 
   const mouseDownHandler = ({
     event,
-    file,
+    bookmark,
     point,
   }: {
     event: React.MouseEvent<HTMLElement, MouseEvent>;
-    file: File;
+    bookmark: Bookmark;
     point: { x: number; y: number };
   }) => {
     event.stopPropagation();
     const { currentTarget, ctrlKey, shiftKey } = event;
-    console.log("mousedown >> ", file, event);
+    console.log("mousedown >> ", bookmark, event);
 
     // 멀티 포커스인 경우는 기존 포커스 유지
     if (!(ctrlKey || shiftKey)) {
@@ -42,9 +42,9 @@ export const useMouseDown = ({ bookshelf }: { bookshelf: Bookshelf }) => {
     }
 
     // 공통
-    setFile(file);
+    setFile(bookmark);
 
-    addFocus([file.id]);
+    addFocus([bookmark.id]);
     // 우클릭
     if (event.button === MOUSE_CLICK.RIGHT) {
       event.preventDefault();

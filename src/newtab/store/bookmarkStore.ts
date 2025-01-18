@@ -1,15 +1,15 @@
 import { create } from "zustand";
 import BookmarkApi from "../utils/bookmarkApi";
-import { File, FileType } from "../../types/store";
+import { Bookmark, BookmarkType } from "../../types/store";
 import { layoutDB, LayoutMap } from "../utils/layoutDB";
 
 type State = {
-  bookmark: File;
+  bookmark: Bookmark;
 };
 
 type Actions = {
-  getBookmark: () => Promise<File>;
-  getSubtree: (id: string) => File | null;
+  getBookmark: () => Promise<Bookmark>;
+  getSubtree: (id: string) => Bookmark | null;
   refreshBookmark: () => Promise<void>;
   updateFilesLayout: (
     files: { id: string; row: number; col: number; parentId: string }[]
@@ -21,7 +21,7 @@ type Actions = {
  * bookmark나 layoutDB를 변경하면 -> 다 리프레시 할 수 있도록
  */
 export const bookmarkStore = create<State & Actions>()((set, get) => ({
-  bookmark: {} as File,
+  bookmark: {} as Bookmark,
   getBookmark: async () => {
     await get().refreshBookmark();
     return get().bookmark;
@@ -50,7 +50,7 @@ export const bookmarkStore = create<State & Actions>()((set, get) => ({
   },
 }));
 
-function findNodeById(id: string, node: File): File | null {
+function findNodeById(id: string, node: Bookmark): Bookmark | null {
   if (node.id === id) {
     return node;
   }
@@ -67,11 +67,11 @@ function findNodeById(id: string, node: File): File | null {
   return null;
 }
 
-function addRowColToTree(bookmark: File, layoutMap: LayoutMap): File {
+function addRowColToTree(bookmark: Bookmark, layoutMap: LayoutMap): Bookmark {
   if (layoutMap[bookmark.id]) {
     bookmark.row = layoutMap[bookmark.id].row;
     bookmark.col = layoutMap[bookmark.id].col;
-    bookmark.type = bookmark.children ? FileType.FOLDER : FileType.BOOKMARK;
+    bookmark.type = bookmark.children ? BookmarkType.FOLDER : BookmarkType.PAGE;
   }
 
   if (bookmark.children) {

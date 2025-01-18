@@ -1,18 +1,18 @@
 import { CSSProperties } from "react";
-import { type File } from "../../types/store";
+import { type Bookmark } from "../../types/store";
 
 type Props = {
-  file: File;
+  bookmark: Bookmark;
   onMouseDown?: React.MouseEventHandler<HTMLElement>;
   onMouseUp?: React.MouseEventHandler<HTMLElement>;
-  onDoubleClick?: (file: File) => void;
+  onDoubleClick?: (bookmark: Bookmark) => void;
   style?: CSSProperties;
   focused?: boolean;
 };
 
 /** @TODO favicon 그리기 (원래 코드에서 안옮겼음) */
-const FileView = ({
-  file,
+const BookmarkView = ({
+  bookmark,
   onMouseDown,
   onMouseUp,
   onDoubleClick,
@@ -25,12 +25,12 @@ const FileView = ({
       onMouseUp={onMouseUp}
       style={{
         ...style,
-        gridRow: file.row || "auto",
-        gridColumn: file.col || "auto",
+        gridRow: bookmark.row || "auto",
+        gridColumn: bookmark.col || "auto",
         border: focused ? "1px solid black" : "",
       }}
       className="h-item w-item"
-      onDoubleClick={() => onDoubleClick?.(file)}
+      onDoubleClick={() => onDoubleClick?.(bookmark)}
     >
       <button
         className="flex size-full flex-col items-center"
@@ -39,14 +39,14 @@ const FileView = ({
         }}
       >
         <div className="flex  flex-[2] items-center text-[48px] leading-[48px] text-yellow-500">
-          {file.title.charAt(0)}
+          {bookmark.title.charAt(0)}
         </div>
         <p className="line-clamp-2 flex-[1] transform-none overflow-hidden text-ellipsis break-words px-2 pb-1 text-xs leading-5 tracking-[.2px]">
-          {file.title}
+          {bookmark.title}
         </p>
       </button>
     </div>
   );
 };
 
-export default FileView;
+export default BookmarkView;

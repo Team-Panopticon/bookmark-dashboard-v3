@@ -1,4 +1,4 @@
-import { File, FileType } from "../../types/store";
+import { Bookmark, BookmarkType } from "../../types/store";
 import { bookmarkStore } from "../store/bookmarkStore";
 import { dragAndDropStore } from "../store/dragAndDrop";
 import { folderStore } from "../store/folder";
@@ -9,12 +9,12 @@ import { layoutDB } from "../utils/layoutDB";
 export const useFolderUp = ({
   navigateTo,
 }: {
-  navigateTo?: (file: File) => void;
+  navigateTo?: (bookmark: Bookmark) => void;
 }) => {
   const {
     mouseDownAt,
     startPoint,
-    file: draggingFile,
+    bookmark: draggingFile,
     flush,
     offsetBetweenStartPointAndFileLeftTop,
   } = dragAndDropStore();
@@ -22,35 +22,38 @@ export const useFolderUp = ({
 
   const { refreshBookmark } = bookmarkStore();
 
-  const doubleClickHandler = (file: File) => {
-    if (file.type === FileType.FOLDER && navigateTo) {
-      navigateTo(file);
+  const doubleClickHandler = (bookmark: Bookmark) => {
+    if (bookmark.type === BookmarkType.FOLDER && navigateTo) {
+      navigateTo(bookmark);
       return;
     }
 
     /** @NOTE: Desktop인 경우 */
-    if (file.type === FileType.FOLDER) {
-      openFolder(file.id);
+    if (bookmark.type === BookmarkType.FOLDER) {
+      openFolder(bookmark.id);
       return;
     }
 
-    window.open(file.url, "_blank")?.focus();
+    window.open(bookmark.url, "_blank")?.focus();
   };
 
-  const folderMouseUpHandler = async (e: React.MouseEvent, file: File) => {
+  const folderMouseUpHandler = async (
+    e: React.MouseEvent,
+    bookmark: Bookmark
+  ) => {
     if (
       !mouseDownAt ||
       !startPoint ||
       !draggingFile ||
       !offsetBetweenStartPointAndFileLeftTop ||
-      file.type !== FileType.FOLDER
+      bookmark.type !== BookmarkType.FOLDER
     ) {
       return;
     }
     e.stopPropagation();
 
     try {
-      const folder = file;
+      const folder = bookmark;
 
       /* NOTE: 빈공간 : placeholder가 보이는 위치로 이동(저장)*/
       const { id: draggingFileId } = draggingFile;
@@ -66,7 +69,7 @@ export const useFolderUp = ({
        * 북마크가 아닌 경우: 레이아웃을 삭제.
        */
       const updateLayoutOrDelete =
-        folder.type === FileType.BOOKMARK
+        folder.type === BookmarkType.PAGE
           ? layoutDB.setItemLayoutById({
               id: draggingFileId,
               parentId: folderId,

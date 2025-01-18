@@ -2,7 +2,7 @@ import { useRef, useState, type FC } from "react";
 import { folderStore } from "../store/folder";
 import Bookshelf from "./Bookshelf";
 import Moveable from "react-moveable";
-import { File } from "../../types/store";
+import { Bookmark } from "../../types/store";
 import { bookmarkStore } from "../store/bookmarkStore";
 
 const FolderManager: FC = () => {
@@ -48,7 +48,7 @@ const Folder = ({
    * 2. 자식 컴포넌트(ex. Bookshelf)는 받아온 데이터를 가지고 layout, drag&drop, action을 처리한다.
    */
 
-  const [folderItems, setFolderItems] = useState<File[]>([]);
+  const [folderItems, setFolderItems] = useState<Bookmark[]>([]);
   const bookshelfId = folderItems[folderItems.length - 1]?.id || id;
   // folderRoute(): BreadCrumb[] {
   //   return this.folderItems.map((item) => ({
@@ -57,8 +57,8 @@ const Folder = ({
   //     "data-id": item.id,
   //   }));
   // },
-  const routeInFolder = (file: File) => {
-    setFolderItems((prev) => [...prev, file]);
+  const routeInFolder = (bookmark: Bookmark) => {
+    setFolderItems((prev) => [...prev, bookmark]);
     // 해줘야하는가?
     // await this.routePathRefresh();
   };
@@ -93,7 +93,7 @@ const Folder = ({
             className="aspect-square size-4 rounded-full bg-red-500 text-center text-[10px]"
           ></button>
         </div>
-        {folder && <Bookshelf routeInFolder={routeInFolder} folder={folder} />}
+        {folder && <Bookshelf folder={folder} />}
       </div>
       <Moveable
         target={targetRef}

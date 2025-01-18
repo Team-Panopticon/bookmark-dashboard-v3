@@ -1,5 +1,5 @@
 import { MouseEvent } from "react";
-import { Bookshelf, File, FileType } from "../../types/store";
+import { Bookshelf, Bookmark, BookmarkType } from "../../types/store";
 import BookmarkApi from "../utils/bookmarkApi";
 import { layoutDB } from "../utils/layoutDB";
 import {
@@ -14,7 +14,7 @@ export const useEventHandler = ({
   navigateTo,
 }: {
   bookshelf?: Bookshelf;
-  navigateTo?: (file: File) => void;
+  navigateTo?: (bookmark: Bookmark) => void;
 }) => {
   const {
     dragAndDrop,
@@ -35,7 +35,8 @@ export const useEventHandler = ({
 
   const bookshelfEventHandler = {
     mouseUp: async (e: React.MouseEvent) => {
-      const { file, offsetBetweenStartPointAndFileLeftTop } = dragAndDrop || {};
+      const { bookmark: file, offsetBetweenStartPointAndFileLeftTop } =
+        dragAndDrop || {};
 
       if (!file || !bookshelf || !offsetBetweenStartPointAndFileLeftTop) {
         return;
@@ -70,16 +71,16 @@ export const useEventHandler = ({
     // 마우스 다운
     mouseDown: ({
       event,
-      file,
+      bookmark,
       point,
     }: {
       event: React.MouseEvent<HTMLElement, MouseEvent>;
-      file: File;
+      bookmark: Bookmark;
       point: { x: number; y: number };
     }) => {
       event.stopPropagation();
       const { currentTarget, ctrlKey, shiftKey } = event;
-      console.log("mousedown >> ", file, event);
+      console.log("mousedown >> ", bookmark, event);
 
       // 멀티 포커스인 경우는 기존 포커스 유지
       if (!(ctrlKey || shiftKey)) {
@@ -87,9 +88,9 @@ export const useEventHandler = ({
       }
 
       // 공통
-      setDragAndDrop({ file });
+      setDragAndDrop({ bookmark: bookmark });
 
-      addFocus([file.id]);
+      addFocus([bookmark.id]);
       // 우클릭
       if (event.button === MOUSE_CLICK.RIGHT) {
         event.preventDefault();
@@ -116,20 +117,20 @@ export const useEventHandler = ({
       });
     },
     // 마우스 업
-    mouseUp: async (e: React.MouseEvent, file: File) => {
+    mouseUp: async (e: React.MouseEvent, bookmark: Bookmark) => {
       const {
         mouseDownAt,
         startPoint,
         offsetBetweenStartPointAndFileLeftTop,
-        file: draggingFile,
+        bookmark: draggingBookmark,
       } = dragAndDrop || {};
 
       if (
         !mouseDownAt ||
         !startPoint ||
-        !draggingFile ||
+        !draggingBookmark ||
         !offsetBetweenStartPointAndFileLeftTop ||
-        file.type !== FileType.FOLDER
+        bookmark.type !== BookmarkType.FOLDER
       ) {
         return;
       }
@@ -137,14 +138,14 @@ export const useEventHandler = ({
       e.stopPropagation();
 
       try {
-        const folder = file;
+        const folder = bookmark;
 
         /* NOTE: 빈공간 : placeholder가 보이는 위치로 이동(저장)*/
-        const { id: draggingFileId } = draggingFile;
+        const { id: draggingBookmarkId } = draggingBookmark;
         const { id: folderId } = folder;
 
-        if (draggingFileId === folderId) {
-          throw Error(`Try Move From ${draggingFileId} to ${folderId}`);
+        if (draggingBookmarkId === folderId) {
+          throw Error(`Try Move From ${draggingBookmarkId} to ${folderId}`);
         }
         const { row, col } = getRowColFromMouseEvent(e);
 
@@ -153,18 +154,18 @@ export const useEventHandler = ({
          * 북마크가 아닌 경우: 레이아웃을 삭제.
          */
         const updateLayoutOrDelete =
-          folder.type === FileType.BOOKMARK
+          folder.type === BookmarkType.PAGE
             ? layoutDB.setItemLayoutById({
-                id: draggingFileId,
+                id: draggingBookmarkId,
                 parentId: folderId,
                 col,
                 row,
               })
-            : layoutDB.deleteItemLayoutById(draggingFileId);
+            : layoutDB.deleteItemLayoutById(draggingBookmarkId);
 
         await Promise.all([
           updateLayoutOrDelete,
-          BookmarkApi.move(draggingFileId, folderId),
+          BookmarkApi.move(draggingBookmarkId, folderId),
         ]);
       } catch {
         //
@@ -173,19 +174,19 @@ export const useEventHandler = ({
         flush();
       }
     },
-    doubleClick: (file: File) => {
-      if (file.type === FileType.FOLDER && navigateTo) {
-        navigateTo(file);
+    doubleClick: (bookmark: Bookmark) => {
+      if (bookmark.type === BookmarkType.FOLDER && navigateTo) {
+        navigateTo(bookmark);
         return;
       }
 
       /** @NOTE: Desktop인 경우 */
-      if (file.type === FileType.FOLDER) {
-        openFolder(file.id);
+      if (bookmark.type === BookmarkType.FOLDER) {
+        openFolder(bookmark.id);
         return;
       }
 
-      window.open(file.url, "_blank")?.focus();
+      window.open(bookmark.url, "_blank")?.focus();
     },
   };
 

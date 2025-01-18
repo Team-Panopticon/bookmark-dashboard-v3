@@ -1,11 +1,11 @@
 import type { FC } from "react";
 import { useEffect, useRef } from "react";
-import { type File } from "../../types/store";
+import { type Bookmark } from "../../types/store";
 import { ITEM_HEIGHT, ITEM_WIDTH } from "../utils/constant";
 import { useMouseDown } from "../hooks/useMouseDown";
 import { useMouseUp } from "../hooks/useMouseUp";
 import { dragAndDropStore } from "../store/dragAndDrop";
-import FileView from "./FileView";
+import BookmarkView from "./BookmarkView";
 import { getRowColUpdatedFiles } from "../utils/getRowColUpdatedFiles";
 import { bookmarkStore } from "../store/bookmarkStore";
 import { useFolderUp } from "../hooks/useFolderUp";
@@ -24,14 +24,14 @@ export const isDarkModeEvent = (event: any): event is DarkModeEvent => {
 };
 
 type Props = {
-  folder: File;
-  navigateTo?: (file: File) => void;
+  folder: Bookmark;
+  navigateTo?: (bookmark: Bookmark) => void;
 };
 
 const Bookshelf: FC<Props> = ({ folder, navigateTo }) => {
   const { children: files = [] } = folder;
   const { updateFilesLayout } = bookmarkStore();
-  const { file: draggingFile } = dragAndDropStore();
+  const { bookmark: draggingFile } = dragAndDropStore();
   const { focusedIds, clearFocus } = focusStore();
   const originGridContainerRef = useRef<HTMLDivElement>(null);
 
@@ -73,14 +73,14 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo }) => {
     >
       {files.map((file) => {
         return (
-          <FileView
+          <BookmarkView
             key={file.id}
-            file={file}
+            bookmark={file}
             focused={focusedIds.has(file.id)}
             onMouseDown={(e) =>
               mouseDownHandler({
                 event: e,
-                file,
+                bookmark: file,
                 point: { x: e.pageX, y: e.pageY },
               })
             }

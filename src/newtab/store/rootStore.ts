@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Bookshelf, File, FileType } from "../../types/store";
+import { Bookshelf, Bookmark, BookmarkType } from "../../types/store";
 import BookmarkApi from "../utils/bookmarkApi";
 import { layoutDB, LayoutMap } from "../utils/layoutDB";
 import { Folders } from "./folder";
@@ -14,7 +14,7 @@ type Position = {
 };
 
 type State = {
-  bookmark: File;
+  bookmark: Bookmark;
   contextMenu: {
     isContextMenuVisible: boolean;
     contextMenuPosition: Position;
@@ -23,7 +23,7 @@ type State = {
     focusedIds: Set<string>;
   };
   dragAndDrop?: {
-    file?: File;
+    bookmark?: Bookmark;
     fileElement?: HTMLElement;
     mouseDownAt?: number;
     bookshelfAtMouseDown?: Bookshelf;
@@ -39,8 +39,8 @@ type State = {
 
 type Action = {
   // bookmark
-  getBookmark: () => Promise<File>;
-  getSubtree: (id: string) => File | null;
+  getBookmark: () => Promise<Bookmark>;
+  getSubtree: (id: string) => Bookmark | null;
   refreshBookmark: () => Promise<void>;
   updateFilesLayout: (
     files: { id: string; row: number; col: number; parentId: string }[]
@@ -75,7 +75,7 @@ type Action = {
 export const rootStore = create<State & Action>()((set, get) => ({
   // bookmark
 
-  bookmark: {} as File,
+  bookmark: {} as Bookmark,
   getBookmark: async () => {
     await get().refreshBookmark();
     return get().bookmark;
@@ -138,14 +138,14 @@ export const rootStore = create<State & Action>()((set, get) => ({
   clearFocus: () => set({ focus: { focusedIds: new Set() } }),
 
   // dragAndDrop
-  isDragging: () => Boolean(get().dragAndDrop?.file),
+  isDragging: () => Boolean(get().dragAndDrop?.bookmark),
   setDragAndDrop: (nextState) => {
     set({ dragAndDrop: { ...get().dragAndDrop, ...nextState } });
   },
   flush: () => {
     set({
       dragAndDrop: {
-        file: undefined,
+        bookmark: undefined,
         fileElement: undefined,
         mouseDownAt: undefined,
         bookshelfAtMouseDown: undefined,
@@ -262,7 +262,7 @@ export const MOUSE_CLICK = {
   RIGHT: 2,
 } as const;
 
-function findNodeById(id: string, node: File): File | null {
+function findNodeById(id: string, node: Bookmark): Bookmark | null {
   if (node.id === id) {
     return node;
   }
@@ -279,11 +279,11 @@ function findNodeById(id: string, node: File): File | null {
   return null;
 }
 
-function addRowColToTree(bookmark: File, layoutMap: LayoutMap): File {
+function addRowColToTree(bookmark: Bookmark, layoutMap: LayoutMap): Bookmark {
   if (layoutMap[bookmark.id]) {
     bookmark.row = layoutMap[bookmark.id].row;
     bookmark.col = layoutMap[bookmark.id].col;
-    bookmark.type = bookmark.children ? FileType.FOLDER : FileType.BOOKMARK;
+    bookmark.type = bookmark.children ? BookmarkType.FOLDER : BookmarkType.PAGE;
   }
 
   if (bookmark.children) {

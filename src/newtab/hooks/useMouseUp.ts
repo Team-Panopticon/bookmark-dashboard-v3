@@ -5,8 +5,11 @@ import { getRowColFromMouseEvent } from "../utils/getRowColUpdatedFiles";
 import { layoutDB } from "../utils/layoutDB";
 
 export const useMouseUp = ({ parentId }: { parentId: string }) => {
-  const { file, flush, offsetBetweenStartPointAndFileLeftTop } =
-    dragAndDropStore();
+  const {
+    bookmark: file,
+    flush,
+    offsetBetweenStartPointAndFileLeftTop,
+  } = dragAndDropStore();
   const { refreshBookmark } = bookmarkStore();
 
   const mouseUpHandler = async (e: React.MouseEvent) => {

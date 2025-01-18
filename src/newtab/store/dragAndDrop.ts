@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Bookshelf, File } from "../../types/store";
+import { Bookshelf, Bookmark } from "../../types/store";
 
 /**
  * 1. File에 대한 정보
@@ -16,7 +16,7 @@ import { Bookshelf, File } from "../../types/store";
  */
 
 export type State = {
-  file?: File;
+  bookmark?: Bookmark;
   fileElement?: HTMLElement;
   mouseDownAt?: number;
   bookshelfAtMouseDown?: Bookshelf;
@@ -26,8 +26,8 @@ export type State = {
 
 export interface Actions {
   isDragging: () => boolean;
-  setFile: (file: File) => void;
-  setFileElement: (element: HTMLElement) => void;
+  setBookmark: (bookmark: Bookmark) => void;
+  setBookmarkElement: (element: HTMLElement) => void;
   setBookshelfAtMouseDown: (bookshelf: Bookshelf) => void;
   setMouseDownAt: (time: number) => void;
   setStartPoint: (point: { x: number; y: number }) => void;
@@ -39,9 +39,9 @@ export interface Actions {
 }
 
 export const dragAndDropStore = create<State & Actions>((set, get) => ({
-  isDragging: () => Boolean(get().file),
-  setFile: (file: File) => set({ file }),
-  setFileElement: (element: HTMLElement) => set({ fileElement: element }),
+  isDragging: () => Boolean(get().bookmark),
+  setBookmark: (bookmark: Bookmark) => set({ bookmark }),
+  setBookmarkElement: (element: HTMLElement) => set({ fileElement: element }),
   setBookshelfAtMouseDown: (bookshelf: Bookshelf) =>
     set({ bookshelfAtMouseDown: bookshelf }),
   setMouseDownAt: (time) => set({ mouseDownAt: time }),
@@ -50,7 +50,7 @@ export const dragAndDropStore = create<State & Actions>((set, get) => ({
     set({ offsetBetweenStartPointAndFileLeftTop: { x, y } }),
   flush: () => {
     set({
-      file: undefined,
+      bookmark: undefined,
       fileElement: undefined,
       mouseDownAt: undefined,
       bookshelfAtMouseDown: undefined,
