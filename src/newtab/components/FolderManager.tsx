@@ -33,8 +33,7 @@ const Folder = ({
   zIndex: number;
   timestampId: string;
 }) => {
-  const { getSubtree } = bookmarkStore();
-  // const folder = getSubtree(id);
+  const { getSubtree, bookmark } = bookmarkStore();
   const targetRef = useRef<HTMLDivElement>(null);
   const dragTargetRef = useRef<HTMLDivElement>(null);
   const { closeFolder, focusFolder } = folderStore();
@@ -67,7 +66,7 @@ const Folder = ({
 
   useEffect(() => {
     setFolder(getSubtree(history[historyCursor]));
-  }, [historyCursor, getSubtree, setFolder, history]);
+  }, [historyCursor, getSubtree, setFolder, history, bookmark]);
 
   return (
     <div className="container">
