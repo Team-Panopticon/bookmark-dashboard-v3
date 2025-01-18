@@ -5,6 +5,7 @@ import { dragAndDropStore } from "../newtab/store/dragAndDrop";
 import FileView from "../newtab/components/FileView";
 import { bookmarkStore } from "../newtab/store/bookmarkStore";
 import { useFolderUp } from "../newtab/hooks/useFolderUp";
+import ContextMenu from "../newtab/components/ContextMenu";
 
 const Desktop: FC = () => {
   const { bookmark, getBookmark } = bookmarkStore();
@@ -36,7 +37,7 @@ const Desktop: FC = () => {
       {bookmark && <Bookshelf folder={bookmark}></Bookshelf>}
       {/* <CreateFolderModal></CreateFolderModal> */}
       <FolderManager />
-      {/* <ContextMenuContainer /> */}
+      <ContextMenu />
       {/* <UpdateModal /> */}
       {/* <Tooltip /> */}
     </div>
@@ -46,6 +47,7 @@ const Desktop: FC = () => {
 export default Desktop;
 
 const DraggingFile = () => {
+  // todo : rootStore 에서 값 가져오는걸로 변경
   const { fileElement, offsetBetweenStartPointAndFileLeftTop, file } =
     dragAndDropStore();
   const { folderMouseUpHandler } = useFolderUp({});

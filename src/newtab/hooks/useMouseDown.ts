@@ -1,5 +1,6 @@
 import { Point } from "../../types/Point";
 import { Bookshelf, File, FileType } from "../../types/store";
+import contextMenuStore from "../store/contextMenuStore";
 import { dragAndDropStore } from "../store/dragAndDrop";
 import focusStore from "../store/focusStore";
 
@@ -19,6 +20,8 @@ export const useMouseDown = ({ bookshelf }: { bookshelf: Bookshelf }) => {
   } = dragAndDropStore();
 
   const { addFocus, clearFocus } = focusStore();
+
+  const { openMenu } = contextMenuStore();
 
   const mouseDownHandler = ({
     event,
@@ -40,33 +43,17 @@ export const useMouseDown = ({ bookshelf }: { bookshelf: Bookshelf }) => {
 
     // 공통
     setFile(file);
-    setStartPoint(point);
 
+    addFocus([file.id]);
     // 우클릭
     if (event.button === MOUSE_CLICK.RIGHT) {
-      const currentFocusedIds = addFocus([file.id]);
-      // 우클릭 일 때
-
-      if (file.type === FileType.BOOKMARK) {
-        // 파일일 때
-        if (currentFocusedIds.size === 1) {
-          // 포커스가 1개일 때 -> 수정 / 삭제
-        } else {
-          // 포커스가 여러개일 때 -> 삭제
-        }
-      } else {
-        // 폴더일 떄
-        if (currentFocusedIds.size === 1) {
-          // 포커스가 1개일 때 -> 수정 / 삭제
-        } else {
-          // 포커스가 여러개일 때 -> 삭제
-        }
-      }
+      event.preventDefault();
+      openMenu(event.clientX, event.clientY);
       return;
     }
-
     // move 에 대한 상태관리
 
+    setStartPoint(point);
     setBookshelfAtMouseDown(bookshelf);
     setFileElement(currentTarget);
     setMouseDownAt(Date.now());
