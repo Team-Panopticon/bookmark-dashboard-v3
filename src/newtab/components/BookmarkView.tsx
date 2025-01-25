@@ -1,5 +1,6 @@
 import { CSSProperties } from "react";
-import { type Bookmark } from "../../types/store";
+import { BookmarkType, type Bookmark } from "../../types/store";
+import FolderImage from "../../assets/folder.svg";
 
 type Props = {
   bookmark: Bookmark;
@@ -39,7 +40,16 @@ const BookmarkView = ({
         }}
       >
         <div className="flex  flex-[2] items-center text-[48px] leading-[48px] text-yellow-500">
-          {bookmark.title.charAt(0)}
+          {bookmark.type === BookmarkType.FOLDER ? (
+            <img
+              src={FolderImage}
+              width={56}
+              height={56}
+              style={{ pointerEvents: "none" }}
+            />
+          ) : (
+            <>{bookmark.title.charAt(0)}</>
+          )}
         </div>
         <p className="line-clamp-2 flex-[1] transform-none overflow-hidden text-ellipsis break-words px-2 pb-1 text-xs leading-5 tracking-[.2px]">
           {bookmark.title}

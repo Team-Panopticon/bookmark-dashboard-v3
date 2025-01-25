@@ -167,14 +167,19 @@ export const useEventHandler = ({
         flush();
       }
     },
+
+    /** @NOTE:
+     * 1. Folder 내부에서 폴더 여는 경우
+     * 2. Desktop인 경우
+     */
     handleDoubleClickBookmark: (bookmark: Bookmark) => {
-      // Folder 내부에서 폴더 여는 경우
+      // 1
       if (bookmark.type === BookmarkType.FOLDER && navigateTo) {
         navigateTo(bookmark);
         return;
       }
 
-      /** @NOTE: Desktop인 경우 */
+      // 2
       if (bookmark.type === BookmarkType.FOLDER) {
         openFolder(bookmark.id);
         return;
