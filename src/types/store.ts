@@ -19,3 +19,7 @@ export type modalInfo = {
 };
 
 export type Bookshelf = Bookmark;
+
+export interface Folders {
+  [key: string]: { zIndex: number; id: string };
+}

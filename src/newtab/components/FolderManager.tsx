@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, type FC } from "react";
-import { folderStore } from "../store/folder";
 import Bookshelf from "./Bookshelf";
 import Moveable from "react-moveable";
 import { Bookmark } from "../../types/store";

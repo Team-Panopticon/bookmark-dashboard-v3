@@ -1,8 +1,7 @@
 import { create } from "zustand";
-import { Bookshelf, Bookmark, BookmarkType } from "../../types/store";
+import { Bookshelf, Bookmark, BookmarkType, Folders } from "../../types/store";
 import BookmarkApi from "../utils/bookmarkApi";
 import { layoutDB, LayoutMap } from "../utils/layoutDB";
-import { Folders } from "./folder";
 import { Point } from "../../types/Point";
 
 const OFFSET = 2;
