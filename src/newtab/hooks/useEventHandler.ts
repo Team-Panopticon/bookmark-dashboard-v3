@@ -1,4 +1,3 @@
-import { MouseEvent } from "react";
 import { Bookshelf, Bookmark, BookmarkType } from "../../types/store";
 import BookmarkApi from "../utils/bookmarkApi";
 import { layoutDB } from "../utils/layoutDB";
@@ -141,8 +140,6 @@ export const useEventHandler = ({
         !startPoint ||
         !draggingBookmark ||
         !offsetBetweenStartPointAndFileLeftTop
-        // ||
-        // bookmark.type !== BookmarkType.FOLDER
       ) {
         return;
       }
@@ -150,36 +147,19 @@ export const useEventHandler = ({
       e.stopPropagation();
 
       try {
-        const folder = bookmark;
-
         const { id: draggingBookmarkId } = draggingBookmark;
-        const { id: folderId } = folder;
-        // debugger;
-        if (draggingBookmarkId === folderId) {
-          throw Error(`Try Move From ${draggingBookmarkId} to ${folderId}`);
+        const { id: bookmarkId } = bookmark;
+
+        if (draggingBookmarkId === bookmarkId) {
+          throw Error(`Try Move From ${draggingBookmarkId} to ${bookmarkId}`);
         }
-        const { row, col } = getRowColFromMouseEvent(e);
 
-        // folder 아이콘 위에 북마크를 넣는 경우
-
-        /**
-         * 북마크인 경우: 레이아웃을 업데이트.
-         * 북마크가 아닌 경우: 레이아웃을 삭제.
-         */
-        const updateLayoutOrDelete =
-          folder.type === BookmarkType.PAGE
-            ? layoutDB.setItemLayoutById({
-                id: draggingBookmarkId,
-                parentId: folderId,
-                col,
-                row,
-              })
-            : layoutDB.deleteItemLayoutById(draggingBookmarkId);
-
-        await Promise.all([
-          updateLayoutOrDelete,
-          BookmarkApi.move(draggingBookmarkId, folderId),
-        ]);
+        if (bookmark.type === BookmarkType.FOLDER) {
+          await Promise.all([
+            layoutDB.deleteItemLayoutById(draggingBookmarkId),
+            BookmarkApi.move(draggingBookmarkId, bookmarkId),
+          ]);
+        }
       } catch {
         //
       } finally {
@@ -188,7 +168,7 @@ export const useEventHandler = ({
       }
     },
     handleDoubleClickBookmark: (bookmark: Bookmark) => {
-      // folder 내부에서 폴더 여는 경우
+      // Folder 내부에서 폴더 여는 경우
       if (bookmark.type === BookmarkType.FOLDER && navigateTo) {
         navigateTo(bookmark);
         return;
