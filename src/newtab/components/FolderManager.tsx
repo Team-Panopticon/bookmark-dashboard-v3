@@ -3,10 +3,12 @@ import { folderStore } from "../store/folder";
 import Bookshelf from "./Bookshelf";
 import Moveable from "react-moveable";
 import { Bookmark } from "../../types/store";
-import { bookmarkStore } from "../store/bookmarkStore";
+import { rootStore } from "../store/rootStore";
 
 const FolderManager: FC = () => {
-  const { folders } = folderStore();
+  const {
+    folder: { folders },
+  } = rootStore();
 
   return (
     <div>
@@ -33,10 +35,9 @@ const Folder = ({
   zIndex: number;
   timestampId: string;
 }) => {
-  const { getSubtree, bookmark } = bookmarkStore();
+  const { getSubtree, bookmark, closeFolder, focusFolder } = rootStore();
   const targetRef = useRef<HTMLDivElement>(null);
   const dragTargetRef = useRef<HTMLDivElement>(null);
-  const { closeFolder, focusFolder } = folderStore();
 
   const [history, setHistory] = useState<string[]>([id]);
   const [folder, setFolder] = useState<Bookmark | null>(null);

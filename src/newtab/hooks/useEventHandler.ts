@@ -34,15 +34,24 @@ export const useEventHandler = ({
   };
 
   const bookshelfEventHandler = {
-    mouseUp: async (e: React.MouseEvent) => {
+    /** @NOTE: 복수선택(ctrl, shift)이 아닌 경우 포커스를 해제 */
+    handleMouseDownBookshelf: (e: React.MouseEvent<HTMLElement>) => {
+      if (!(e.ctrlKey || e.shiftKey)) {
+        clearFocus();
+      } else {
+        // 복수 선택
+      }
+    },
+    /** @NOTE: 빈공간에 드랍하는 경우 북마크를 빈공간으로 이동 */
+    handleMouseUpBookshelf: async (e: React.MouseEvent) => {
+      const { row, col } = getRowColFromMouseEvent(e);
+
       const { bookmark: file, offsetBetweenStartPointAndFileLeftTop } =
         dragAndDrop || {};
 
       if (!file || !bookshelf || !offsetBetweenStartPointAndFileLeftTop) {
         return;
       }
-
-      const { row, col } = getRowColFromMouseEvent(e);
 
       const { id } = file;
       const parentId = bookshelf?.id;
@@ -58,30 +67,27 @@ export const useEventHandler = ({
       flush();
       refreshBookmark();
     },
-
-    // 마우스 다운
-    mouseDown: (e: React.MouseEvent<HTMLElement>) => {
-      if (!(e.ctrlKey || e.shiftKey)) {
-        clearFocus();
-      }
-    },
   };
 
   const bookmarkEventHandler = {
-    // 마우스 다운
-    mouseDown: ({
+    /** @NOTE:
+     * 1. 멀티 포커스인 경우 포커스 유지 else 신규 포커스
+     * 2. 우클릭을 하는 경우 컨텍스트 메뉴 오픈
+     * 3. 드래그 앤 드랍 대상 정보를 스토어에 저장
+     */
+    handleMouseDownBookmark: ({
       event,
       bookmark,
-      point,
     }: {
-      event: React.MouseEvent<HTMLElement, MouseEvent>;
+      event: React.MouseEvent<HTMLElement>;
       bookmark: Bookmark;
-      point: { x: number; y: number };
     }) => {
       event.stopPropagation();
-      const { currentTarget, ctrlKey, shiftKey } = event;
-      console.log("mousedown >> ", bookmark, event);
+      const { currentTarget, ctrlKey, shiftKey, pageX, pageY } = event;
+      const point = { x: pageX, y: pageY };
 
+      console.log("mousedown >> ", bookmark, event);
+      // point: { x: e.pageX, y: e.pageY },
       // 멀티 포커스인 경우는 기존 포커스 유지
       if (!(ctrlKey || shiftKey)) {
         clearFocus();
@@ -89,8 +95,8 @@ export const useEventHandler = ({
 
       // 공통
       setDragAndDrop({ bookmark: bookmark });
-
       addFocus([bookmark.id]);
+
       // 우클릭
       if (event.button === MOUSE_CLICK.RIGHT) {
         event.preventDefault();
@@ -116,8 +122,13 @@ export const useEventHandler = ({
         offsetBetweenStartPointAndFileLeftTop,
       });
     },
-    // 마우스 업
-    mouseUp: async (e: React.MouseEvent, bookmark: Bookmark) => {
+    /** @NOTE:
+     * 폴더 위에 북마크를 드랍하는 경우
+     * 1. 페이지인 경우 레이아웃(row, col)을 업데이트
+     * 2. 폴더인 경우 레이아웃(row, col) 삭제
+     * 3. 북마크를
+     */
+    handleMouseUpBookmark: async (e: React.MouseEvent, bookmark: Bookmark) => {
       const {
         mouseDownAt,
         startPoint,
@@ -129,8 +140,9 @@ export const useEventHandler = ({
         !mouseDownAt ||
         !startPoint ||
         !draggingBookmark ||
-        !offsetBetweenStartPointAndFileLeftTop ||
-        bookmark.type !== BookmarkType.FOLDER
+        !offsetBetweenStartPointAndFileLeftTop
+        // ||
+        // bookmark.type !== BookmarkType.FOLDER
       ) {
         return;
       }
@@ -140,14 +152,15 @@ export const useEventHandler = ({
       try {
         const folder = bookmark;
 
-        /* NOTE: 빈공간 : placeholder가 보이는 위치로 이동(저장)*/
         const { id: draggingBookmarkId } = draggingBookmark;
         const { id: folderId } = folder;
-
+        // debugger;
         if (draggingBookmarkId === folderId) {
           throw Error(`Try Move From ${draggingBookmarkId} to ${folderId}`);
         }
         const { row, col } = getRowColFromMouseEvent(e);
+
+        // folder 아이콘 위에 북마크를 넣는 경우
 
         /**
          * 북마크인 경우: 레이아웃을 업데이트.
@@ -174,7 +187,8 @@ export const useEventHandler = ({
         flush();
       }
     },
-    doubleClick: (bookmark: Bookmark) => {
+    handleDoubleClickBookmark: (bookmark: Bookmark) => {
+      // folder 내부에서 폴더 여는 경우
       if (bookmark.type === BookmarkType.FOLDER && navigateTo) {
         navigateTo(bookmark);
         return;
@@ -198,7 +212,7 @@ export const useEventHandler = ({
   };
 
   const draggingFilEventHandler = {
-    mouseUp: bookmarkEventHandler.mouseUp,
+    mouseUp: bookmarkEventHandler.handleMouseUpBookmark,
   };
 
   const folderEventHanlder = {

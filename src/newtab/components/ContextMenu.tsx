@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
-import contextMenuStore from "../store/contextMenuStore";
-import focusStore from "../store/focusStore";
+
+import { rootStore } from "../store/rootStore";
 
 interface ContextMenu {
   title: string;
@@ -8,8 +8,10 @@ interface ContextMenu {
 }
 
 const ContextMenu = () => {
-  const { position, isVisible } = contextMenuStore();
-  const { focusedIds } = focusStore();
+  const {
+    focus: { focusedIds },
+    contextMenu: { contextMenuPosition, isContextMenuVisible },
+  } = rootStore();
   useEffect(() => {
     window.oncontextmenu = (e) => {
       e.preventDefault();
@@ -70,15 +72,15 @@ const ContextMenu = () => {
     }
   }, []);
 
-  if (!isVisible) return null;
+  if (!isContextMenuVisible) return null;
 
   return (
     <div
       className="size-[200px] border-2"
       style={{
         position: "absolute",
-        left: position.x,
-        top: position.y,
+        left: contextMenuPosition.x,
+        top: contextMenuPosition.y,
       }}
     >
       메뉴가 나와야함

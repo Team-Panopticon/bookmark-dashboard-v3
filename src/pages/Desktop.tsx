@@ -1,14 +1,13 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import Bookshelf from "../newtab/components/Bookshelf";
 import FolderManager from "../newtab/components/FolderManager";
-import { dragAndDropStore } from "../newtab/store/dragAndDrop";
 import BookmarkView from "../newtab/components/BookmarkView";
-import { bookmarkStore } from "../newtab/store/bookmarkStore";
-import { useFolderUp } from "../newtab/hooks/useFolderUp";
 import ContextMenu from "../newtab/components/ContextMenu";
+import { rootStore } from "../newtab/store/rootStore";
+import { useEventHandler } from "../newtab/hooks/useEventHandler";
 
 const Desktop: FC = () => {
-  const { bookmark, getBookmark } = bookmarkStore();
+  const { bookmark, getBookmark, isDragging } = rootStore();
 
   const setBookmarksEventHandlers = useCallback(() => {
     chrome.bookmarks.onCreated.addListener(() => {
@@ -30,7 +29,6 @@ const Desktop: FC = () => {
     getBookmark();
   }, [getBookmark]);
 
-  const { isDragging } = dragAndDropStore();
   return (
     <div className="size-full">
       {isDragging() && <DraggingFile />}
@@ -48,9 +46,12 @@ export default Desktop;
 
 const DraggingFile = () => {
   // todo : rootStore 에서 값 가져오는걸로 변경
+  const { dragAndDrop = {} } = rootStore();
+  const {
+    bookmarkEventHandler: { handleMouseUpBookmark },
+  } = useEventHandler({});
   const { fileElement, offsetBetweenStartPointAndFileLeftTop, bookmark } =
-    dragAndDropStore();
-  const { folderMouseUpHandler } = useFolderUp({});
+    dragAndDrop;
 
   const [{ x, y }, setDraggingFilePosition] = useState<{
     x?: number;
@@ -110,7 +111,7 @@ const DraggingFile = () => {
       }}
       onMouseUp={(e) => {
         console.log("draging file mouse up");
-        folderMouseUpHandler(e, bookmark);
+        handleMouseUpBookmark(e, bookmark);
       }}
     />
   );
