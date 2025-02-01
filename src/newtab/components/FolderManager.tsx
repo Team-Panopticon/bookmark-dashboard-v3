@@ -106,7 +106,13 @@ const Folder = ({
             className="aspect-square size-4 rounded-full bg-red-500 text-center text-[10px]"
           ></button>
         </div>
-        {folder && <Bookshelf folder={folder} navigateTo={navigateTo} />}
+        {folder && (
+          <Bookshelf
+            folder={folder}
+            navigateTo={navigateTo}
+            timestampId={timestampId}
+          />
+        )}
       </div>
       <Moveable
         target={targetRef}

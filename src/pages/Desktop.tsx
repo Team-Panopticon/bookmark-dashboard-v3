@@ -6,6 +6,8 @@ import ContextMenu from "../newtab/components/ContextMenu";
 import { rootStore } from "../newtab/store/rootStore";
 import { useEventHandler } from "../newtab/hooks/useEventHandler";
 
+const DESKTOP_TIMESTAMP_ID = `${Date.now()}`;
+
 const Desktop: FC = () => {
   const { bookmark, getBookmark, isDragging } = rootStore();
 
@@ -32,7 +34,12 @@ const Desktop: FC = () => {
   return (
     <div className="size-full">
       {isDragging() && <DraggingFile />}
-      {bookmark && <Bookshelf folder={bookmark}></Bookshelf>}
+      {bookmark && (
+        <Bookshelf
+          folder={bookmark}
+          timestampId={DESKTOP_TIMESTAMP_ID}
+        ></Bookshelf>
+      )}
       {/* <CreateFolderModal></CreateFolderModal> */}
       <FolderManager />
       <ContextMenu />

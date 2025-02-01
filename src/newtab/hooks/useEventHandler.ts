@@ -77,9 +77,11 @@ export const useEventHandler = ({
     handleMouseDownBookmark: ({
       event,
       bookmark,
+      timestampId,
     }: {
       event: React.MouseEvent<HTMLElement>;
       bookmark: Bookmark;
+      timestampId: string;
     }) => {
       event.stopPropagation();
       const { currentTarget, ctrlKey, shiftKey, pageX, pageY } = event;
@@ -93,8 +95,9 @@ export const useEventHandler = ({
       }
 
       // 공통
-      setDragAndDrop({ bookmark: bookmark });
-      addFocus([bookmark.id]);
+      // setDragAndDrop({ bookmark: bookmark });
+      addFocus([`${timestampId}_${bookmark.id}`]);
+      console.log("addFocus : ", `${timestampId}_${bookmark.id}`);
 
       // 우클릭
       if (event.button === MOUSE_CLICK.RIGHT) {
@@ -114,11 +117,13 @@ export const useEventHandler = ({
       );
 
       setDragAndDrop({
+        bookmark: bookmark,
         startPoint: point,
         bookshelfAtMouseDown: bookshelf,
         fileElement: currentTarget,
         mouseDownAt: Date.now(),
         offsetBetweenStartPointAndFileLeftTop,
+        timestampId,
       });
     },
     /** @NOTE:

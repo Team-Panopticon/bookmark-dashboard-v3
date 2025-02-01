@@ -20,6 +20,7 @@ type State = {
   };
   focus: {
     focusedIds: Set<string>;
+    // 1738373953826_123
   };
   dragAndDrop?: {
     bookmark?: Bookmark;
@@ -161,7 +162,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
     currentPosition: { x: 0, y: 0 },
   },
   openFolder: (id) => {
-    const timestampId = new Date().toString();
+    const timestampId = `${Date.now()}`;
     set({
       folder: {
         ...get().folder,

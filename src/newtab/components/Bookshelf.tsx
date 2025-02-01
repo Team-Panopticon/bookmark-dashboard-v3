@@ -22,16 +22,18 @@ export const isDarkModeEvent = (event: any): event is DarkModeEvent => {
 type Props = {
   folder: Bookmark;
   navigateTo?: (bookmark: Bookmark) => void;
+  timestampId: string;
 };
 
-const Bookshelf: FC<Props> = ({ folder, navigateTo }) => {
+const Bookshelf: FC<Props> = ({ folder, navigateTo, timestampId }) => {
   const { children: files = [] } = folder;
   const {
     updateFilesLayout,
     dragAndDrop = {},
     focus: { focusedIds },
   } = rootStore();
-  const { bookmark: draggingFile } = dragAndDrop;
+  const { bookmark: draggingFile, timestampId: draggingFileTimestampId } =
+    dragAndDrop;
 
   const originGridContainerRef = useRef<HTMLDivElement>(null);
 
@@ -72,11 +74,12 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo }) => {
           <BookmarkView
             key={file.id}
             bookmark={file}
-            focused={focusedIds.has(file.id)}
+            focused={focusedIds.has(`${timestampId}_${file.id}`)}
             onMouseDown={(e) =>
               handleMouseDownBookmark({
                 event: e,
                 bookmark: file,
+                timestampId,
               })
             }
             onMouseUp={(e) => {
@@ -86,7 +89,11 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo }) => {
             }}
             onDoubleClick={handleDoubleClickBookmark}
             style={{
-              background: draggingFile?.id === file.id ? "#eee" : "",
+              background:
+                `${draggingFileTimestampId}_${draggingFile?.id}` ===
+                `${timestampId}_${file.id}`
+                  ? "#eee"
+                  : "",
             }}
           />
         );
