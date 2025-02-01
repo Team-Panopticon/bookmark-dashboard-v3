@@ -37,7 +37,7 @@ const Desktop: FC = () => {
       {bookmark && (
         <Bookshelf
           folder={bookmark}
-          timestampId={DESKTOP_TIMESTAMP_ID}
+          timestamp={DESKTOP_TIMESTAMP_ID}
         ></Bookshelf>
       )}
       {/* <CreateFolderModal></CreateFolderModal> */}

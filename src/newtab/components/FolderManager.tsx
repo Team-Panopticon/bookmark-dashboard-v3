@@ -11,13 +11,13 @@ const FolderManager: FC = () => {
 
   return (
     <div>
-      {Object.entries(folders).map(([timestampId, value]) => {
+      {Object.entries(folders).map(([timestamp, value]) => {
         return (
           <Folder
-            key={timestampId}
+            key={timestamp}
             id={value.id}
             zIndex={value.zIndex}
-            timestampId={timestampId}
+            timestamp={timestamp}
           />
         );
       })}
@@ -28,11 +28,11 @@ const FolderManager: FC = () => {
 const Folder = ({
   id,
   zIndex,
-  timestampId,
+  timestamp,
 }: {
   id: string;
   zIndex: number;
-  timestampId: string;
+  timestamp: string;
 }) => {
   const { getSubtree, bookmark, closeFolder, focusFolder } = rootStore();
   const targetRef = useRef<HTMLDivElement>(null);
@@ -72,7 +72,7 @@ const Folder = ({
     <div className="container">
       <div
         onMouseDown={() => {
-          focusFolder(timestampId);
+          focusFolder(timestamp);
         }}
         className="absolute flex size-[500px] flex-col rounded-lg border bg-neutral-50 shadow-2xl"
         style={{
@@ -101,7 +101,7 @@ const Folder = ({
           </div>
           <button
             onClick={() => {
-              closeFolder(timestampId);
+              closeFolder(timestamp);
             }}
             className="aspect-square size-4 rounded-full bg-red-500 text-center text-[10px]"
           ></button>
@@ -110,7 +110,7 @@ const Folder = ({
           <Bookshelf
             folder={folder}
             navigateTo={navigateTo}
-            timestampId={timestampId}
+            timestamp={timestamp}
           />
         )}
       </div>

@@ -22,17 +22,17 @@ export const isDarkModeEvent = (event: any): event is DarkModeEvent => {
 type Props = {
   folder: Bookmark;
   navigateTo?: (bookmark: Bookmark) => void;
-  timestampId: string;
+  timestamp: string;
 };
 
-const Bookshelf: FC<Props> = ({ folder, navigateTo, timestampId }) => {
+const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
   const { children: files = [] } = folder;
   const {
     updateFilesLayout,
     dragAndDrop = {},
     focus: { focusedIds },
   } = rootStore();
-  const { bookmark: draggingFile, timestampId: draggingFileTimestampId } =
+  const { bookmark: draggingFile, timestamp: draggingFileTimestamp } =
     dragAndDrop;
 
   const originGridContainerRef = useRef<HTMLDivElement>(null);
@@ -70,30 +70,29 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo, timestampId }) => {
       onMouseDown={handleMouseDownBookshelf}
     >
       {files.map((file) => {
+        const timestampId = `${timestamp}_${file.id}`;
+        const draggingFileTimestampId = `${draggingFileTimestamp}_${draggingFile?.id}`;
+        const isFoscused = focusedIds.has(timestampId);
+        const isDragging = draggingFileTimestampId === timestampId;
         return (
           <BookmarkView
             key={file.id}
             bookmark={file}
-            focused={focusedIds.has(`${timestampId}_${file.id}`)}
+            focused={isFoscused}
             onMouseDown={(e) =>
               handleMouseDownBookmark({
                 event: e,
                 bookmark: file,
-                timestampId,
+                timestamp,
               })
             }
             onMouseUp={(e) => {
               // TODO: 동작 확인 필요, 부모 이벤트에 먹힘
-              console.log("fileview mouse up");
               handleMouseUpBookmark(e, file);
             }}
             onDoubleClick={handleDoubleClickBookmark}
             style={{
-              background:
-                `${draggingFileTimestampId}_${draggingFile?.id}` ===
-                `${timestampId}_${file.id}`
-                  ? "#eee"
-                  : "",
+              background: isDragging ? "#eee" : "",
             }}
           />
         );

@@ -20,7 +20,6 @@ type State = {
   };
   focus: {
     focusedIds: Set<string>;
-    // 1738373953826_123
   };
   dragAndDrop?: {
     bookmark?: Bookmark;
@@ -29,6 +28,7 @@ type State = {
     bookshelfAtMouseDown?: Bookshelf;
     startPoint?: Position;
     offsetBetweenStartPointAndFileLeftTop?: Position;
+    timestamp?: string;
   };
   folder: {
     currentZIndex: number;
@@ -62,8 +62,8 @@ type Action = {
   // folder
 
   openFolder: (folderId: string) => void;
-  focusFolder: (timestampId: string) => void;
-  closeFolder: (timestampId: string) => void;
+  focusFolder: (timestamp: string) => void;
+  closeFolder: (timestamp: string) => void;
   closeFolderById: (id: string) => void;
   updateFolderCurrentPosition: (position: Position) => void;
   getFolderCurrentPosition: (
@@ -162,13 +162,13 @@ export const rootStore = create<State & Action>()((set, get) => ({
     currentPosition: { x: 0, y: 0 },
   },
   openFolder: (id) => {
-    const timestampId = `${Date.now()}`;
+    const timestamp = `${Date.now()}`;
     set({
       folder: {
         ...get().folder,
         folders: {
           ...get().folder.folders,
-          [timestampId]: {
+          [timestamp]: {
             id,
             zIndex: get().folder.currentZIndex + OFFSET,
           },
@@ -176,12 +176,12 @@ export const rootStore = create<State & Action>()((set, get) => ({
         currentZIndex: get().folder.currentZIndex + OFFSET,
       },
     });
-    console.debug("open folder >> ", timestampId);
+    console.debug("open folder >> ", timestamp);
   },
 
-  focusFolder: (timestampId) => {
+  focusFolder: (timestamp) => {
     const newFolders = { ...get().folder.folders };
-    newFolders[timestampId].zIndex = get().folder.currentZIndex + OFFSET;
+    newFolders[timestamp].zIndex = get().folder.currentZIndex + OFFSET;
 
     set({
       folder: {
@@ -191,27 +191,27 @@ export const rootStore = create<State & Action>()((set, get) => ({
       },
     });
 
-    console.debug("focus folder >> ", timestampId);
+    console.debug("focus folder >> ", timestamp);
   },
 
-  closeFolder: (timestampId) => {
+  closeFolder: (timestamp) => {
     const newFolders = { ...get().folder.folders };
-    delete newFolders[timestampId];
+    delete newFolders[timestamp];
     set({
       folder: {
         ...get().folder,
         folders: newFolders,
       },
     });
-    console.debug("close folder >> ", timestampId);
+    console.debug("close folder >> ", timestamp);
   },
 
   /** @TODO 미사용?  */
   closeFolderById: (id) => {
     const newFolders = Object.keys(get().folder.folders)
-      .filter((timestampId) => get().folder.folders[timestampId].id !== id)
-      .reduce((acc, timestampId) => {
-        acc[timestampId] = get().folder.folders[timestampId];
+      .filter((timestamp) => get().folder.folders[timestamp].id !== id)
+      .reduce((acc, timestamp) => {
+        acc[timestamp] = get().folder.folders[timestamp];
         return acc;
       }, {} as Folders);
     set({ folder: { ...get().folder, folders: newFolders } });
