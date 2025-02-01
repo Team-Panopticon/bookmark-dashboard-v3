@@ -41,12 +41,14 @@ const BookmarkView = ({
       >
         <div className="flex  flex-[2] items-center text-[48px] leading-[48px] text-yellow-500">
           {bookmark.type === BookmarkType.FOLDER ? (
-            <img
-              src={FolderImage}
-              width={56}
-              height={56}
-              style={{ pointerEvents: "none" }}
-            />
+            <div className="flex flex-col">
+              <img
+                src={FolderImage}
+                width={56}
+                height={56}
+                style={{ pointerEvents: "none" }}
+              />
+            </div>
           ) : (
             <>{bookmark.title.charAt(0)}</>
           )}
