@@ -6,6 +6,7 @@ import BookmarkView from "./BookmarkView";
 import { getRowColUpdatedFiles } from "../utils/getRowColUpdatedFiles";
 import { useEventHandler } from "../hooks/useEventHandler";
 import { rootStore } from "../store/rootStore";
+import BookmarkApi from "../utils/bookmarkApi";
 
 export interface DarkModeEvent {
   darkMode: boolean;
@@ -31,6 +32,9 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
     updateFilesLayout,
     dragAndDrop = {},
     focus: { focusedIds },
+    refreshBookmark,
+    edit,
+    setEdit,
   } = rootStore();
   const { bookmark: draggingFile, timestamp: draggingFileTimestamp } =
     dragAndDrop;
@@ -48,6 +52,12 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
     bookshelf: folder,
     navigateTo,
   });
+
+  const handleSave = async (id: string, title: string) => {
+    // updateTitle
+    await BookmarkApi.updateTitle(id, title);
+    await refreshBookmark();
+  };
 
   useEffect(() => {
     updateFilesLayout(
@@ -74,11 +84,15 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
         const draggingFileTimestampId = `${draggingFileTimestamp}_${draggingFile?.id}`;
         const isFoscused = focusedIds.has(timestampId);
         const isDragging = draggingFileTimestampId === timestampId;
+
+        const isEdit = edit.timestampId === timestampId;
+
         return (
           <BookmarkView
-            key={file.id}
+            key={timestampId}
             bookmark={file}
             focused={isFoscused}
+            onSave={async (title) => handleSave(file.id, title)}
             onMouseDown={(e) =>
               handleMouseDownBookmark({
                 event: e,
@@ -93,6 +107,14 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
             onDoubleClick={handleDoubleClickBookmark}
             style={{
               background: isDragging ? "#eee" : "",
+            }}
+            isEdit={isEdit}
+            setIsEdit={(newIsEdit) => {
+              if (newIsEdit) {
+                setEdit(timestampId);
+              } else {
+                setEdit(null);
+              }
             }}
           />
         );

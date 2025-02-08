@@ -35,9 +35,17 @@ type State = {
     folders: Folders;
     currentPosition: Position;
   };
+
+  edit: {
+    // bookmark?: Bookmark;
+    timestampId: string | null;
+  };
 };
 
 type Action = {
+  //edit
+  setEdit: (id: string | null) => void;
+
   // bookmark
   getBookmark: () => Promise<Bookmark>;
   getSubtree: (id: string) => Bookmark | null;
@@ -73,8 +81,13 @@ type Action = {
 };
 
 export const rootStore = create<State & Action>()((set, get) => ({
-  // bookmark
+  // edit
+  edit: {
+    timestampId: null,
+  },
+  setEdit: (id) => set({ edit: { timestampId: id } }),
 
+  // bookmark,
   bookmark: {} as Bookmark,
   getBookmark: async () => {
     await get().refreshBookmark();
@@ -135,7 +148,8 @@ export const rootStore = create<State & Action>()((set, get) => ({
 
       return { focus: { focusedIds: newFocusedIds } };
     }),
-  clearFocus: () => set({ focus: { focusedIds: new Set() } }),
+  clearFocus: () =>
+    set({ focus: { focusedIds: new Set() }, edit: { timestampId: null } }),
 
   // dragAndDrop
   isDragging: () => Boolean(get().dragAndDrop?.bookmark),
@@ -151,6 +165,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
         bookshelfAtMouseDown: undefined,
         startPoint: undefined,
         offsetBetweenStartPointAndFileLeftTop: undefined,
+        timestamp: undefined,
       },
     });
   },
