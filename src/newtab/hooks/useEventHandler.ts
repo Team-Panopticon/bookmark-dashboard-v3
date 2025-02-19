@@ -94,8 +94,10 @@ export const useEventHandler = ({
         clearFocus();
       }
 
+      const timestampId = `${timestamp}_${bookmark.id}`;
+
       // 공통
-      addFocus([`${timestamp}_${bookmark.id}`]);
+      addFocus([timestampId]);
 
       // 우클릭
       if (event.button === MOUSE_CLICK.RIGHT) {
@@ -103,6 +105,7 @@ export const useEventHandler = ({
 
         setContextMenu({
           isContextMenuVisible: true,
+          timestampId: timestampId,
           contextMenuPosition: { x: event.clientX, y: event.clientY },
         });
 

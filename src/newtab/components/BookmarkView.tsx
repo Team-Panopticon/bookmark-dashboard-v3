@@ -41,9 +41,27 @@ const BookmarkView = ({
     setNewTitle(bookmark.title);
   }, [bookmark.title]);
 
+  const saveTitle = async () => {
+    if (!isEdit) {
+      return;
+    }
+    setNewTitle(newTitle.trim());
+    setIsEdit?.(false);
+    try {
+      await onSave?.(newTitle.trim());
+    } catch {
+      setNewTitle(bookmark.title);
+    }
+    containerRef.current?.focus();
+  };
+
   return (
     <div
-      onMouseDown={onMouseDown}
+      onMouseDown={async (e) => {
+        // edit 상태에서 자기자신 클릭 시 blur에서 저장해줄 수 없으므로 mouseDown에서 저장
+        await saveTitle();
+        onMouseDown?.(e);
+      }}
       onMouseUp={onMouseUp}
       style={{
         ...style,
@@ -93,23 +111,26 @@ const BookmarkView = ({
             }}
             rows={3}
             value={newTitle}
-            onBlur={() => {
-              setIsEdit?.(false);
-              setNewTitle(bookmark.title);
-              containerRef.current?.focus();
+            onBlur={(e) => {
+              // Escape 키로 인한 blur 이벤트 방지
+              if (e.relatedTarget === containerRef.current) {
+                e.preventDefault();
+                return;
+              }
+              saveTitle();
             }}
             onKeyDown={async (e) => {
               e.stopPropagation();
+
               if (e.code === "Enter") {
-                await onSave?.(newTitle.trim());
-                setIsEdit?.(false);
-                containerRef.current?.focus();
+                saveTitle();
                 return;
               }
 
               if (e.code === "Escape") {
-                setIsEdit?.(false);
+                e.preventDefault();
                 setNewTitle(bookmark.title);
+                setIsEdit?.(false);
                 containerRef.current?.focus();
                 return;
               }

@@ -17,6 +17,7 @@ type State = {
   contextMenu: {
     isContextMenuVisible: boolean;
     contextMenuPosition: Position;
+    timestampId: string | null;
   };
   focus: {
     focusedIds: Set<string>;
@@ -119,6 +120,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
   // contextMenu
   contextMenu: {
     isContextMenuVisible: false,
+    timestampId: null,
     contextMenuPosition: { x: 0, y: 0 },
   },
   setContextMenu: (nextState) => {
@@ -148,8 +150,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
 
       return { focus: { focusedIds: newFocusedIds } };
     }),
-  clearFocus: () =>
-    set({ focus: { focusedIds: new Set() }, edit: { timestampId: null } }),
+  clearFocus: () => set({ focus: { focusedIds: new Set() } }),
 
   // dragAndDrop
   isDragging: () => Boolean(get().dragAndDrop?.bookmark),
