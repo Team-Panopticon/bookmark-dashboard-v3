@@ -58,9 +58,10 @@ const BookmarkView = ({
   return (
     <div
       onMouseDown={async (e) => {
-        // edit 상태에서 자기자신 클릭 시 blur에서 저장해줄 수 없으므로 mouseDown에서 저장
-        await saveTitle();
+        // saveTitle에서 focus를 변경하므로 onMouseDown 처리를 먼저 하지 않으면 currentTarget이 사라져 에러 발생
         onMouseDown?.(e);
+        // mouseDown에서 saveTitle을 해주는 이유: edit 상태에서 자기자신 클릭 시 blur에서 저장해줄 수 없으므로 mouseDown에서 저장
+        await saveTitle();
       }}
       onMouseUp={onMouseUp}
       style={{

@@ -3,9 +3,7 @@ import { Bookshelf, Bookmark, BookmarkType, Folders } from "../../types/store";
 import BookmarkApi from "../utils/bookmarkApi";
 import { layoutDB, LayoutMap } from "../utils/layoutDB";
 import { Point } from "../../types/Point";
-
-const OFFSET = 2;
-const POSITION_OFFSET = 50;
+import { Z_INDEX, POSITION_OFFSET } from "../utils/constant";
 
 type Position = {
   x: number;
@@ -173,7 +171,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
 
   // folder
   folder: {
-    currentZIndex: 1000,
+    currentZIndex: Z_INDEX.FOLDER_BASE,
     folders: {},
     currentPosition: { x: 0, y: 0 },
   },
@@ -186,10 +184,10 @@ export const rootStore = create<State & Action>()((set, get) => ({
           ...get().folder.folders,
           [timestamp]: {
             id,
-            zIndex: get().folder.currentZIndex + OFFSET,
+            zIndex: get().folder.currentZIndex + Z_INDEX.FOLDER_OFFSET,
           },
         },
-        currentZIndex: get().folder.currentZIndex + OFFSET,
+        currentZIndex: get().folder.currentZIndex + Z_INDEX.FOLDER_OFFSET,
       },
     });
     console.debug("open folder >> ", timestamp);
@@ -197,13 +195,14 @@ export const rootStore = create<State & Action>()((set, get) => ({
 
   focusFolder: (timestamp) => {
     const newFolders = { ...get().folder.folders };
-    newFolders[timestamp].zIndex = get().folder.currentZIndex + OFFSET;
+    newFolders[timestamp].zIndex =
+      get().folder.currentZIndex + Z_INDEX.FOLDER_OFFSET;
 
     set({
       folder: {
         ...get().folder,
         folders: newFolders,
-        currentZIndex: get().folder.currentZIndex + OFFSET,
+        currentZIndex: get().folder.currentZIndex + Z_INDEX.FOLDER_OFFSET,
       },
     });
 

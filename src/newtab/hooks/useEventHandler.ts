@@ -26,6 +26,7 @@ export const useEventHandler = ({
     openFolder,
     focusFolder,
     closeFolder,
+    setEdit,
   } = rootStore();
 
   const globalEventHandelr = {
@@ -35,6 +36,8 @@ export const useEventHandler = ({
   const bookshelfEventHandler = {
     /** @NOTE: 복수선택(ctrl, shift)이 아닌 경우 포커스를 해제 */
     handleMouseDownBookshelf: (e: React.MouseEvent<HTMLElement>) => {
+      setContextMenu({ isContextMenuVisible: false });
+
       if (!(e.ctrlKey || e.shiftKey)) {
         clearFocus();
       } else {
@@ -83,6 +86,9 @@ export const useEventHandler = ({
       bookmark: Bookmark;
       timestamp: string;
     }) => {
+      setContextMenu({ isContextMenuVisible: false });
+      setEdit(null);
+
       event.stopPropagation();
       const { currentTarget, ctrlKey, shiftKey, pageX, pageY } = event;
       const point = { x: pageX, y: pageY };
@@ -114,7 +120,7 @@ export const useEventHandler = ({
       // move 에 대한 상태관리
       const offsetBetweenStartPointAndFileLeftTop = getOffsetBetweenPoints(
         point,
-        currentTarget?.getBoundingClientRect()
+        currentTarget.getBoundingClientRect()
       );
 
       setDragAndDrop({
@@ -207,8 +213,31 @@ export const useEventHandler = ({
   };
 
   const folderEventHanlder = {
-    mouseDown: (timestamp: string) => focusFolder(timestamp),
+    mouseDown: (timestamp: string) => {
+      setContextMenu({ isContextMenuVisible: false });
+      focusFolder(timestamp);
+    },
     closeButtonClick: (timestamp: string) => closeFolder(timestamp),
+  };
+
+  const desktopEventHander = {
+    handleMouseDownDesktop: (event: React.MouseEvent) => {
+      if (event.button === MOUSE_CLICK.LEFT) {
+        setContextMenu({ isContextMenuVisible: false });
+        return;
+      }
+
+      if (event.button === MOUSE_CLICK.RIGHT) {
+        event.preventDefault();
+
+        setContextMenu({
+          isContextMenuVisible: true,
+          contextMenuPosition: { x: event.clientX, y: event.clientY },
+        });
+
+        return;
+      }
+    },
   };
 
   return {
@@ -218,5 +247,6 @@ export const useEventHandler = ({
     draggingFilEventHandler,
     folderEventHanlder,
     contextMenuEventHandler,
+    desktopEventHander,
   };
 };

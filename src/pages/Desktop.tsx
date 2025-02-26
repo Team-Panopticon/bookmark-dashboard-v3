@@ -5,11 +5,15 @@ import BookmarkView from "../newtab/components/BookmarkView";
 import ContextMenu from "../newtab/components/ContextMenu";
 import { rootStore } from "../newtab/store/rootStore";
 import { useEventHandler } from "../newtab/hooks/useEventHandler";
+import { Z_INDEX } from "../newtab/utils/constant";
 
 const DESKTOP_TIMESTAMP_ID = `${Date.now()}`;
 
 const Desktop: FC = () => {
   const { bookmark, getBookmark, isDragging } = rootStore();
+  const {
+    desktopEventHander: { handleMouseDownDesktop },
+  } = useEventHandler({});
 
   const setBookmarksEventHandlers = useCallback(() => {
     chrome.bookmarks.onCreated.addListener(() => {
@@ -32,7 +36,7 @@ const Desktop: FC = () => {
   }, [getBookmark]);
 
   return (
-    <div className="size-full">
+    <div className="size-full" onMouseDown={handleMouseDownDesktop}>
       {isDragging() && <DraggingFile />}
       {bookmark && (
         <Bookshelf
@@ -113,7 +117,7 @@ const DraggingFile = () => {
         position: "absolute",
         top: y,
         left: x,
-        zIndex: 99999,
+        zIndex: Z_INDEX.DRAGGING_FILE,
         pointerEvents: "none",
       }}
       onMouseUp={(e) => {
