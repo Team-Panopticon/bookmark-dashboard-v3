@@ -297,10 +297,10 @@ function findNodeById(id: string, node: Bookmark): Bookmark | null {
 }
 
 function addRowColToTree(bookmark: Bookmark, layoutMap: LayoutMap): Bookmark {
+  bookmark.type = bookmark.children ? BookmarkType.FOLDER : BookmarkType.PAGE;
   if (layoutMap[bookmark.id]) {
     bookmark.row = layoutMap[bookmark.id].row;
     bookmark.col = layoutMap[bookmark.id].col;
-    bookmark.type = bookmark.children ? BookmarkType.FOLDER : BookmarkType.PAGE;
   }
 
   if (bookmark.children) {
