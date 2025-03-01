@@ -27,6 +27,8 @@ export const useEventHandler = ({
     focusFolder,
     closeFolder,
     setEdit,
+    focus,
+    removeFocus,
   } = rootStore();
 
   const globalEventHandelr = {
@@ -90,20 +92,24 @@ export const useEventHandler = ({
       setEdit(null);
 
       event.stopPropagation();
-      const { currentTarget, ctrlKey, shiftKey, pageX, pageY } = event;
+      const { currentTarget, ctrlKey, metaKey, shiftKey, pageX, pageY } = event;
       const point = { x: pageX, y: pageY };
 
       console.log("mousedown >> ", bookmark, event);
       // point: { x: e.pageX, y: e.pageY },
       // 멀티 포커스인 경우는 기존 포커스 유지
-      if (!(ctrlKey || shiftKey)) {
+      if (!(ctrlKey || shiftKey || metaKey)) {
         clearFocus();
       }
 
       const timestampId = `${timestamp}_${bookmark.id}`;
 
       // 공통
-      addFocus([timestampId]);
+      if (focus.focusedIds.has(timestampId)) {
+        removeFocus([timestampId]);
+      } else {
+        addFocus([timestampId]);
+      }
 
       // 우클릭
       if (event.button === MOUSE_CLICK.RIGHT) {
