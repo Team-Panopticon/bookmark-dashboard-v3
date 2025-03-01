@@ -37,8 +37,11 @@ export const useEventHandler = ({
 
   const bookshelfEventHandler = {
     /** @NOTE: 복수선택(ctrl, shift)이 아닌 경우 포커스를 해제 */
-    handleMouseDownBookshelf: (e: React.MouseEvent<HTMLElement>) => {
-      setContextMenu({ isContextMenuVisible: false });
+    handleMouseDownBookshelf: (
+      e: React.MouseEvent<HTMLElement>,
+      bookmark: Bookmark
+    ) => {
+      setContextMenu({ isContextMenuVisible: false, context: bookmark });
 
       if (!(e.ctrlKey || e.shiftKey)) {
         clearFocus();

@@ -13,6 +13,7 @@ type Position = {
 type State = {
   bookmark: Bookmark;
   contextMenu: {
+    context: Bookmark;
     isContextMenuVisible: boolean;
     contextMenuPosition: Position;
     timestampId: string | null;
@@ -117,6 +118,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
 
   // contextMenu
   contextMenu: {
+    context: {} as Bookmark,
     isContextMenuVisible: false,
     timestampId: null,
     contextMenuPosition: { x: 0, y: 0 },

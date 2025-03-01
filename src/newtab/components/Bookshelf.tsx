@@ -77,7 +77,7 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
       }}
       ref={originGridContainerRef}
       onMouseUp={handleMouseUpBookshelf}
-      onMouseDown={handleMouseDownBookshelf}
+      onMouseDown={(e) => handleMouseDownBookshelf(e, folder)}
     >
       {files.map((file) => {
         const timestampId = `${timestamp}_${file.id}`;

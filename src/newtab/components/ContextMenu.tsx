@@ -13,7 +13,12 @@ const ContextMenu = () => {
   const {
     focus: { focusedIds },
     setEdit,
-    contextMenu: { contextMenuPosition, isContextMenuVisible, timestampId },
+    contextMenu: {
+      contextMenuPosition,
+      isContextMenuVisible,
+      timestampId,
+      context,
+    },
     setContextMenu,
   } = rootStore();
 
@@ -36,7 +41,6 @@ const ContextMenu = () => {
       title: "이름 변경",
       onClick: (e: React.MouseEvent) => {
         e.stopPropagation();
-        console.log(e);
         setEdit(timestampId);
         setContextMenu({ isContextMenuVisible: false });
       },
@@ -58,6 +62,7 @@ const ContextMenu = () => {
       title: "폴더생성",
       onClick: (e: React.MouseEvent) => {
         e.stopPropagation();
+        BookmarkApi.create(context.id, "무제 폴더");
         setContextMenu({ isContextMenuVisible: false });
       },
     };
@@ -82,7 +87,6 @@ const ContextMenu = () => {
     }
   }, [focusedIds]);
 
-  console.log("isContextMenuVisible", isContextMenuVisible);
   if (!isContextMenuVisible) return null;
   return (
     <div
