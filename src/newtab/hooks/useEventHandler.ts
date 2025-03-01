@@ -95,25 +95,53 @@ export const useEventHandler = ({
       const { currentTarget, ctrlKey, metaKey, shiftKey, pageX, pageY } = event;
       const point = { x: pageX, y: pageY };
 
+      /** @NOTE: control, shift, meta 키가 눌려있는지 */
+      const pressedCmdKey = ctrlKey || shiftKey || metaKey;
+
       console.log("mousedown >> ", bookmark, event);
       // point: { x: e.pageX, y: e.pageY },
-      // 멀티 포커스인 경우는 기존 포커스 유지
-      if (!(ctrlKey || shiftKey || metaKey)) {
-        clearFocus();
-      }
 
       const timestampId = `${timestamp}_${bookmark.id}`;
 
-      // 공통
-      if (focus.focusedIds.has(timestampId)) {
-        removeFocus([timestampId]);
-      } else {
-        addFocus([timestampId]);
+      // 좌클릭
+      if (event.button === MOUSE_CLICK.LEFT) {
+        if (pressedCmdKey) {
+          if (focus.focusedIds.has(timestampId)) {
+            removeFocus([timestampId]);
+          } else {
+            addFocus([timestampId]);
+          }
+        } else {
+          clearFocus();
+          addFocus([timestampId]);
+        }
+
+        // move 에 대한 상태관리
+        const offsetBetweenStartPointAndFileLeftTop = getOffsetBetweenPoints(
+          point,
+          currentTarget.getBoundingClientRect()
+        );
+
+        setDragAndDrop({
+          bookmark: bookmark,
+          startPoint: point,
+          bookshelfAtMouseDown: bookshelf,
+          fileElement: currentTarget,
+          mouseDownAt: Date.now(),
+          offsetBetweenStartPointAndFileLeftTop,
+          timestamp,
+        });
+        return;
       }
 
       // 우클릭
       if (event.button === MOUSE_CLICK.RIGHT) {
         event.preventDefault();
+
+        if (!focus.focusedIds.has(timestampId)) {
+          clearFocus();
+          addFocus([timestampId]);
+        }
 
         setContextMenu({
           isContextMenuVisible: true,
@@ -123,21 +151,6 @@ export const useEventHandler = ({
 
         return;
       }
-      // move 에 대한 상태관리
-      const offsetBetweenStartPointAndFileLeftTop = getOffsetBetweenPoints(
-        point,
-        currentTarget.getBoundingClientRect()
-      );
-
-      setDragAndDrop({
-        bookmark: bookmark,
-        startPoint: point,
-        bookshelfAtMouseDown: bookshelf,
-        fileElement: currentTarget,
-        mouseDownAt: Date.now(),
-        offsetBetweenStartPointAndFileLeftTop,
-        timestamp,
-      });
     },
     /** @NOTE:
      * 폴더 위에 북마크를 드랍하는 경우
