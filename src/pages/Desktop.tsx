@@ -28,11 +28,9 @@ const Desktop: FC = () => {
 
   useEffect(() => {
     setBookmarksEventHandlers();
-  }, [setBookmarksEventHandlers]);
-
-  useEffect(() => {
     refreshBookmark();
-  }, [refreshBookmark]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="size-full" onMouseDown={handleMouseDownDesktop}>
