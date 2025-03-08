@@ -3,18 +3,21 @@ import react from "@vitejs/plugin-react-swc";
 import tailwindcss from "tailwindcss";
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  build: {
-    rollupOptions: {
-      input: {
-        newtab: "./newtab.html",
+export default defineConfig(({ mode }) => {
+  return {
+    build: {
+      rollupOptions: {
+        input: {
+          newtab: "./newtab.html",
+        },
+      },
+      minify: mode === "development" ? false : true,
+    },
+    plugins: [react()],
+    css: {
+      postcss: {
+        plugins: [tailwindcss()],
       },
     },
-  },
-  plugins: [react()],
-  css: {
-    postcss: {
-      plugins: [tailwindcss()],
-    },
-  },
+  };
 });
