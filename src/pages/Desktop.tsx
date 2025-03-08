@@ -10,30 +10,30 @@ import { Z_INDEX } from "../newtab/utils/constant";
 const DESKTOP_TIMESTAMP_ID = `${Date.now()}`;
 
 const Desktop: FC = () => {
-  const { bookmark, getBookmark, isDragging } = rootStore();
+  const { bookmark, refreshBookmark, isDragging } = rootStore();
   const {
     desktopEventHander: { handleMouseDownDesktop },
   } = useEventHandler({});
 
   const setBookmarksEventHandlers = useCallback(() => {
     chrome.bookmarks.onCreated.addListener(() => {
-      getBookmark();
+      refreshBookmark();
     });
     chrome.bookmarks.onRemoved.addListener(() => {
-      getBookmark();
+      refreshBookmark();
     });
     chrome.bookmarks.onMoved.addListener(() => {
-      getBookmark();
+      refreshBookmark();
     });
-  }, [getBookmark]);
+  }, [refreshBookmark]);
 
   useEffect(() => {
     setBookmarksEventHandlers();
   }, [setBookmarksEventHandlers]);
 
   useEffect(() => {
-    getBookmark();
-  }, [getBookmark]);
+    refreshBookmark();
+  }, [refreshBookmark]);
 
   return (
     <div className="size-full" onMouseDown={handleMouseDownDesktop}>

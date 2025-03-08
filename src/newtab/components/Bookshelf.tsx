@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { type Bookmark } from "../../types/store";
 import { ITEM_HEIGHT, ITEM_WIDTH } from "../utils/constant";
 import BookmarkView from "./BookmarkView";
@@ -59,14 +59,27 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
     await refreshBookmark();
   };
 
+  const folderRef = useRef(folder);
+
+  useEffect(() => {
+    folderRef.current = folder;
+  }, [folder]);
+
+  const folderChildrenLength = useMemo(() => {
+    return folder.children?.length;
+  }, [folder]);
+
   useEffect(() => {
     updateFilesLayout(
-      getRowColUpdatedFiles(
-        folder,
-        originGridContainerRef.current?.children as HTMLDivElement[] | undefined
-      )
+      getRowColUpdatedFiles({
+        files: folderRef.current.children,
+        folderId: folderRef.current.id,
+        refs: originGridContainerRef.current?.children as
+          | HTMLDivElement[]
+          | undefined,
+      })
     );
-  }, [originGridContainerRef.current?.children]);
+  }, [folderChildrenLength, updateFilesLayout]);
 
   return (
     <div

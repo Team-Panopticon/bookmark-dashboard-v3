@@ -13,14 +13,17 @@ const getRowCol = (id: string, elItem: HTMLDivElement, parentId: string) => {
   return { id, parentId, row, col };
 };
 
-export const getRowColUpdatedFiles = (
-  folder: Bookmark,
-  refs?: HTMLDivElement[]
-) => {
-  const { children: files = [], id: parentId } = folder;
-
+export const getRowColUpdatedFiles = ({
+  files = [],
+  folderId,
+  refs,
+}: {
+  files?: Bookmark[];
+  folderId: string;
+  refs?: HTMLDivElement[];
+}) => {
   return [...(refs || [])].map((el, index) =>
-    getRowCol(files[index]?.id, el, parentId)
+    getRowCol(files[index]?.id, el, folderId)
   );
 };
 

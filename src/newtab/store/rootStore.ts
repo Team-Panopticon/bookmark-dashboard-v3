@@ -47,7 +47,6 @@ type Action = {
   setEdit: (id: string | null) => void;
 
   // bookmark
-  getBookmark: () => Promise<Bookmark>;
   getSubtree: (id: string) => Bookmark | null;
   refreshBookmark: () => Promise<void>;
   updateFilesLayout: (
@@ -89,10 +88,6 @@ export const rootStore = create<State & Action>()((set, get) => ({
 
   // bookmark,
   bookmark: {} as Bookmark,
-  getBookmark: async () => {
-    await get().refreshBookmark();
-    return get().bookmark;
-  },
   refreshBookmark: async () => {
     const subTree = await BookmarkApi.getSubTree("1");
     const layout = await layoutDB.getAllLayout();
