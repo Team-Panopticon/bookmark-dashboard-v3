@@ -82,7 +82,7 @@ const Folder = ({
         onMouseDown={() => {
           focusFolder(timestamp);
         }}
-        className="absolute flex size-[500px] flex-col rounded-lg border bg-neutral-50 shadow-2xl"
+        className="absolute flex size-[500px] flex-col rounded-lg border border-gray-200 bg-neutral-50 shadow-2xl"
         style={{
           top: "10px",
           left: 0,
@@ -96,7 +96,7 @@ const Folder = ({
       >
         <div
           ref={dragTargetRef}
-          className="flex h-12 w-full items-center justify-between rounded-t-lg p-2 hover:border-b"
+          className="flex h-12 w-full items-center justify-between rounded-t-lg border-gray-200 p-2 hover:border-b hover:shadow-sm"
         >
           <div className="flex items-center">
             <button
