@@ -3,6 +3,11 @@ import Bookshelf from "./Bookshelf";
 import Moveable from "react-moveable";
 import { Bookmark } from "../../types/store";
 import { rootStore } from "../store/rootStore";
+import CloseIcon from "../../assets/close.svg";
+import BackIcon from "../../assets/back.svg";
+import BackIconLG from "../../assets/back_lg.svg";
+import ForwardIcon from "../../assets/forward.svg";
+import ForwardIconLG from "../../assets/forward_lg.svg";
 
 const FolderManager: FC = () => {
   const {
@@ -68,6 +73,9 @@ const Folder = ({
     setFolder(getSubtree(history[historyCursor]));
   }, [historyCursor, getSubtree, setFolder, history, bookmark]);
 
+  const canGoBack = !!history[historyCursor - 1];
+  const canGoForward = !!history[historyCursor + 1];
+
   return (
     <div className="container">
       <div
@@ -88,23 +96,44 @@ const Folder = ({
       >
         <div
           ref={dragTargetRef}
-          className="flex h-12 w-full items-center justify-between rounded-t-lg bg-neutral-300 p-2 hover:border-b "
+          className="flex h-12 w-full items-center justify-between rounded-t-lg p-2 hover:border-b"
         >
-          <div className="flex">
-            <button className="w-4 border-none bg-none" onClick={goBack}>
-              {"<"}
+          <div className="flex items-center">
+            <button
+              onClick={() => {
+                closeFolder(timestamp);
+              }}
+              className="group ml-2 flex aspect-square size-3 items-center justify-center rounded-full bg-red-500 text-center text-[9px] font-semibold transition-all duration-300"
+            >
+              <img
+                className="flex items-center justify-center opacity-0 duration-500 group-hover:opacity-100"
+                src={CloseIcon}
+              />
             </button>
-            <button className="w-4 border-none bg-none" onClick={goForward}>
-              {">"}
+            <button
+              className={`ml-2 flex size-8 items-center justify-center rounded-md border-none transition-all duration-500 
+                ${canGoBack && "hover:bg-gray-200"}`}
+              disabled={!canGoBack}
+              onClick={goBack}
+            >
+              <img
+                className="mr-[-8px] w-5"
+                src={canGoBack ? BackIcon : BackIconLG}
+              />
             </button>
-            <div>{folder?.title}</div>
+            <button
+              className={`flex size-8 items-center justify-center rounded-md border-none transition-all duration-500
+                ${canGoForward && "hover:bg-gray-200"}`}
+              disabled={!canGoForward}
+              onClick={goForward}
+            >
+              <img
+                className="mr-[-2px] w-5"
+                src={canGoForward ? ForwardIcon : ForwardIconLG}
+              />
+            </button>
+            <div className="ml-2 font-semibold">{folder?.title}</div>
           </div>
-          <button
-            onClick={() => {
-              closeFolder(timestamp);
-            }}
-            className="aspect-square size-4 rounded-full bg-red-500 text-center text-[10px]"
-          ></button>
         </div>
         {folder && (
           <Bookshelf
