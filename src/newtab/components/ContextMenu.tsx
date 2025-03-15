@@ -90,23 +90,24 @@ const ContextMenu = () => {
   if (!isContextMenuVisible) return null;
   return (
     <div
-      className="flex w-[150px] flex-col rounded border-[0.5px] bg-slate-50 p-2 text-xs"
+      className="flex w-[150px] flex-col rounded-md border-[0.5px] border-solid border-[#b8b8b8] p-1 text-xs bg-[#eaeaea] shadow-md"
       style={{
         position: "absolute",
         left: contextMenuPosition.x,
         top: contextMenuPosition.y,
         zIndex: Z_INDEX.CONTEXT_MENU,
+        boxShadow:'rgba(0, 0, 0, 0.1) 0px 6px 24px;'
       }}
     >
       {menuList.map((menu) => {
         return (
-          <div
-            className="flex h-6"
+          <button
+            className="flex justify-start items-center h-6 rounded-md py-1 px-2.5 hover:bg-[#4898ff] hover:text-[#fff] cursor-default"
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => menu.onClick(e)}
           >
             {menu.title}
-          </div>
+          </button>
         );
       })}
     </div>
