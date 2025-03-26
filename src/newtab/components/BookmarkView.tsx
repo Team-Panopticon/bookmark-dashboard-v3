@@ -105,7 +105,7 @@ const BookmarkView = ({
               />
             </div>
           ) : (
-            <div className="text-[48px]">{bookmark.title.charAt(0)}</div>
+            <div className="text-[16px]">{bookmark.title.slice(0, 3)}</div>
           )}
         </div>
 
