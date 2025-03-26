@@ -12,6 +12,7 @@ type Props = {
   focused?: boolean;
   isEdit?: boolean;
   setIsEdit?: (isEdit: boolean) => void;
+  isDragging?: boolean;
 };
 declare module "react" {
   interface CSSProperties {
@@ -31,6 +32,7 @@ const BookmarkView = ({
   focused,
   isEdit,
   setIsEdit,
+  isDragging,
 }: Props) => {
   const [newTitle, setNewTitle] = useState<string>(bookmark.title);
 
@@ -60,6 +62,19 @@ const BookmarkView = ({
     }
     containerRef.current?.focus();
   };
+  const getTrimmedTitle = (title: string) => {
+    const MAX_LENGTH = 26;
+    const TAIL_LENGTH = 5;
+    const ELLIPSIS = "...";
+
+    if (title.length <= MAX_LENGTH) return title;
+
+    const headLength = MAX_LENGTH - TAIL_LENGTH - ELLIPSIS.length;
+    const head = title.slice(0, headLength);
+    const tail = title.slice(-TAIL_LENGTH);
+
+    return `${head}${ELLIPSIS}${tail}`;
+  };
 
   return (
     <div
@@ -74,6 +89,7 @@ const BookmarkView = ({
         ...style,
         gridRow: bookmark.row || "auto",
         gridColumn: bookmark.col || "auto",
+        opacity: isDragging ? 0.95 : 1,
       }}
       onKeyDown={(e) => {
         if (e.code === "Enter" && isEdit === false) {
@@ -84,19 +100,25 @@ const BookmarkView = ({
       onDoubleClick={() => onDoubleClick?.(bookmark)}
     >
       <button
-        className="relative flex size-full flex-col items-center gap-1 "
+        className="relative flex size-full flex-col items-center gap-1 bg-transparent"
         ref={containerRef}
-        style={{
-          border: "1px solid transparent",
-        }}
       >
         <div
-          className={`flex size-[68px] shrink-0 grow-0 items-center justify-center rounded-md ${
-            focused ? "bg-[#E6E6E6]" : ""
+          className={`flex size-[74px] shrink-0 grow-0 items-center justify-center rounded-md ${
+            focused ? "bg-[#E6E6E6]" : "bg-transparent"
           }`}
+          style={{
+            ...(bookmark.type === BookmarkType.PAGE && {
+              backgroundImage: "url(not-found.png)",
+              backgroundSize: "contain",
+            }),
+            ...(isDragging && {
+              filter: "drop-shadow(0px 6px 24px rgb(0 0 0 / 0.2))",
+            }),
+          }}
         >
           {bookmark.type === BookmarkType.FOLDER ? (
-            <div className={`flex h-full items-center  p-2 `}>
+            <div className={`flex h-full items-center p-2 `}>
               <img
                 src={FolderImage}
                 width={56}
@@ -105,32 +127,29 @@ const BookmarkView = ({
               />
             </div>
           ) : (
-            <div
-              style={{
-                backgroundImage: "url(not-found.png)",
-                backgroundSize: "contain",
-                backgroundPosition: "center",
-              }}
-              className="flex size-[93%] items-center justify-center rounded  text-[10px] text-gray-800"
-            >
+            <div className="flex size-[95%] items-center justify-center rounded text-[10px] text-gray-800">
               {bookmark.title.slice(0, 3)}
             </div>
           )}
         </div>
 
-        <div className="max-w-[86px] ">
+        <div className="break-all text-center leading-3  text-black">
           {!isEdit ? (
-            <p
-              className={`line-clamp-2 overflow-hidden text-ellipsis break-words text-center text-xs leading-4`}
+            <div
+              style={{
+                ...((isDragging || focused) && {
+                  background: "#0065E1",
+                  filter: 'url("goo.svg#goo")',
+                  color: "white",
+                }),
+                fontSize: "11px",
+                display: "inline",
+                padding: "1px 3.5px",
+                boxDecorationBreak: "clone",
+              }}
             >
-              <span
-                className={`${
-                  focused ? "bg-[#0065E1]  text-white" : ""
-                } break-words rounded  box-decoration-clone px-1 py-px leading-3 `}
-              >
-                {newTitle}
-              </span>
-            </p>
+              {getTrimmedTitle(newTitle)}
+            </div>
           ) : (
             <textarea
               ref={inputRef}

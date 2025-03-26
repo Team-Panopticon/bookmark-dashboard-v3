@@ -1,21 +1,21 @@
-import { useState, useEffect } from "react";
-import { useEventHandler } from "../hooks/useEventHandler";
-import { rootStore } from "../store/rootStore";
-import { Z_INDEX } from "../utils/constant";
+import {useState, useEffect} from "react";
+import {useEventHandler} from "../hooks/useEventHandler";
+import {rootStore} from "../store/rootStore";
+import {Z_INDEX} from "../utils/constant";
 import BookmarkView from "./BookmarkView";
 
 const DraggingFile = () => {
-  const { dragAndDrop = {} } = rootStore();
+  const {dragAndDrop = {}} = rootStore();
   const {
-    bookmarkEventHandler: { handleMouseUpBookmark },
+    bookmarkEventHandler: {handleMouseUpBookmark},
   } = useEventHandler({});
-  const { fileElement, offsetBetweenStartPointAndFileLeftTop, bookmark } =
+  const {fileElement, offsetBetweenStartPointAndFileLeftTop, bookmark} =
     dragAndDrop;
 
-  const [{ x, y }, setDraggingFilePosition] = useState<{
+  const [{x, y}, setDraggingFilePosition] = useState<{
     x?: number;
     y?: number;
-  }>({ x: undefined, y: undefined });
+  }>({x: undefined, y: undefined});
 
   useEffect(() => {
     const handleMouseDown = (event: MouseEvent) => {
@@ -60,6 +60,7 @@ const DraggingFile = () => {
 
   return (
     <BookmarkView
+      isDragging={true}
       bookmark={bookmark}
       style={{
         position: "absolute",

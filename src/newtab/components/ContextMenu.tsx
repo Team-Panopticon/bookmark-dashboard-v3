@@ -1,8 +1,8 @@
-import { useEffect, useMemo } from "react";
+import {useEffect, useMemo} from "react";
 
-import { rootStore } from "../store/rootStore";
+import {rootStore} from "../store/rootStore";
 import BookmarkApi from "../utils/bookmarkApi";
-import { Z_INDEX } from "../utils/constant";
+import {Z_INDEX} from "../utils/constant";
 
 interface ContextMenu {
   title: string;
@@ -11,7 +11,7 @@ interface ContextMenu {
 
 const ContextMenu = () => {
   const {
-    focus: { focusedIds },
+    focus: {focusedIds},
     setEdit,
     contextMenu: {
       contextMenuPosition,
@@ -42,7 +42,7 @@ const ContextMenu = () => {
       onClick: (e: React.MouseEvent) => {
         e.stopPropagation();
         setEdit(timestampId);
-        setContextMenu({ isContextMenuVisible: false });
+        setContextMenu({isContextMenuVisible: false});
       },
     };
 
@@ -55,7 +55,7 @@ const ContextMenu = () => {
           const bookmarkId = timestampId.split("_")[1];
           bookmarkId && BookmarkApi.recursiveRemove(bookmarkId);
         });
-        setContextMenu({ isContextMenuVisible: false });
+        setContextMenu({isContextMenuVisible: false});
       },
     };
     const 폴더생성 = {
@@ -63,7 +63,7 @@ const ContextMenu = () => {
       onClick: (e: React.MouseEvent) => {
         e.stopPropagation();
         BookmarkApi.create(context.id, "무제 폴더");
-        setContextMenu({ isContextMenuVisible: false });
+        setContextMenu({isContextMenuVisible: false});
       },
     };
 
@@ -90,19 +90,19 @@ const ContextMenu = () => {
   if (!isContextMenuVisible) return null;
   return (
     <div
-      className="flex w-[150px] flex-col rounded-md border-[0.5px] border-solid border-[#b8b8b8] p-1 text-xs bg-[#eaeaea] shadow-md"
+      className="flex w-[150px] flex-col rounded-md border-[0.5px] border-solid border-[#b8b8b8] bg-[#eaeaeac9] p-1 text-xs shadow-md backdrop-blur-md"
       style={{
         position: "absolute",
         left: contextMenuPosition.x,
         top: contextMenuPosition.y,
         zIndex: Z_INDEX.CONTEXT_MENU,
-        boxShadow:'rgba(0, 0, 0, 0.1) 0px 6px 24px;'
+        boxShadow: "rgba(0, 0, 0, 0.1) 0px 6px 24px;",
       }}
     >
       {menuList.map((menu) => {
         return (
           <button
-            className="flex justify-start items-center h-6 rounded-md py-1 px-2.5 hover:bg-[#4898ff] hover:text-[#fff] cursor-default"
+            className="flex h-6 cursor-default items-center justify-start rounded-md px-2.5 py-1 hover:bg-[#4898ff] hover:text-white"
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => menu.onClick(e)}
           >
