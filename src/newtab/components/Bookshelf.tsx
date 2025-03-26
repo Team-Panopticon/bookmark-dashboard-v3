@@ -1,11 +1,11 @@
-import type { FC } from "react";
-import { useEffect, useMemo, useRef } from "react";
-import { type Bookmark } from "../../types/store";
-import { ITEM_HEIGHT, ITEM_WIDTH } from "../utils/constant";
+import type {FC} from "react";
+import {useEffect, useMemo, useRef} from "react";
+import {type Bookmark} from "../../types/store";
+import {ITEM_HEIGHT, ITEM_WIDTH} from "../utils/constant";
 import BookmarkView from "./BookmarkView";
-import { getRowColUpdatedFiles } from "../utils/getRowColUpdatedFiles";
-import { useEventHandler } from "../hooks/useEventHandler";
-import { rootStore } from "../store/rootStore";
+import {getRowColUpdatedFiles} from "../utils/getRowColUpdatedFiles";
+import {useEventHandler} from "../hooks/useEventHandler";
+import {rootStore} from "../store/rootStore";
 import BookmarkApi from "../utils/bookmarkApi";
 
 export interface DarkModeEvent {
@@ -26,17 +26,17 @@ type Props = {
   timestamp: string;
 };
 
-const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
-  const { children: files = [] } = folder;
+const Bookshelf: FC<Props> = ({folder, navigateTo, timestamp}) => {
+  const {children: files = []} = folder;
   const {
     updateFilesLayout,
     dragAndDrop = {},
-    focus: { focusedIds },
+    focus: {focusedIds},
     refreshBookmark,
     edit,
     setEdit,
   } = rootStore();
-  const { bookmark: draggingFile, timestamp: draggingFileTimestamp } =
+  const {bookmark: draggingFile, timestamp: draggingFileTimestamp} =
     dragAndDrop;
 
   const originGridContainerRef = useRef<HTMLDivElement>(null);
@@ -47,7 +47,7 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
       handleMouseDownBookmark,
       handleMouseUpBookmark,
     },
-    bookshelfEventHandler: { handleMouseDownBookshelf, handleMouseUpBookshelf },
+    bookshelfEventHandler: {handleMouseDownBookshelf, handleMouseUpBookshelf},
   } = useEventHandler({
     bookshelf: folder,
     navigateTo,
@@ -119,7 +119,7 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
             }}
             onDoubleClick={handleDoubleClickBookmark}
             style={{
-              background: isDragging ? "#eee" : "",
+              boxShadow: isDragging ? " rgba(0, 0, 0, 0.04) 0px 3px 5px;" : "",
             }}
             isEdit={isEdit}
             setIsEdit={(newIsEdit) => {
