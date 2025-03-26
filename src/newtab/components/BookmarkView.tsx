@@ -105,7 +105,16 @@ const BookmarkView = ({
               />
             </div>
           ) : (
-            <div className="text-[16px]">{bookmark.title.slice(0, 3)}</div>
+            <div
+              style={{
+                backgroundImage: "url(not-found.png)",
+                backgroundSize: "contain",
+                backgroundPosition: "center",
+              }}
+              className="flex size-[93%] items-center justify-center rounded  text-[10px] text-gray-800"
+            >
+              {bookmark.title.slice(0, 3)}
+            </div>
           )}
         </div>
 
