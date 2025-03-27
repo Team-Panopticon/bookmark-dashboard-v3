@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState, type FC } from "react";
+import {useEffect, useRef, useState, type FC} from "react";
 import Bookshelf from "./Bookshelf";
 import Moveable from "react-moveable";
-import { Bookmark } from "../../types/store";
-import { rootStore } from "../store/rootStore";
+import {Bookmark} from "../../types/store";
+import {rootStore} from "../store/rootStore";
 import CloseIcon from "../../assets/close.svg";
 import BackIcon from "../../assets/back.svg";
 import BackIconLG from "../../assets/back_lg.svg";
@@ -11,7 +11,7 @@ import ForwardIconLG from "../../assets/forward_lg.svg";
 
 const FolderManager: FC = () => {
   const {
-    folder: { folders },
+    folder: {folders},
   } = rootStore();
 
   return (
@@ -39,7 +39,7 @@ const Folder = ({
   zIndex: number;
   timestamp: string;
 }) => {
-  const { getSubtree, bookmark, closeFolder, focusFolder } = rootStore();
+  const {getSubtree, bookmark, closeFolder, focusFolder} = rootStore();
   const targetRef = useRef<HTMLDivElement>(null);
   const dragTargetRef = useRef<HTMLDivElement>(null);
 
@@ -63,7 +63,7 @@ const Folder = ({
   };
 
   // 폴더 이동 시 호출
-  const navigateTo = ({ id: folderId }: Bookmark) => {
+  const navigateTo = ({id: folderId}: Bookmark) => {
     const newHistory = history.slice(0, historyCursor + 1); // 현재 이후 기록 제거
     setHistory([...newHistory, folderId]);
     setHistoryCursor(newHistory.length); // 새로운 위치로 이동
@@ -88,7 +88,7 @@ const Folder = ({
           left: 0,
           maxWidth: "auto",
           maxHeight: "auto",
-          minWidth: "auto",
+          minWidth: "200px",
           minHeight: "auto",
           zIndex,
         }}
@@ -96,9 +96,9 @@ const Folder = ({
       >
         <div
           ref={dragTargetRef}
-          className="flex h-12 w-full items-center justify-between rounded-t-lg border-gray-200 p-2 hover:border-b hover:shadow-sm"
+          className="flex h-12 w-full items-center justify-between  rounded-t-lg border-b border-transparent p-2 hover:border-gray-200 hover:shadow-sm"
         >
-          <div className="flex items-center">
+          <div className="flex w-full items-center">
             <button
               onClick={() => {
                 closeFolder(timestamp);
@@ -111,7 +111,7 @@ const Folder = ({
               />
             </button>
             <button
-              className={`ml-2 flex size-8 items-center justify-center rounded-md border-none transition-all duration-500 
+              className={`ml-2 flex size-8 shrink-0 items-center justify-center rounded-md border-none transition-all  duration-500
                 ${canGoBack && "hover:bg-gray-200"}`}
               disabled={!canGoBack}
               onClick={goBack}
@@ -122,7 +122,7 @@ const Folder = ({
               />
             </button>
             <button
-              className={`flex size-8 items-center justify-center rounded-md border-none transition-all duration-500
+              className={`flex size-8 shrink-0 items-center justify-center rounded-md border-none transition-all duration-500
                 ${canGoForward && "hover:bg-gray-200"}`}
               disabled={!canGoForward}
               onClick={goForward}
@@ -132,7 +132,9 @@ const Folder = ({
                 src={canGoForward ? ForwardIcon : ForwardIconLG}
               />
             </button>
-            <div className="ml-2 font-semibold">{folder?.title}</div>
+            <div className="ml-2 overflow-hidden text-ellipsis font-semibold">
+              {folder?.title}
+            </div>
           </div>
         </div>
         {folder && (
