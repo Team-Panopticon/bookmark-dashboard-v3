@@ -9,6 +9,8 @@ import BackIconLG from "../../assets/back_lg.svg";
 import ForwardIcon from "../../assets/forward.svg";
 import ForwardIconLG from "../../assets/forward_lg.svg";
 
+import Resize from "../../assets/Resize.svg";
+
 const FolderManager: FC = () => {
   const {
     folder: {folders},
@@ -75,7 +77,19 @@ const Folder = ({
 
   const canGoBack = !!history[historyCursor - 1];
   const canGoForward = !!history[historyCursor + 1];
+  const toggleFullscreen = () => {
+    const el = targetRef.current;
 
+    if (!el) return;
+
+    if (document.fullscreenElement === el) {
+      // 이미 전체화면이면 해제
+      document.exitFullscreen();
+    } else {
+      // 전체화면 진입
+      el.requestFullscreen();
+    }
+  };
   return (
     <div className="container">
       <div
@@ -103,11 +117,22 @@ const Folder = ({
               onClick={() => {
                 closeFolder(timestamp);
               }}
-              className="group ml-2 flex aspect-square size-3 items-center justify-center rounded-full bg-red-500 text-center text-[9px] font-semibold transition-all duration-300"
+              className="group ml-2 flex aspect-square size-3 items-center justify-center rounded-full border-[0.5px] border-black/10 bg-[#FF5F57] text-center text-[9px] font-semibold transition-all duration-300"
             >
               <img
                 className="flex items-center justify-center opacity-0 duration-500 group-hover:opacity-100"
                 src={CloseIcon}
+              />
+            </button>
+            <button
+              onClick={() => {
+                toggleFullscreen();
+              }}
+              className="group ml-2 flex aspect-square size-3 items-center justify-center rounded-full border-[0.5px] border-black/10 bg-[#28C840] text-center text-[9px] font-semibold transition-all duration-300"
+            >
+              <img
+                className="flex items-center justify-center opacity-0 duration-500 group-hover:opacity-100"
+                src={Resize}
               />
             </button>
             <button

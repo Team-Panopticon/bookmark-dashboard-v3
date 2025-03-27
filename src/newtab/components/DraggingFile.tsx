@@ -70,7 +70,6 @@ const DraggingFile = () => {
         pointerEvents: "none",
       }}
       onMouseUp={(e) => {
-        console.log("draging file mouse up");
         handleMouseUpBookmark(e, bookmark);
       }}
     />

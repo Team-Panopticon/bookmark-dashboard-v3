@@ -1,5 +1,7 @@
 ### 2025-03-26
 
+https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---macOS-(Community)?node-id=103-8830&t=mYQU88gC94t5Aztm-0
+
 - ## ui 개선 사항
   - 드래깅중 드래깅 파일에 대한 포커싱 - 제목만, 투명도
   - 드래깅 파일이 폴더위에 올렸을때 - 폴더에 대한 포커싱

@@ -138,7 +138,7 @@ const BookmarkView = ({
             <div
               style={{
                 ...((isDragging || focused) && {
-                  background: "#0065E1",
+                  background: "#0A82FF",
                   filter: 'url("goo.svg#goo")',
                   color: "white",
                 }),
