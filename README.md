@@ -3,15 +3,16 @@
 https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---macOS-(Community)?node-id=103-8830&t=mYQU88gC94t5Aztm-0
 
 - ## ui 개선 사항
-  - 드래깅중 드래깅 파일에 대한 포커싱 - 제목만, 투명도
-  - 드래깅 파일이 폴더위에 올렸을때 - 폴더에 대한 포커싱
-  - ellipsis 색상 표현 오류
-  - text area 줄수 제한
-  - 타이틀 3글자 검토
-  - folder header border height 늘어나는 현상
-- 버그만 핵심적인것만 고치고 배포일정
 
-  - 폴더 헤더에서 아래 파일에 대한 컨텍스트 잡히는 현상
+  - [ ] 드래깅 파일이 폴더위에 올렸을때 - 폴더에 대한 포커싱
+  - [ ] 폴더 헤더에서 아래 파일에 대한 컨텍스트 잡히는 현상
+  - [x] folder header border height 늘어나는 현상
+  - [x] 드래깅중 드래깅 파일에 대한 포커싱 - 제목만, 투명도
+  - [x] ellipsis 색상 표현 오류
+  - [x] text area 줄수 제한
+  - [x] 타이틀 3글자 검토
+
+- 버그만 핵심적인것만 고치고 배포일정
 
   추가 기능은 나중에
 

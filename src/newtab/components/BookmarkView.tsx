@@ -1,5 +1,5 @@
-import {CSSProperties, useEffect, useRef, useState} from "react";
-import {BookmarkType, type Bookmark} from "../../types/store";
+import { CSSProperties, useEffect, useRef, useState } from "react";
+import { BookmarkType, type Bookmark } from "../../types/store";
 import FolderImage from "../../assets/folder.svg";
 
 type Props = {
@@ -64,6 +64,7 @@ const BookmarkView = ({
   };
   const getTrimmedTitle = (title: string) => {
     const MAX_LENGTH = 26;
+    // const MAX_LENGTH = 20;
     const TAIL_LENGTH = 5;
     const ELLIPSIS = "...";
 
@@ -123,7 +124,7 @@ const BookmarkView = ({
                 src={FolderImage}
                 width={56}
                 height={56}
-                style={{pointerEvents: "none"}}
+                style={{ pointerEvents: "none" }}
               />
             </div>
           ) : (
