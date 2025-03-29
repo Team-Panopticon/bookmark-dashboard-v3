@@ -38,15 +38,28 @@ export const useEventHandler = ({
   const bookshelfEventHandler = {
     /** @NOTE: 복수선택(ctrl, shift)이 아닌 경우 포커스를 해제 */
     handleMouseDownBookshelf: (
-      e: React.MouseEvent<HTMLElement>,
+      event: React.MouseEvent<HTMLElement>,
       bookmark: Bookmark
     ) => {
       setContextMenu({ isContextMenuVisible: false, context: bookmark });
 
-      if (!(e.ctrlKey || e.shiftKey)) {
+      if (!(event.ctrlKey || event.shiftKey)) {
         clearFocus();
       } else {
         // 복수 선택
+      }
+
+      if (event.button === MOUSE_CLICK.RIGHT) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        setContextMenu({
+          isContextMenuVisible: true,
+          context: bookmark,
+          contextMenuPosition: { x: event.clientX, y: event.clientY },
+        });
+
+        return;
       }
     },
     /** @NOTE: 빈공간에 드랍하는 경우 북마크를 빈공간으로 이동 */
@@ -241,26 +254,6 @@ export const useEventHandler = ({
     handleCloseButtonClick: (timestamp: string) => closeFolder(timestamp),
   };
 
-  const desktopEventHander = {
-    handleMouseDownDesktop: (event: React.MouseEvent) => {
-      if (event.button === MOUSE_CLICK.LEFT) {
-        setContextMenu({ isContextMenuVisible: false });
-        return;
-      }
-
-      if (event.button === MOUSE_CLICK.RIGHT) {
-        event.preventDefault();
-
-        setContextMenu({
-          isContextMenuVisible: true,
-          contextMenuPosition: { x: event.clientX, y: event.clientY },
-        });
-
-        return;
-      }
-    },
-  };
-
   return {
     globalEventHandelr,
     bookmarkEventHandler,
@@ -268,6 +261,5 @@ export const useEventHandler = ({
     draggingFilEventHandler,
     folderEventHanlder,
     contextMenuEventHandler,
-    desktopEventHander,
   };
 };

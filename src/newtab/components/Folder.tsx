@@ -91,11 +91,6 @@ const Folder = ({
       >
         <div
           ref={dragTargetRef}
-          onMouseDown={(e) => {
-            if (e.button === MOUSE_CLICK.RIGHT) {
-              e.stopPropagation();
-            }
-          }}
           className="flex h-12 w-full items-center justify-between  rounded-t-lg border-b border-transparent p-2 hover:border-gray-200 hover:shadow-sm"
         >
           <div className="flex w-full items-center">
