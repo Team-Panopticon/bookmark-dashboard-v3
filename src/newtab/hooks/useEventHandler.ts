@@ -1,12 +1,12 @@
-import {Bookshelf, Bookmark, BookmarkType} from "../../types/store";
+import { Bookshelf, Bookmark, BookmarkType } from "../../types/store";
 import BookmarkApi from "../utils/bookmarkApi";
-import {layoutDB} from "../utils/layoutDB";
+import { layoutDB } from "../utils/layoutDB";
 import {
   getOffsetBetweenPoints,
   MOUSE_CLICK,
   rootStore,
 } from "../store/rootStore";
-import {getRowColFromMouseEvent} from "../utils/getRowColUpdatedFiles";
+import { getRowColFromMouseEvent } from "../utils/getRowColUpdatedFiles";
 
 export const useEventHandler = ({
   bookshelf,
@@ -41,7 +41,7 @@ export const useEventHandler = ({
       e: React.MouseEvent<HTMLElement>,
       bookmark: Bookmark
     ) => {
-      setContextMenu({isContextMenuVisible: false, context: bookmark});
+      setContextMenu({ isContextMenuVisible: false, context: bookmark });
 
       if (!(e.ctrlKey || e.shiftKey)) {
         clearFocus();
@@ -51,16 +51,16 @@ export const useEventHandler = ({
     },
     /** @NOTE: 빈공간에 드랍하는 경우 북마크를 빈공간으로 이동 */
     handleMouseUpBookshelf: async (e: React.MouseEvent) => {
-      const {row, col} = getRowColFromMouseEvent(e);
+      const { row, col } = getRowColFromMouseEvent(e);
 
-      const {bookmark: file, offsetBetweenStartPointAndFileLeftTop} =
+      const { bookmark: file, offsetBetweenStartPointAndFileLeftTop } =
         dragAndDrop || {};
 
       if (!file || !bookshelf || !offsetBetweenStartPointAndFileLeftTop) {
         return;
       }
 
-      const {id} = file;
+      const { id } = file;
       const parentId = bookshelf?.id;
 
       layoutDB.setItemLayoutById({
@@ -91,12 +91,12 @@ export const useEventHandler = ({
       bookmark: Bookmark;
       timestamp: string;
     }) => {
-      setContextMenu({isContextMenuVisible: false});
+      setContextMenu({ isContextMenuVisible: false });
       setEdit(null);
 
       event.stopPropagation();
-      const {currentTarget, ctrlKey, metaKey, shiftKey, pageX, pageY} = event;
-      const point = {x: pageX, y: pageY};
+      const { currentTarget, ctrlKey, metaKey, shiftKey, pageX, pageY } = event;
+      const point = { x: pageX, y: pageY };
 
       /** @NOTE: control, shift, meta 키가 눌려있는지 */
       const pressedCmdKey = ctrlKey || shiftKey || metaKey;
@@ -148,7 +148,7 @@ export const useEventHandler = ({
         setContextMenu({
           isContextMenuVisible: true,
           timestampId: timestampId,
-          contextMenuPosition: {x: event.clientX, y: event.clientY},
+          contextMenuPosition: { x: event.clientX, y: event.clientY },
         });
 
         return;
@@ -180,8 +180,8 @@ export const useEventHandler = ({
       e.stopPropagation();
 
       try {
-        const {id: draggingBookmarkId} = draggingBookmark;
-        const {id: bookmarkId} = bookmark;
+        const { id: draggingBookmarkId } = draggingBookmark;
+        const { id: bookmarkId } = bookmark;
 
         if (draggingBookmarkId === bookmarkId) {
           throw Error(`Try Move From ${draggingBookmarkId} to ${bookmarkId}`);
@@ -234,17 +234,17 @@ export const useEventHandler = ({
   };
 
   const folderEventHanlder = {
-    mouseDown: (timestamp: string) => {
-      setContextMenu({isContextMenuVisible: false});
+    handleMouseDown: (timestamp: string) => {
+      setContextMenu({ isContextMenuVisible: false });
       focusFolder(timestamp);
     },
-    closeButtonClick: (timestamp: string) => closeFolder(timestamp),
+    handleCloseButtonClick: (timestamp: string) => closeFolder(timestamp),
   };
 
   const desktopEventHander = {
     handleMouseDownDesktop: (event: React.MouseEvent) => {
       if (event.button === MOUSE_CLICK.LEFT) {
-        setContextMenu({isContextMenuVisible: false});
+        setContextMenu({ isContextMenuVisible: false });
         return;
       }
 
@@ -253,7 +253,7 @@ export const useEventHandler = ({
 
         setContextMenu({
           isContextMenuVisible: true,
-          contextMenuPosition: {x: event.clientX, y: event.clientY},
+          contextMenuPosition: { x: event.clientX, y: event.clientY },
         });
 
         return;
