@@ -4,8 +4,7 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
 
 - ## ui 개선 사항
 
-  - [ ] 드래깅 파일이 폴더위에 올렸을때 - 폴더에 대한 포커싱
-  - [ ] 폴더 헤더에서 아래 파일에 대한 컨텍스트 잡히는 현상
+  - [x] 폴더 헤더에서 아래 파일에 대한 컨텍스트 잡히는 현상 -> 컨텍스트 안되도록 수정
   - [x] folder header border height 늘어나는 현상
   - [x] 드래깅중 드래깅 파일에 대한 포커싱 - 제목만, 투명도
   - [x] ellipsis 색상 표현 오류
@@ -18,10 +17,16 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
 
 ### Bugfix List
 
+- [ ] 생성 시 간헐적으로 첫 번째 위치에 겹쳐서 생성됨 (조건은 모름)
+- [x] 이름 변경 시 이전 아이콘에 변경창이 뜸 -> useMemo 디펜던시 배열에 timestampId가 없어서 이전 값을 참조하여 생긴 문제
+  1. 1번 아이템 우클릭 + 이름변경
+  2. 2번 아이템 클릭
+  3. 2번 아이템 우클릭 + 이름변경
+  4. 1번 아이템에 이름변경 input
+- [ ] 새로고침 직후 간헐적으로 이름변경이 안됨
 - [x] ~~폴더 내에서 navigation이 표시가 안됨~~
       ~~breadcrumb 구현~~ => MAC에 없으므로 구현하지 않는걸로 결정함
-- [ ] 생성 시 간헐적으로 첫 번째 위치에 겹쳐서 생성됨 (조건은 모름)
-- [ ] 폴더 title쪽에 우클릭할 때 아래 폴더 기준으로 context menu가 생성됨 (우클릭 안되도록)
+- [x] 폴더 title쪽에 우클릭할 때 아래 폴더 기준으로 context menu가 생성됨 (우클릭 안되도록)
 - [x] mouseup 시에 원래 위치에 아이콘이 살짝 보임
 - [x] 마우스 down 하고 그자리에서 up 시 드래그 상태가 유지됨
 - [x] 마우스 클릭 시에 드래깅 표시(bg 회색)이 잠깐 보임
@@ -29,12 +34,16 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
 
 ### 추가 기능
 
+- [ ] 바탕화면에서 북마크 포커스후 빈공간에 우클릭시 메뉴표기가 북마크 메뉴표기로 나오는 현상
 - [ ] 삭제 할 때 알림? (폴더를 삭제하면 하위 북마크들도 다 삭제된다는...)
   - mac은 안해준다 -> 휴지통이 있으니까
   - soft delete? 휴지통? ...
 - [ ] focus keyboard 이동
 - [ ] 컨텍스트메뉴 주소바꾸기 구현(optional)
 - [ ] 폴더 타이틀 아래에 북마크 갯수 표시
+- [ ] 검색기능
+- [ ] URL 수정
+- [ ] 드래깅 파일이 폴더위에 올렸을때 - 폴더에 대한 포커싱
 
 ## 25-03-08
 
