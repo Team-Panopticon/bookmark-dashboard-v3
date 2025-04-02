@@ -64,7 +64,6 @@ const BookmarkView = ({
   };
   const getTrimmedTitle = (title: string) => {
     const MAX_LENGTH = 26;
-    // const MAX_LENGTH = 20;
     const TAIL_LENGTH = 5;
     const ELLIPSIS = "...";
 
@@ -119,7 +118,7 @@ const BookmarkView = ({
           }}
         >
           {bookmark.type === BookmarkType.FOLDER ? (
-            <div className={`flex h-full items-center p-2 `}>
+            <div className={`flex h-full items-center p-2`}>
               <img
                 src={FolderImage}
                 width={56}
@@ -134,7 +133,7 @@ const BookmarkView = ({
           )}
         </div>
 
-        <div className="break-all text-center leading-3  text-black">
+        <div className="break-all text-center leading-3 text-black">
           {!isEdit ? (
             <div
               style={{
@@ -157,7 +156,7 @@ const BookmarkView = ({
               style={{
                 fieldSizing: "content",
               }}
-              className="line-clamp-3 max-w-[88px] resize-none break-words  rounded-sm border border-[#5BA1FA]  bg-[#B3D7FE] px-0.5 caret-white outline-none ring ring-[#81B5FB]"
+              className="max-h-9 resize-none overflow-hidden break-words rounded-sm border border-[#5BA1FA] bg-[#B3D7FE] px-0.5 caret-white outline-none ring ring-[#81B5FB]"
               onChange={(e) => {
                 setNewTitle(e.target.value.replace(/[\n|\r\n|\r|]/g, ""));
               }}

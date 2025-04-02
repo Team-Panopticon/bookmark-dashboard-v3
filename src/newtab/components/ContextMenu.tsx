@@ -1,8 +1,8 @@
-import {useEffect, useMemo} from "react";
+import { useEffect, useMemo } from "react";
 
-import {rootStore} from "../store/rootStore";
+import { rootStore } from "../store/rootStore";
 import BookmarkApi from "../utils/bookmarkApi";
-import {Z_INDEX} from "../utils/constant";
+import { Z_INDEX } from "../utils/constant";
 
 interface ContextMenu {
   title: string;
@@ -11,7 +11,7 @@ interface ContextMenu {
 
 const ContextMenu = () => {
   const {
-    focus: {focusedIds},
+    focus: { focusedIds },
     setEdit,
     contextMenu: {
       contextMenuPosition,
@@ -42,7 +42,7 @@ const ContextMenu = () => {
       onClick: (e: React.MouseEvent) => {
         e.stopPropagation();
         setEdit(timestampId);
-        setContextMenu({isContextMenuVisible: false});
+        setContextMenu({ isContextMenuVisible: false });
       },
     };
 
@@ -55,7 +55,7 @@ const ContextMenu = () => {
           const bookmarkId = timestampId.split("_")[1];
           bookmarkId && BookmarkApi.recursiveRemove(bookmarkId);
         });
-        setContextMenu({isContextMenuVisible: false});
+        setContextMenu({ isContextMenuVisible: false });
       },
     };
     const 폴더생성 = {
@@ -63,7 +63,7 @@ const ContextMenu = () => {
       onClick: (e: React.MouseEvent) => {
         e.stopPropagation();
         BookmarkApi.create(context.id, "무제 폴더");
-        setContextMenu({isContextMenuVisible: false});
+        setContextMenu({ isContextMenuVisible: false });
       },
     };
 
@@ -80,12 +80,13 @@ const ContextMenu = () => {
       [...focusedIds][0];
       const target = [...focusedIds][0];
       target;
-      return [이름변경, URL수정, 삭제];
+      return [이름변경, 삭제];
+      // return [이름변경, URL수정, 삭제];
     } else {
       // 포커스가 여러개일 때 -> 삭제
       return [삭제];
     }
-  }, [focusedIds]);
+  }, [context.id, focusedIds, setContextMenu, setEdit, timestampId]);
 
   if (!isContextMenuVisible) return null;
   return (
