@@ -1,0 +1,35 @@
+@font-face {
+  font-family: "San Francisco";
+  font-weight: 400;
+  src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "San Francisco", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.positionHolderEl-component {
+  opacity: 0.5;
+}
+
+#root {
+  height: 100vh;
+}
+
+html {
+  overflow-y: auto !important;
+}
+
+.moveable-line {
+  background: none !important;
+  height: 0px !important;
+}
+
+.moveable-control {
+  border: none !important;
+  background: none !important;
+}
