@@ -21,6 +21,8 @@ declare module "react" {
   }
 }
 
+const PREFIX = "https://www.google.com/s2/favicons?sz=64&domain=";
+
 /** @TODO favicon 그리기 (원래 코드에서 안옮겼음) */
 const BookmarkView = ({
   bookmark,
@@ -63,7 +65,7 @@ const BookmarkView = ({
     containerRef.current?.focus();
   };
   const getTrimmedTitle = (title: string) => {
-    const MAX_LENGTH = 26;
+    const MAX_LENGTH = 23;
     const TAIL_LENGTH = 5;
     const ELLIPSIS = "...";
 
@@ -75,6 +77,7 @@ const BookmarkView = ({
 
     return `${head}${ELLIPSIS}${tail}`;
   };
+  const [showImgIcon, setShowImgIcon] = useState(true);
 
   return (
     <div
@@ -108,10 +111,11 @@ const BookmarkView = ({
             focused ? "bg-[#E6E6E6]" : "bg-transparent"
           }`}
           style={{
-            ...(bookmark.type === BookmarkType.PAGE && {
-              backgroundImage: "url(not-found.png)",
-              backgroundSize: "contain",
-            }),
+            ...(bookmark.type === BookmarkType.PAGE &&
+              !showImgIcon && {
+                backgroundImage: "url(not-found.png)",
+                backgroundSize: "contain",
+              }),
             ...(isDragging && {
               filter: "drop-shadow(0px 6px 24px rgb(0 0 0 / 0.2))",
             }),
@@ -128,7 +132,20 @@ const BookmarkView = ({
             </div>
           ) : (
             <div className="flex size-[95%] items-center justify-center rounded text-[10px] text-gray-800">
-              {bookmark.title.slice(0, 3)}
+              {!showImgIcon && bookmark.title.slice(0, 3)}
+
+              {showImgIcon && (
+                <img
+                  src={PREFIX + bookmark.url}
+                  onLoad={(e) => {
+                    const targetImg = e.target as HTMLImageElement;
+                    if (targetImg.width <= 16 || targetImg.height <= 16) {
+                      setShowImgIcon(false);
+                    }
+                  }}
+                  alt=""
+                />
+              )}
             </div>
           )}
         </div>
