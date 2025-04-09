@@ -35,16 +35,22 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
 
 ### 추가 기능
 
-- [ ] 바탕화면에서 북마크 포커스후 빈공간에 우클릭시 메뉴표기가 북마크 메뉴표기로 나오는 현상
+- [ ] 컨텍스트메뉴 주소바꾸기 구현(optional),URL 수정
+      버튼 이름은 `정보 수정`?
+      mac save dialog 디자인 / title, url 수정, 버튼들은 그대로, 상단에 favicon (없으면 안보여줌)
+- [ ] 검색기능
+      float button + spotlight ui
+- [ ] focus keyboard 이동
+- [ ] favicon api 적용
+
+- [ ] 폴더 타이틀 아래에 북마크 갯수 표시
+- [ ] 바탕화면
+- [ ] 드래깅 파일이 폴더위에 올렸을때 - 폴더에 대한 포커싱
+
 - [ ] 삭제 할 때 알림? (폴더를 삭제하면 하위 북마크들도 다 삭제된다는...)
   - mac은 안해준다 -> 휴지통이 있으니까
   - soft delete? 휴지통? ...
-- [ ] focus keyboard 이동
-- [ ] 컨텍스트메뉴 주소바꾸기 구현(optional)
-- [ ] 폴더 타이틀 아래에 북마크 갯수 표시
-- [ ] 검색기능
-- [ ] URL 수정
-- [ ] 드래깅 파일이 폴더위에 올렸을때 - 폴더에 대한 포커싱
+- [x] 바탕화면에서 북마크 포커스후 빈공간에 우클릭시 메뉴표기가 북마크 메뉴표기로 나오는 현상
 
 ## 25-03-08
 
