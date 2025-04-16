@@ -3,7 +3,7 @@ import SearchBar from "./SearchBar";
 import SearchButton from "./SearchButton";
 
 const Search = () => {
-  const [showSearchBar, setShowSearchBar] = useState(false);
+  const [show, setShow] = useState(false);
   const searchBarRef = useRef<HTMLDivElement>(null);
   const searchButtonRef = useRef<HTMLDivElement>(null);
 
@@ -17,7 +17,7 @@ const Search = () => {
         !searchButtonRef.current.contains(e.target as Node);
 
       if (isOutsideOfSearchBar && isOutsideOfSearchButton) {
-        setShowSearchBar(false);
+        hideSearchBar();
       }
     };
 
@@ -28,7 +28,7 @@ const Search = () => {
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setShowSearchBar(false);
+        hideSearchBar();
       }
     };
 
@@ -36,19 +36,23 @@ const Search = () => {
     return () => document.removeEventListener("keydown", handleEsc);
   }, []);
 
-  const onSearchButtonClick = () => {
-    setShowSearchBar(true);
+  const showSearchBar = () => {
+    setShow(true);
+  };
+
+  const hideSearchBar = () => {
+    setShow(false);
   };
 
   return (
     <>
-      {showSearchBar && (
+      {show && (
         <div ref={searchBarRef}>
-          <SearchBar />
+          <SearchBar hideSearchBar={hideSearchBar} />
         </div>
       )}
       <div ref={searchButtonRef}>
-        <SearchButton onClick={onSearchButtonClick} />
+        <SearchButton onClick={showSearchBar} />
       </div>
     </>
   );
