@@ -73,7 +73,7 @@ const SearchBar = ({ hideSearchBar }: Props) => {
                   className="mr-3 size-5"
                 />
               )}
-              <span className="text-sm text-gray-800">{result.title}</span>
+              <span className="text-xs text-gray-800">{result.title}</span>
             </div>
           ))}
         </div>
