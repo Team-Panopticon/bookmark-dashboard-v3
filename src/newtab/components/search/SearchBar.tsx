@@ -1,7 +1,10 @@
 import { ChangeEvent, useState } from "react";
 import SearchIcon from "../../../assets/search.svg";
+import FolderImage from "../../../assets/folder.svg";
 import { rootStore } from "../../store/rootStore";
-import { Bookmark } from "../../../types/store";
+import { Bookmark, BookmarkType } from "../../../types/store";
+import { useEventHandler } from "../../hooks/useEventHandler";
+import { FAVICON_PREFIX } from "../../utils/constant";
 
 const searchBookmarks = (bookmark: Bookmark, keyword: string) => {
   const results: Bookmark[] = [];
@@ -20,8 +23,15 @@ const searchBookmarks = (bookmark: Bookmark, keyword: string) => {
   return results;
 };
 
-const SearchBar = () => {
+interface Props {
+  hideSearchBar: () => void;
+}
+
+const SearchBar = ({ hideSearchBar }: Props) => {
   const { bookmark } = rootStore();
+  const {
+    bookmarkEventHandler: { handleDoubleClickBookmark: handleClickBookmark },
+  } = useEventHandler({});
   const [results, setResults] = useState<Bookmark[]>(
     searchBookmarks(bookmark, "")
   );
@@ -29,6 +39,11 @@ const SearchBar = () => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setResults(searchBookmarks(bookmark, value));
+  };
+
+  const onClickBookmark = (bookmark: Bookmark) => {
+    handleClickBookmark(bookmark);
+    hideSearchBar();
   };
 
   return (
@@ -48,8 +63,16 @@ const SearchBar = () => {
             <div
               key={idx}
               className="flex cursor-pointer items-center px-4 py-2 hover:bg-gray-100"
+              onClick={() => onClickBookmark(result)}
             >
-              <img src={result.url} alt="favicon" className="mr-3 size-5" />
+              {result.type === BookmarkType.FOLDER ? (
+                <img src={FolderImage} className="mr-3 size-5" />
+              ) : (
+                <img
+                  src={FAVICON_PREFIX + result.url}
+                  className="mr-3 size-5"
+                />
+              )}
               <span className="text-sm text-gray-800">{result.title}</span>
             </div>
           ))}
