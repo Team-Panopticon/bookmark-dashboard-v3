@@ -4,6 +4,7 @@ import FolderManager from "../newtab/components/FolderManager";
 import ContextMenu from "../newtab/components/ContextMenu";
 import { rootStore } from "../newtab/store/rootStore";
 import DraggingFile from "../newtab/components/DraggingFile";
+import InfoDialog from "../newtab/components/InfoDialog";
 
 const DESKTOP_TIMESTAMP_ID = `${Date.now()}`;
 
@@ -39,6 +40,7 @@ const Desktop: FC = () => {
       )}
       <FolderManager />
       <ContextMenu />
+      <InfoDialog />
     </div>
   );
 };

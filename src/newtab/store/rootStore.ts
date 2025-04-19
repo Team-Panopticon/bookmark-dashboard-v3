@@ -37,8 +37,11 @@ type State = {
   };
 
   edit: {
-    // bookmark?: Bookmark;
     timestampId: string | null;
+  };
+  editDialog: {
+    bookmark?: Bookmark | null;
+    isOpen: boolean;
   };
 };
 
@@ -77,6 +80,8 @@ type Action = {
     folderHeight: number,
     folderWidth: number
   ) => Position;
+
+  setEditDialog: (state: Partial<State["editDialog"]>) => void;
 };
 
 export const rootStore = create<State & Action>()((set, get) => ({
@@ -84,7 +89,11 @@ export const rootStore = create<State & Action>()((set, get) => ({
   edit: {
     timestampId: null,
   },
-  setEdit: (id) => set({ edit: { timestampId: id } }),
+  editDialog: {
+    bookmark: undefined,
+    isOpen: false,
+  },
+  setEdit: (id) => set({edit: {timestampId: id}}),
 
   // bookmark,
   bookmark: {} as Bookmark,
@@ -145,7 +154,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
 
       return { focus: { focusedIds: newFocusedIds } };
     }),
-  clearFocus: () => set({ focus: { focusedIds: new Set() } }),
+  clearFocus: () => set({focus: {focusedIds: new Set()}}),
 
   // dragAndDrop
   isDragging: () => Boolean(get().dragAndDrop?.bookmark),
@@ -259,6 +268,9 @@ export const rootStore = create<State & Action>()((set, get) => ({
     });
 
     return targetPosition;
+  },
+  setEditDialog: (nextState) => {
+    set({editDialog: {...get().editDialog, ...nextState}});
   },
 }));
 
