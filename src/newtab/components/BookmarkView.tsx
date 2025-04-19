@@ -111,7 +111,7 @@ const BookmarkView = ({
       onDoubleClick={() => onDoubleClick?.(bookmark)}
     >
       <button
-        className="relative flex size-full cursor-default flex-col items-center gap-1 bg-transparent"
+        className="relative flex size-full cursor-default flex-col items-center gap-1 bg-transparent focus:outline-none"
         ref={containerRef}
       >
         <div
