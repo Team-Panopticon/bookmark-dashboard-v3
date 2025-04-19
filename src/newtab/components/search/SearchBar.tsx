@@ -4,7 +4,8 @@ import FolderImage from "../../../assets/folder.svg";
 import { rootStore } from "../../store/rootStore";
 import { Bookmark, BookmarkType } from "../../../types/store";
 import { useEventHandler } from "../../hooks/useEventHandler";
-import { FAVICON_PREFIX, Z_INDEX } from "../../utils/constant";
+import { Z_INDEX } from "../../utils/constant";
+import { getFaviconURI } from "../../utils/getFaviconURI";
 
 function isFolder(
   bookmark: Bookmark
@@ -108,7 +109,7 @@ const SearchBar = ({
                   <img src={FolderImage} className="mr-3 size-5" />
                 ) : (
                   <img
-                    src={FAVICON_PREFIX + result.url}
+                    src={getFaviconURI(result.url ?? "", 32)}
                     className="mr-3 size-5"
                   />
                 )}
