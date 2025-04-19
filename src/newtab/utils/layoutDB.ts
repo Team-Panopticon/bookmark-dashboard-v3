@@ -4,7 +4,7 @@ export interface LayoutMap {
   [id: string]: ItemLayout; // key는 Item의 id, desktop === 1
 }
 
-interface ItemLayout {
+export interface ItemLayout {
   id: string;
   parentId: string;
   row: number;
@@ -25,6 +25,7 @@ const parseLayoutData = (layoutDataArray: ItemLayout[]) => {
 
 class LayoutDB {
   private db!: IDBPDatabase<LayoutMap>;
+  private layoutMap?: LayoutMap;
 
   async initDB() {
     this.db = await openDB<LayoutMap>(DB_NAME, DB_VERSION, {
@@ -44,11 +45,13 @@ class LayoutDB {
     const result = await this.db.getAll(OBJECT_STORE_NAME);
     const layoutMap = parseLayoutData(result);
 
+    this.layoutMap = layoutMap;
+
     return layoutMap;
   }
 
-  async getItemLayoutById(id: string): Promise<ItemLayout | undefined> {
-    return await this.db.get(OBJECT_STORE_NAME, id);
+  getItemLayoutById(id: string) {
+    return this.layoutMap?.[id];
   }
 
   async setItemLayoutById({ id, parentId, row, col }: ItemLayout) {
@@ -57,6 +60,13 @@ class LayoutDB {
 
   async deleteItemLayoutById(id: string) {
     await this.db.delete(OBJECT_STORE_NAME, id);
+  }
+
+  async getItemByRowCol({ parentId, row, col }: Omit<ItemLayout, "id">) {
+    return Object.values<ItemLayout>(this.layoutMap || {}).find(
+      (item) =>
+        item.col === col && item.row === row && item.parentId === parentId
+    );
   }
 }
 
