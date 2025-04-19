@@ -61,6 +61,7 @@ type Action = {
   addFocus: (timestampIds: string[], bookshelfTimestamp: string) => Set<string>; // 새로운 ID 추가
   removeFocus: (id: string[]) => void; // 특정 ID 제거
   clearFocus: () => void; // 모든 focus 초기화
+  moveFocus: (direction: string) => Promise<void>; // 키보드로 포커스 이동
 
   // dragndrop
   isDragging: () => boolean;
@@ -154,6 +155,52 @@ export const rootStore = create<State & Action>()((set, get) => ({
       return { focus: { focusedIds: newFocusedIds } };
     }),
   clearFocus: () => set({ focus: { focusedIds: new Set() } }),
+  moveFocus: async (direction: string) => {
+    const { focusCursor } = get().focus;
+    if (!focusCursor) return;
+
+    const { target, currentBookshelf } = focusCursor;
+    if (!target || !currentBookshelf) return;
+
+    const { parentId, row, col } = target;
+
+    const getNextPosition = () => {
+      switch (direction) {
+        case "ArrowUp":
+          return { row: row - 1, col };
+        case "ArrowDown":
+          return { row: row + 1, col };
+        case "ArrowLeft":
+          return { row, col: col - 1 };
+        case "ArrowRight":
+          return { row, col: col + 1 };
+        default:
+          return null;
+      }
+    };
+
+    const nextPosition = getNextPosition();
+    if (!nextPosition) return;
+
+    const next = await layoutDB.getItemByRowCol({
+      parentId,
+      ...nextPosition,
+    });
+
+    if (next) {
+      const { id } = next;
+      const timestampId = `${currentBookshelf}_${id}`;
+      set(() => ({
+        focus: {
+          focusedIds: new Set([timestampId]),
+          focusCursor: {
+            target: layoutDB.getItemLayoutById(id),
+            currentBookshelf,
+          },
+        },
+      }));
+    }
+  },
 
   // dragAndDrop
   isDragging: () => Boolean(get().dragAndDrop?.bookmark),
