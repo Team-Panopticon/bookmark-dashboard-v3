@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { Bookshelf, Bookmark, BookmarkType, Folders } from "../../types/store";
 import BookmarkApi from "../utils/bookmarkApi";
-import { layoutDB, LayoutMap } from "../utils/layoutDB";
+import { ItemLayout, layoutDB, LayoutMap } from "../utils/layoutDB";
 import { Point } from "../../types/Point";
 import { Z_INDEX, POSITION_OFFSET } from "../utils/constant";
 
@@ -20,6 +20,7 @@ type State = {
   };
   focus: {
     focusedIds: Set<string>;
+    focusCursor?: { target?: ItemLayout; currentBookshelf: string };
   };
   dragAndDrop?: {
     bookmark?: Bookmark;
@@ -57,7 +58,7 @@ type Action = {
   setContextMenu: (state: Partial<State["contextMenu"]>) => void;
 
   // focus
-  addFocus: (id: string[]) => Set<string>; // 새로운 ID 추가
+  addFocus: (timestampIds: string[], bookshelfTimestamp: string) => Set<string>; // 새로운 ID 추가
   removeFocus: (id: string[]) => void; // 특정 ID 제거
   clearFocus: () => void; // 모든 focus 초기화
 
@@ -126,13 +127,20 @@ export const rootStore = create<State & Action>()((set, get) => ({
   focus: {
     focusedIds: new Set(),
   },
-  addFocus: (ids: string[]) => {
+  addFocus: (timestampIds: string[], bookshelfTimestamp: string) => {
     const { focusedIds } = get().focus;
-    const newSet = new Set([...focusedIds, ...ids]);
+    const newSet = new Set([...focusedIds, ...timestampIds]);
+
+    const timestampId = timestampIds[0] || "";
+    const [, id] = timestampId.split("_");
 
     set(() => ({
       focus: {
-        focusedIds: newSet, // 기존 ID와 새 ID를 병합 후 중복 제거
+        focusedIds: newSet,
+        focusCursor: {
+          target: layoutDB.getItemLayoutById(id),
+          currentBookshelf: bookshelfTimestamp,
+        },
       },
     }));
 
