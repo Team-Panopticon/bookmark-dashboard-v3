@@ -13,6 +13,7 @@ type Props = {
   isEdit?: boolean;
   setIsEdit?: (isEdit: boolean) => void;
   isDragging?: boolean;
+  isCurrentFocusCursor?: boolean;
 };
 declare module "react" {
   interface CSSProperties {
@@ -35,6 +36,7 @@ const BookmarkView = ({
   isEdit,
   setIsEdit,
   isDragging,
+  isCurrentFocusCursor,
 }: Props) => {
   const [newTitle, setNewTitle] = useState<string>(bookmark.title);
 
@@ -50,6 +52,12 @@ const BookmarkView = ({
   useEffect(() => {
     setNewTitle(bookmark.title);
   }, [bookmark.title]);
+
+  useEffect(() => {
+    if (isCurrentFocusCursor) {
+      containerRef.current?.focus();
+    }
+  }, [isCurrentFocusCursor]);
 
   const saveTitle = async () => {
     if (!isEdit) {

@@ -1,11 +1,11 @@
-import type {FC} from "react";
-import {useEffect, useMemo, useRef} from "react";
-import {type Bookmark} from "../../types/store";
-import {ITEM_HEIGHT, ITEM_WIDTH} from "../utils/constant";
+import type { FC } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import { type Bookmark } from "../../types/store";
+import { ITEM_HEIGHT, ITEM_WIDTH } from "../utils/constant";
 import BookmarkView from "./BookmarkView";
-import {getRowColUpdatedFiles} from "../utils/getRowColUpdatedFiles";
-import {useEventHandler} from "../hooks/useEventHandler";
-import {rootStore} from "../store/rootStore";
+import { getRowColUpdatedFiles } from "../utils/getRowColUpdatedFiles";
+import { useEventHandler } from "../hooks/useEventHandler";
+import { rootStore } from "../store/rootStore";
 import BookmarkApi from "../utils/bookmarkApi";
 
 export interface DarkModeEvent {
@@ -26,17 +26,17 @@ type Props = {
   timestamp: string;
 };
 
-const Bookshelf: FC<Props> = ({folder, navigateTo, timestamp}) => {
-  const {children: files = []} = folder;
+const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
+  const { children: files = [] } = folder;
   const {
     updateFilesLayout,
     dragAndDrop = {},
-    focus: {focusedIds},
+    focus: { focusedIds, focusCursor },
     refreshBookmark,
     edit,
     setEdit,
   } = rootStore();
-  const {bookmark: draggingFile, timestamp: draggingFileTimestamp} =
+  const { bookmark: draggingFile, timestamp: draggingFileTimestamp } =
     dragAndDrop;
 
   const originGridContainerRef = useRef<HTMLDivElement>(null);
@@ -47,7 +47,7 @@ const Bookshelf: FC<Props> = ({folder, navigateTo, timestamp}) => {
       handleMouseDownBookmark,
       handleMouseUpBookmark,
     },
-    bookshelfEventHandler: {handleMouseDownBookshelf, handleMouseUpBookshelf},
+    bookshelfEventHandler: { handleMouseDownBookshelf, handleMouseUpBookshelf },
   } = useEventHandler({
     bookshelf: folder,
     navigateTo,
@@ -97,6 +97,9 @@ const Bookshelf: FC<Props> = ({folder, navigateTo, timestamp}) => {
         const draggingFileTimestampId = `${draggingFileTimestamp}_${draggingFile?.id}`;
         const isFoscused = focusedIds.has(timestampId);
         const isDragging = draggingFileTimestampId === timestampId;
+        const isCurrentFocusCursor =
+          focusCursor?.currentBookshelf === timestamp &&
+          file.id === focusCursor?.target?.id;
 
         const isEdit = edit.timestampId === timestampId;
 
@@ -105,6 +108,7 @@ const Bookshelf: FC<Props> = ({folder, navigateTo, timestamp}) => {
             key={timestampId}
             bookmark={file}
             focused={isFoscused}
+            isCurrentFocusCursor={isCurrentFocusCursor}
             onSave={async (title) => handleSave(file.id, title)}
             onMouseDown={(e) =>
               handleMouseDownBookmark({
