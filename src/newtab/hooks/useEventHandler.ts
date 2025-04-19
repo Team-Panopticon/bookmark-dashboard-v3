@@ -29,10 +29,21 @@ export const useEventHandler = ({
     setEdit,
     focus,
     removeFocus,
+    moveFocus,
   } = rootStore();
 
   const globalEventHandelr = {
-    //
+    handleKeyDown: (e: KeyboardEvent) => {
+      // textarea에서는 작동하지 않도록 함
+      if (e.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+
+      if (e.key.startsWith("Arrow")) {
+        e.preventDefault();
+        moveFocus(e.key);
+      }
+    },
   };
 
   const bookshelfEventHandler = {
@@ -124,11 +135,11 @@ export const useEventHandler = ({
           if (focus.focusedIds.has(timestampId)) {
             removeFocus([timestampId]);
           } else {
-            addFocus([timestampId]);
+            addFocus([timestampId], timestamp);
           }
         } else {
           clearFocus();
-          addFocus([timestampId]);
+          addFocus([timestampId], timestamp);
         }
 
         // move 에 대한 상태관리
@@ -155,7 +166,7 @@ export const useEventHandler = ({
 
         if (!focus.focusedIds.has(timestampId)) {
           clearFocus();
-          addFocus([timestampId]);
+          addFocus([timestampId], timestamp);
         }
 
         setContextMenu({
