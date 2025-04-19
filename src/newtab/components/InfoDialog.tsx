@@ -6,23 +6,24 @@ import {Z_INDEX} from "../utils/constant";
 
 const InfoDialog = () => {
   const {editDialog, setEditDialog, refreshBookmark} = rootStore();
+  const {bookmark, isOpen} = editDialog;
 
   const handleCloseButtonClick = () => {
     setEditDialog({isOpen: false, bookmark: null});
   };
   const handleSaveButtonClick = async () => {
-    if (!editDialog.bookmark) {
+    if (!bookmark) {
       return;
     }
-    await BookmarkApi.update(editDialog.bookmark.id, title, url);
+    await BookmarkApi.update(bookmark.id, title, url);
     handleCloseButtonClick();
     refreshBookmark();
   };
   const handleRemoveButtonClick = async () => {
-    if (!editDialog.bookmark) {
+    if (!bookmark) {
       return;
     }
-    await BookmarkApi.remove(editDialog.bookmark.id);
+    await BookmarkApi.remove(bookmark.id);
     handleCloseButtonClick();
     refreshBookmark();
   };
@@ -30,12 +31,13 @@ const InfoDialog = () => {
   const [url, setUrl] = useState<string>("");
 
   useEffect(() => {
-    if (editDialog.bookmark) {
-      setTitle(editDialog.bookmark.title);
-      setUrl(editDialog.bookmark.url || "");
+    if (bookmark) {
+      setTitle(bookmark.title);
+      setUrl(bookmark.url || "");
     }
-  }, [editDialog.bookmark]);
-  if (!editDialog.isOpen) {
+  }, [bookmark]);
+
+  if (!isOpen || !bookmark) {
     return null;
   }
   return (
@@ -76,6 +78,7 @@ const InfoDialog = () => {
                 <div className="flex flex-1 items-center">
                   <input
                     type="text"
+                    disabled={!bookmark?.url}
                     className="flex-1 rounded px-[7px] py-[3px] focus:outline-[#007BFF80]"
                     style={{
                       boxShadow:
