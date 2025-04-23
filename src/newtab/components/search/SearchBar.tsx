@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import SearchIcon from "../../../assets/search.svg";
 import FolderImage from "../../../assets/folder.svg";
 import { rootStore } from "../../store/rootStore";
@@ -40,6 +40,12 @@ const SearchBar = ({
   } = useEventHandler({});
   const [results, setResults] = useState<Bookmark[]>([]);
 
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    searchInputRef.current?.focus();
+  }, []);
+
   useEffect(() => {
     if (searchText != "") {
       setResults(searchBookmarks(bookmark, searchText));
@@ -63,6 +69,7 @@ const SearchBar = ({
       <div className="flex items-center rounded-xl border border-gray-300 bg-white px-3 py-2 shadow-sm">
         <img src={SearchIcon} width={24} alt="Search Icon" />
         <input
+          ref={searchInputRef}
           type="text"
           placeholder="Search"
           value={searchText}
