@@ -136,6 +136,7 @@ const BookmarkView = ({
 
               {showImgIcon && (
                 <img
+                  className="pointer-events-none"
                   src={PREFIX + bookmark.url}
                   onLoad={(e) => {
                     const targetImg = e.target as HTMLImageElement;
