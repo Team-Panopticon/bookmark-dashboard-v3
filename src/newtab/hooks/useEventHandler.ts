@@ -30,12 +30,16 @@ export const useEventHandler = ({
     focus,
     removeFocus,
     moveFocus,
+    contextMenu,
   } = rootStore();
 
   const globalEventHandelr = {
     handleKeyDown: (e: KeyboardEvent) => {
       // textarea에서는 작동하지 않도록 함
-      if (e.target instanceof HTMLTextAreaElement) {
+      if (
+        e.target instanceof HTMLTextAreaElement &&
+        contextMenu.isContextMenuVisible
+      ) {
         return;
       }
 
