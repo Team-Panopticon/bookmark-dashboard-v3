@@ -58,24 +58,26 @@ const SearchBar = ({ hideSearchBar }: Props) => {
         />
       </div>
       {results.length > 0 && (
-        <div className="mt-2 flex-1 overflow-y-auto rounded-xl border border-gray-200 bg-white">
-          {results.map((result, idx) => (
-            <div
-              key={idx}
-              className="flex cursor-pointer items-center px-4 py-2 hover:bg-gray-100"
-              onClick={() => onClickBookmark(result)}
-            >
-              {result.type === BookmarkType.FOLDER ? (
-                <img src={FolderImage} className="mr-3 size-5" />
-              ) : (
-                <img
-                  src={FAVICON_PREFIX + result.url}
-                  className="mr-3 size-5"
-                />
-              )}
-              <span className="text-xs text-gray-800">{result.title}</span>
-            </div>
-          ))}
+        <div className="relative mt-2 flex max-h-96 flex-1 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white">
+          <div className="h-full overflow-y-auto">
+            {results.map((result, idx) => (
+              <div
+                key={idx}
+                className="flex cursor-pointer items-center px-4 py-2 hover:bg-gray-100"
+                onClick={() => onClickBookmark(result)}
+              >
+                {result.type === BookmarkType.FOLDER ? (
+                  <img src={FolderImage} className="mr-3 size-5" />
+                ) : (
+                  <img
+                    src={FAVICON_PREFIX + result.url}
+                    className="mr-3 size-5"
+                  />
+                )}
+                <span className="text-xs text-gray-800">{result.title}</span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
