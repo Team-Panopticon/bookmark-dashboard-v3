@@ -140,7 +140,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
       focus: {
         focusedIds: newSet,
         focusCursor: {
-          target: layoutDB.getItemLayoutById(id),
+          target: get().layoutMap[id],
           currentBookshelf: bookshelfTimestamp,
         },
       },
@@ -195,7 +195,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
         focus: {
           focusedIds: new Set([timestampId]),
           focusCursor: {
-            target: layoutDB.getItemLayoutById(id),
+            target: get().layoutMap[id],
             currentBookshelf,
           },
         },

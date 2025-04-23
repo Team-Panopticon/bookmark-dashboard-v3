@@ -50,10 +50,6 @@ class LayoutDB {
     return layoutMap;
   }
 
-  getItemLayoutById(id: string) {
-    return this.layoutMap?.[id];
-  }
-
   async setItemLayoutById({ id, parentId, row, col }: ItemLayout) {
     await this.db.put(OBJECT_STORE_NAME, { id, parentId, row, col });
   }
