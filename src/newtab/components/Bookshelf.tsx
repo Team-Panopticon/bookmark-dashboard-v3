@@ -99,7 +99,7 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
         const isDragging = draggingFileTimestampId === timestampId;
         const isCurrentFocusCursor =
           focusCursor?.currentBookshelf === timestamp &&
-          file.id === focusCursor?.target?.id;
+          file.id === focusCursor?.targetId;
 
         const isEdit = edit.timestampId === timestampId;
 

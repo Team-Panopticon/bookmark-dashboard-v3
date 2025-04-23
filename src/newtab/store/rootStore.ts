@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { Bookshelf, Bookmark, BookmarkType, Folders } from "../../types/store";
 import BookmarkApi from "../utils/bookmarkApi";
-import { ItemLayout, layoutDB, LayoutMap } from "../utils/layoutDB";
+import { layoutDB, LayoutMap } from "../utils/layoutDB";
 import { Point } from "../../types/Point";
 import { Z_INDEX, POSITION_OFFSET } from "../utils/constant";
 
@@ -20,7 +20,7 @@ type State = {
   };
   focus: {
     focusedIds: Set<string>;
-    focusCursor?: { target?: ItemLayout; currentBookshelf: string };
+    focusCursor?: { targetId?: string; currentBookshelf: string };
   };
   dragAndDrop?: {
     bookmark?: Bookmark;
@@ -140,7 +140,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
       focus: {
         focusedIds: newSet,
         focusCursor: {
-          target: get().layoutMap[id],
+          targetId: id,
           currentBookshelf: bookshelfTimestamp,
         },
       },
@@ -160,10 +160,10 @@ export const rootStore = create<State & Action>()((set, get) => ({
     const { focusCursor } = get().focus;
     if (!focusCursor) return;
 
-    const { target, currentBookshelf } = focusCursor;
-    if (!target || !currentBookshelf) return;
+    const { targetId, currentBookshelf } = focusCursor;
+    if (!targetId || !currentBookshelf) return;
 
-    const { parentId, row, col } = target;
+    const { parentId, row, col } = get().layoutMap[targetId];
 
     const items = getItems({
       layoutMap: get().layoutMap,
@@ -218,7 +218,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
         focus: {
           focusedIds: new Set([timestampId]),
           focusCursor: {
-            target: get().layoutMap[id],
+            targetId: id,
             currentBookshelf,
           },
         },
