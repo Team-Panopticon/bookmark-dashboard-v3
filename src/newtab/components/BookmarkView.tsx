@@ -1,6 +1,7 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { BookmarkType, type Bookmark } from "../../types/store";
 import FolderImage from "../../assets/folder.svg";
+import { FAVICON_PREFIX } from "../utils/constant";
 
 type Props = {
   bookmark: Bookmark;
@@ -20,8 +21,6 @@ declare module "react" {
     fieldSizing?: "fixed" | "content";
   }
 }
-
-const PREFIX = "https://www.google.com/s2/favicons?sz=64&domain=";
 
 /** @TODO favicon 그리기 (원래 코드에서 안옮겼음) */
 const BookmarkView = ({
@@ -136,7 +135,8 @@ const BookmarkView = ({
 
               {showImgIcon && (
                 <img
-                  src={PREFIX + bookmark.url}
+                  className="pointer-events-none"
+                  src={FAVICON_PREFIX + bookmark.url}
                   onLoad={(e) => {
                     const targetImg = e.target as HTMLImageElement;
                     if (targetImg.width <= 16 || targetImg.height <= 16) {
