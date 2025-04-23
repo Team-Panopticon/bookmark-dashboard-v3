@@ -144,7 +144,7 @@ const BookmarkView = ({
               {showImgIcon && (
                 <img
                   className="pointer-events-none"
-                  src={getFaviconURI(bookmark.url ?? "", 52)}
+                  src={getFaviconURI(bookmark.url ?? "", 48)}
                   onLoad={(e) => {
                     const targetImg = e.target as HTMLImageElement;
                     if (targetImg.width <= 32 || targetImg.height <= 32) {
