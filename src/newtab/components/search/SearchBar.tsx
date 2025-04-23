@@ -32,13 +32,15 @@ const SearchBar = ({ hideSearchBar }: Props) => {
   const {
     bookmarkEventHandler: { handleDoubleClickBookmark: handleClickBookmark },
   } = useEventHandler({});
-  const [results, setResults] = useState<Bookmark[]>(
-    searchBookmarks(bookmark, "")
-  );
+  const [results, setResults] = useState<Bookmark[]>([]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setResults(searchBookmarks(bookmark, value));
+    if (value != "") {
+      setResults(searchBookmarks(bookmark, value));
+    } else {
+      setResults([]);
+    }
   };
 
   const onClickBookmark = (bookmark: Bookmark) => {
