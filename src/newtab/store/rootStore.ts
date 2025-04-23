@@ -41,6 +41,7 @@ type State = {
     // bookmark?: Bookmark;
     timestampId: string | null;
   };
+  layoutMap: LayoutMap;
 };
 
 type Action = {
@@ -95,7 +96,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
     const layout = await layoutDB.getAllLayout();
     const bookmark = addRowColToTree(subTree, layout);
 
-    set({ bookmark });
+    set({ bookmark, layoutMap: layout });
   },
   getSubtree: (id) => {
     const bookmark = get().bookmark;
@@ -314,6 +315,10 @@ export const rootStore = create<State & Action>()((set, get) => ({
     });
 
     return targetPosition;
+  },
+  layoutMap: {},
+  setLayoutMap: (layoutMap: LayoutMap) => {
+    set({ layoutMap });
   },
 }));
 
