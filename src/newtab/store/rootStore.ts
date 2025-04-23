@@ -165,28 +165,51 @@ export const rootStore = create<State & Action>()((set, get) => ({
 
     const { parentId, row, col } = target;
 
-    const getNextPosition = () => {
+    const items = getItems({
+      layoutMap: get().layoutMap,
+      parentId,
+    });
+
+    const getNextItem = () => {
       switch (direction) {
         case "ArrowUp":
-          return { row: row - 1, col };
+          return (() => {
+            const targetItems = items.filter((item) => item.col === col);
+            const targetIndex = targetItems.findIndex(
+              (item) => item.row === row
+            );
+            return targetItems[targetIndex - 1];
+          })();
         case "ArrowDown":
-          return { row: row + 1, col };
+          return (() => {
+            const targetItems = items.filter((item) => item.col === col);
+            const targetIndex = targetItems.findIndex(
+              (item) => item.row === row
+            );
+            return targetItems[targetIndex + 1];
+          })();
         case "ArrowLeft":
-          return { row, col: col - 1 };
+          return (() => {
+            const targetItems = items.filter((item) => item.row === row);
+            const targetIndex = targetItems.findIndex(
+              (item) => item.col === col
+            );
+            return targetItems[targetIndex - 1];
+          })();
         case "ArrowRight":
-          return { row, col: col + 1 };
+          return (() => {
+            const targetItems = items.filter((item) => item.row === row);
+            const targetIndex = targetItems.findIndex(
+              (item) => item.col === col
+            );
+            return targetItems[targetIndex + 1];
+          })();
         default:
           return null;
       }
     };
 
-    const nextPosition = getNextPosition();
-    if (!nextPosition) return;
-
-    const next = await layoutDB.getItemByRowCol({
-      parentId,
-      ...nextPosition,
-    });
+    const next = getNextItem();
 
     if (next) {
       const { id } = next;
@@ -362,4 +385,19 @@ function addRowColToTree(bookmark: Bookmark, layoutMap: LayoutMap): Bookmark {
     bookmark.children?.forEach((child) => addRowColToTree(child, layoutMap));
   }
   return bookmark;
+}
+
+function getItems({
+  layoutMap,
+  parentId,
+}: {
+  layoutMap: LayoutMap;
+  parentId: string;
+}) {
+  const items = Object.values(layoutMap)
+    .filter((item) => item.parentId === parentId)
+    .sort((a, b) => a.col - b.col)
+    .sort((a, b) => a.row - b.row);
+
+  return items;
 }
