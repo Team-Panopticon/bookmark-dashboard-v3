@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import SearchIcon from "../../../assets/search.svg";
 import FolderImage from "../../../assets/folder.svg";
 import { rootStore } from "../../store/rootStore";
@@ -25,22 +25,32 @@ const searchBookmarks = (bookmark: Bookmark, keyword: string) => {
 
 interface Props {
   hideSearchBar: () => void;
+  searchText: string;
+  onChangeSearchInput: (value: string) => void;
 }
 
-const SearchBar = ({ hideSearchBar }: Props) => {
+const SearchBar = ({
+  hideSearchBar,
+  searchText,
+  onChangeSearchInput,
+}: Props) => {
   const { bookmark } = rootStore();
   const {
     bookmarkEventHandler: { handleDoubleClickBookmark: handleClickBookmark },
   } = useEventHandler({});
   const [results, setResults] = useState<Bookmark[]>([]);
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value != "") {
-      setResults(searchBookmarks(bookmark, value));
+  useEffect(() => {
+    if (searchText != "") {
+      setResults(searchBookmarks(bookmark, searchText));
     } else {
       setResults([]);
     }
+  }, [bookmark, searchText]);
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    onChangeSearchInput(value);
   };
 
   const onClickBookmark = (bookmark: Bookmark) => {
@@ -55,6 +65,7 @@ const SearchBar = ({ hideSearchBar }: Props) => {
         <input
           type="text"
           placeholder="Search"
+          value={searchText}
           onChange={handleInputChange}
           className="w-full bg-transparent pl-1 text-lg text-gray-800 outline-none placeholder:text-gray-400"
         />

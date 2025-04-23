@@ -4,6 +4,7 @@ import SearchButton from "./SearchButton";
 
 const Search = () => {
   const [show, setShow] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const searchBarRef = useRef<HTMLDivElement>(null);
   const searchButtonRef = useRef<HTMLDivElement>(null);
 
@@ -27,14 +28,20 @@ const Search = () => {
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key != "Escape") {
+        return;
+      }
+
+      if (searchText == "") {
         hideSearchBar();
+      } else {
+        setSearchText("");
       }
     };
 
     document.addEventListener("keydown", handleEsc);
     return () => document.removeEventListener("keydown", handleEsc);
-  }, []);
+  }, [searchText]);
 
   const showSearchBar = () => {
     setShow(true);
@@ -44,11 +51,19 @@ const Search = () => {
     setShow(false);
   };
 
+  const onChangeSearchInput = (value: string) => {
+    setSearchText(value);
+  };
+
   return (
     <>
       {show && (
         <div ref={searchBarRef}>
-          <SearchBar hideSearchBar={hideSearchBar} />
+          <SearchBar
+            hideSearchBar={hideSearchBar}
+            searchText={searchText}
+            onChangeSearchInput={onChangeSearchInput}
+          />
         </div>
       )}
       <div ref={searchButtonRef}>
