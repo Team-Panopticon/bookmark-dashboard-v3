@@ -43,8 +43,12 @@ const Search = () => {
     return () => document.removeEventListener("keydown", handleEsc);
   }, [searchText]);
 
-  const showSearchBar = () => {
-    setShow(true);
+  const toggleSearchBar = () => {
+    if (show) {
+      setShow(false);
+    } else {
+      setShow(true);
+    }
   };
 
   const hideSearchBar = () => {
@@ -67,7 +71,7 @@ const Search = () => {
         </div>
       )}
       <div ref={searchButtonRef}>
-        <SearchButton onClick={showSearchBar} />
+        <SearchButton onClick={toggleSearchBar} />
       </div>
     </>
   );
