@@ -57,13 +57,6 @@ class LayoutDB {
   async deleteItemLayoutById(id: string) {
     await this.db.delete(OBJECT_STORE_NAME, id);
   }
-
-  async getItemByRowCol({ parentId, row, col }: Omit<ItemLayout, "id">) {
-    return Object.values<ItemLayout>(this.layoutMap || {}).find(
-      (item) =>
-        item.col === col && item.row === row && item.parentId === parentId
-    );
-  }
 }
 
 export const layoutDB = new LayoutDB();
