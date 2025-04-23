@@ -6,6 +6,12 @@ import { Bookmark, BookmarkType } from "../../../types/store";
 import { useEventHandler } from "../../hooks/useEventHandler";
 import { FAVICON_PREFIX } from "../../utils/constant";
 
+function isFolder(
+  bookmark: Bookmark
+): bookmark is Bookmark & { children: Bookmark[] } {
+  return Array.isArray(bookmark.children);
+}
+
 const searchBookmarks = (bookmark: Bookmark, keyword: string) => {
   const results: Bookmark[] = [];
 
@@ -14,7 +20,7 @@ const searchBookmarks = (bookmark: Bookmark, keyword: string) => {
       results.push(bookmark);
     }
 
-    if (Array.isArray(bookmark.children)) {
+    if (isFolder(bookmark)) {
       bookmark.children.forEach((child) => doSearch(child, keyword));
     }
   };
