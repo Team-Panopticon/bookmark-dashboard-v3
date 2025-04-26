@@ -4,7 +4,7 @@ import FolderImage from "../../../assets/folder.svg";
 import { rootStore } from "../../store/rootStore";
 import { Bookmark, BookmarkType } from "../../../types/store";
 import { useEventHandler } from "../../hooks/useEventHandler";
-import { FAVICON_PREFIX } from "../../utils/constant";
+import { FAVICON_PREFIX, Z_INDEX } from "../../utils/constant";
 
 function isFolder(
   bookmark: Bookmark
@@ -73,7 +73,10 @@ const SearchBar = ({
   return (
     <div
       className="absolute left-1/2 top-[20%] flex max-h-[60vh] w-full max-w-2xl -translate-x-1/2 flex-col overflow-hidden rounded-xl border border-gray-300 bg-[rgba(246,246,246,0.6)]  backdrop-blur-md"
-      style={{ boxShadow: "rgba(0, 0, 0, 0.4) 0px 10px 40px -12px" }}
+      style={{
+        boxShadow: "rgba(0, 0, 0, 0.4) 0px 10px 40px -12px",
+        zIndex: Z_INDEX.SEARCH,
+      }}
     >
       <div className="flex items-center border-b px-3 py-2">
         <img src={SearchIcon} width={24} alt="Search Icon" />
