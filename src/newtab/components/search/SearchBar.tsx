@@ -72,30 +72,36 @@ const SearchBar = ({
 
   return (
     <div
-      className="absolute left-1/2 top-[20%] flex max-h-[60vh] w-full max-w-2xl -translate-x-1/2 flex-col overflow-hidden rounded-xl border border-gray-300 bg-[rgba(246,246,246,0.6)]  backdrop-blur-md"
+      className="absolute left-1/2 top-[20%] flex max-h-[60vh] w-[600px] -translate-x-1/2 flex-col overflow-hidden rounded-2xl border border-gray-300 bg-[rgba(253,253,253,0.5)]  backdrop-blur-2xl"
       style={{
-        boxShadow: "rgba(0, 0, 0, 0.4) 0px 10px 40px -12px",
+        boxShadow:
+          "0 4px 30px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)",
         zIndex: Z_INDEX.SEARCH,
       }}
     >
-      <div className="flex items-center border-b px-3 py-2">
-        <img src={SearchIcon} width={24} alt="Search Icon" />
+      <div className="flex h-[52px] items-center px-3 py-2">
+        <img
+          className="opacity-70"
+          src={SearchIcon}
+          width={24}
+          alt="Search Icon"
+        />
         <input
           ref={searchInputRef}
           type="text"
           placeholder="Search"
           value={searchText}
           onChange={handleInputChange}
-          className="w-full bg-transparent pl-1 text-lg font-medium text-gray-800 outline-none placeholder:text-gray-400"
+          className="w-full bg-transparent pl-1 text-[26px] font-medium leading-[26px] text-gray-800 outline-none placeholder:text-gray-500"
         />
       </div>
       {results.length > 0 && (
-        <div className="relative mt-2 flex max-h-96 flex-1 flex-col overflow-hidden">
+        <div className="relative flex max-h-96 flex-1 flex-col overflow-hidden border-t p-2">
           <div className="scrollbar-thin-custom h-full overflow-y-auto">
             {results.map((result, idx) => (
               <div
                 key={idx}
-                className="flex cursor-pointer items-center px-4 py-2 hover:bg-gray-100"
+                className="flex cursor-pointer items-center rounded-md px-2.5 py-1.5 hover:bg-black/10"
                 onClick={() => onClickBookmark(result)}
               >
                 {result.type === BookmarkType.FOLDER ? (
