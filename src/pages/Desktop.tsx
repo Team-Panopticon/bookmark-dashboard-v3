@@ -4,11 +4,15 @@ import FolderManager from "../newtab/components/FolderManager";
 import ContextMenu from "../newtab/components/ContextMenu";
 import { rootStore } from "../newtab/store/rootStore";
 import DraggingFile from "../newtab/components/DraggingFile";
+import { useEventHandler } from "../newtab/hooks/useEventHandler";
 
 const DESKTOP_TIMESTAMP_ID = `${Date.now()}`;
 
 const Desktop: FC = () => {
   const { bookmark, refreshBookmark, isDragging } = rootStore();
+  const {
+    globalEventHandelr: { handleKeyDown },
+  } = useEventHandler({});
 
   const setBookmarksEventHandlers = useCallback(() => {
     chrome.bookmarks.onCreated.addListener(() => {
@@ -27,6 +31,13 @@ const Desktop: FC = () => {
     refreshBookmark();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleKeyDown]);
 
   return (
     <div className="size-full">
