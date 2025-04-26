@@ -24,9 +24,10 @@ type Props = {
   folder: Bookmark;
   navigateTo?: (bookmark: Bookmark) => void;
   timestamp: string;
+  isDesktop?: boolean;
 };
 
-const Bookshelf: FC<Props> = ({folder, navigateTo, timestamp}) => {
+const Bookshelf: FC<Props> = ({folder, navigateTo, timestamp, isDesktop}) => {
   const {children: files = []} = folder;
   const {
     updateFilesLayout,
@@ -87,6 +88,9 @@ const Bookshelf: FC<Props> = ({folder, navigateTo, timestamp}) => {
       style={{
         gridTemplateColumns: `repeat(auto-fill, ${ITEM_WIDTH}px)`,
         gridAutoRows: `${ITEM_HEIGHT}px`,
+        backgroundImage: folder.id === "1" ? "transparent" : "white",
+        gridRowGap: "8px",
+        gridColumnGap: "8px",
       }}
       ref={originGridContainerRef}
       onMouseUp={handleMouseUpBookshelf}
@@ -103,6 +107,7 @@ const Bookshelf: FC<Props> = ({folder, navigateTo, timestamp}) => {
         return (
           <BookmarkView
             key={timestampId}
+            isDesktop={isDesktop}
             bookmark={file}
             focused={isFoscused}
             onSave={async (title) => handleSave(file.id, title)}
