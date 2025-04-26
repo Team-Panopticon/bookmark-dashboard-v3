@@ -71,8 +71,11 @@ const SearchBar = ({
   };
 
   return (
-    <div className="absolute left-1/2 top-[20%] flex max-h-[60vh] w-full max-w-2xl -translate-x-1/2 flex-col overflow-hidden">
-      <div className="flex items-center rounded-xl border border-gray-300 bg-white px-3 py-2 shadow-sm">
+    <div
+      className="absolute left-1/2 top-[20%] flex max-h-[60vh] w-full max-w-2xl -translate-x-1/2 flex-col overflow-hidden rounded-xl border border-gray-300 bg-[rgba(246,246,246,0.6)] backdrop-blur-md"
+      style={{ boxShadow: "rgba(0, 0, 0, 0.4) 0px 10px 40px -12px" }}
+    >
+      <div className="flex items-center border-b px-3 py-2">
         <img src={SearchIcon} width={24} alt="Search Icon" />
         <input
           ref={searchInputRef}
@@ -80,11 +83,11 @@ const SearchBar = ({
           placeholder="Search"
           value={searchText}
           onChange={handleInputChange}
-          className="w-full bg-transparent pl-1 text-lg text-gray-800 outline-none placeholder:text-gray-400"
+          className="w-full bg-transparent pl-1 text-lg font-medium text-gray-800 outline-none placeholder:text-gray-400"
         />
       </div>
       {results.length > 0 && (
-        <div className="relative mt-2 flex max-h-96 flex-1 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white">
+        <div className="relative mt-2 flex max-h-96 flex-1 flex-col overflow-hidden">
           <div className="h-full overflow-y-auto">
             {results.map((result, idx) => (
               <div
