@@ -33,3 +33,28 @@ html {
   border: none !important;
   background: none !important;
 }
+
+@layer utilities {
+  .scrollbar-thin-custom {
+    scrollbar-width: thin; /* Firefox */
+  }
+
+  .scrollbar-thin-custom::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+  }
+
+  .scrollbar-thin-custom::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+  }
+
+  .scrollbar-thin-custom::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin-custom::-webkit-scrollbar-button {
+    display: none;
+    height: 0;
+    width: 0;
+  }
+}
