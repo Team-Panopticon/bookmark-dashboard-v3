@@ -33,7 +33,7 @@ const Desktop: FC = () => {
     <div
       className="size-full"
       style={{
-        backgroundImage: "url(wallpaper.jpg)",
+        backgroundImage: "url(catalina.jpg)",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
