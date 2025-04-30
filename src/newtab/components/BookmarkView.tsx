@@ -1,7 +1,7 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { BookmarkType, type Bookmark } from "../../types/store";
 import FolderImage from "../../assets/folder.svg";
-import { FAVICON_PREFIX } from "../utils/constant";
+import { getFaviconURI } from "../utils/getFaviconURI";
 
 type Props = {
   bookmark: Bookmark;
@@ -144,10 +144,10 @@ const BookmarkView = ({
               {showImgIcon && (
                 <img
                   className="pointer-events-none"
-                  src={FAVICON_PREFIX + bookmark.url}
+                  src={getFaviconURI(bookmark.url ?? "", 48)}
                   onLoad={(e) => {
                     const targetImg = e.target as HTMLImageElement;
-                    if (targetImg.width <= 16 || targetImg.height <= 16) {
+                    if (targetImg.width <= 32 || targetImg.height <= 32) {
                       setShowImgIcon(false);
                     }
                   }}
