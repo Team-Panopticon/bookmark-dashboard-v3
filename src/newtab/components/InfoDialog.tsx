@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {rootStore} from "../store/rootStore";
 
 import BookmarkApi from "../utils/bookmarkApi";
@@ -7,6 +7,8 @@ import {Z_INDEX} from "../utils/constant";
 const InfoDialog = () => {
   const {editDialog, setEditDialog, refreshBookmark} = rootStore();
   const {bookmark, isOpen} = editDialog;
+  const titleRef = useRef<HTMLInputElement>(null);
+  const urlRef = useRef<HTMLInputElement>(null);
 
   const handleCloseButtonClick = () => {
     setEditDialog({isOpen: false, bookmark: null});
@@ -37,9 +39,17 @@ const InfoDialog = () => {
     }
   }, [bookmark]);
 
+  useEffect(() => {
+    if (!bookmark?.url) {
+      return titleRef.current?.focus();
+    }
+    urlRef.current?.focus();
+  }, [bookmark?.url, isOpen]);
+
   if (!isOpen || !bookmark) {
     return null;
   }
+
   return (
     <div className="container">
       <div
@@ -67,6 +77,7 @@ const InfoDialog = () => {
                     onChange={(e) => {
                       setTitle(e.target.value);
                     }}
+                    ref={titleRef}
                   />
                 </div>
               </div>
@@ -77,6 +88,7 @@ const InfoDialog = () => {
                 <div className="w-11 text-right text-[#00000080]">URL: </div>
                 <div className="flex flex-1 items-center">
                   <input
+                    ref={urlRef}
                     type="text"
                     disabled={!bookmark?.url}
                     className="flex-1 rounded px-[7px] py-[3px] focus:outline-[#007BFF80]"
