@@ -1,14 +1,14 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import {ChangeEvent, useEffect, useRef, useState} from "react";
 import SearchIcon from "../../../assets/search.svg";
 import FolderImage from "../../../assets/folder.svg";
-import { rootStore } from "../../store/rootStore";
-import { Bookmark, BookmarkType } from "../../../types/store";
-import { useEventHandler } from "../../hooks/useEventHandler";
-import { FAVICON_PREFIX } from "../../utils/constant";
+import {rootStore} from "../../store/rootStore";
+import {Bookmark, BookmarkType} from "../../../types/store";
+import {useEventHandler} from "../../hooks/useEventHandler";
+import {FAVICON_PREFIX, Z_INDEX} from "../../utils/constant";
 
 function isFolder(
   bookmark: Bookmark
-): bookmark is Bookmark & { children: Bookmark[] } {
+): bookmark is Bookmark & {children: Bookmark[]} {
   return Array.isArray(bookmark.children);
 }
 
@@ -35,14 +35,10 @@ interface Props {
   onChangeSearchInput: (value: string) => void;
 }
 
-const SearchBar = ({
-  hideSearchBar,
-  searchText,
-  onChangeSearchInput,
-}: Props) => {
-  const { bookmark } = rootStore();
+const SearchBar = ({hideSearchBar, searchText, onChangeSearchInput}: Props) => {
+  const {bookmark} = rootStore();
   const {
-    bookmarkEventHandler: { handleDoubleClickBookmark: handleClickBookmark },
+    bookmarkEventHandler: {handleDoubleClickBookmark: handleClickBookmark},
   } = useEventHandler({});
   const [results, setResults] = useState<Bookmark[]>([]);
 
@@ -71,25 +67,37 @@ const SearchBar = ({
   };
 
   return (
-    <div className="absolute left-1/2 top-[20%] flex max-h-[60vh] w-full max-w-2xl -translate-x-1/2 flex-col overflow-hidden">
-      <div className="flex items-center rounded-xl border border-gray-300 bg-white px-3 py-2 shadow-sm">
-        <img src={SearchIcon} width={24} alt="Search Icon" />
+    <div
+      className="absolute left-1/2 top-[20%] flex max-h-[60vh] w-[600px] -translate-x-1/2 flex-col overflow-hidden rounded-2xl border border-gray-300 bg-[rgba(253,253,253,0.5)]  backdrop-blur-2xl"
+      style={{
+        boxShadow:
+          "0 4px 30px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)",
+        zIndex: Z_INDEX.SEARCH,
+      }}
+    >
+      <div className="flex h-[52px] items-center px-3 py-2">
+        <img
+          className="opacity-70"
+          src={SearchIcon}
+          width={24}
+          alt="Search Icon"
+        />
         <input
           ref={searchInputRef}
           type="text"
           placeholder="Search"
           value={searchText}
           onChange={handleInputChange}
-          className="w-full bg-transparent pl-1 text-lg text-gray-800 outline-none placeholder:text-gray-400"
+          className="w-full bg-transparent pl-1 text-[26px] font-medium leading-[26px] text-gray-800 outline-none placeholder:text-gray-500"
         />
       </div>
       {results.length > 0 && (
-        <div className="relative mt-2 flex max-h-96 flex-1 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white">
-          <div className="h-full overflow-y-auto">
+        <div className="relative flex max-h-96 flex-1 flex-col overflow-hidden border-t p-2">
+          <div className="scrollbar-thin-custom h-full overflow-y-auto">
             {results.map((result, idx) => (
               <div
                 key={idx}
-                className="flex cursor-pointer items-center px-4 py-2 hover:bg-gray-100"
+                className="flex cursor-pointer items-center rounded-md px-2.5 py-1.5 hover:bg-black/10"
                 onClick={() => onClickBookmark(result)}
               >
                 {result.type === BookmarkType.FOLDER ? (

@@ -72,7 +72,6 @@ html {
 @layer utilities {
   .scrollbar-thin-custom {
     scrollbar-width: thin; /* Firefox */
-    scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* Firefox */
   }
 
   .scrollbar-thin-custom::-webkit-scrollbar {
@@ -81,7 +80,6 @@ html {
   }
 
   .scrollbar-thin-custom::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
   }
 

@@ -150,6 +150,7 @@ const BookmarkView = ({
 
               {showImgIcon && (
                 <img
+                  className="pointer-events-none"
                   src={FAVICON_PREFIX + bookmark.url}
                   onLoad={(e) => {
                     const targetImg = e.target as HTMLImageElement;

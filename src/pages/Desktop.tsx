@@ -6,7 +6,7 @@ import {rootStore} from "../newtab/store/rootStore";
 import DraggingFile from "../newtab/components/DraggingFile";
 import Search from "../newtab/components/search/Search";
 import {useEventHandler} from "../newtab/hooks/useEventHandler";
-
+import InfoDialog from "../newtab/components/InfoDialog";
 const DESKTOP_TIMESTAMP_ID = `${Date.now()}`;
 
 const Desktop: FC = () => {
@@ -61,6 +61,7 @@ const Desktop: FC = () => {
       )}
       <FolderManager />
       <ContextMenu />
+      <InfoDialog />
       <Search />
     </div>
   );
