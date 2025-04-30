@@ -5,6 +5,7 @@ import ContextMenu from "../newtab/components/ContextMenu";
 import { rootStore } from "../newtab/store/rootStore";
 import DraggingFile from "../newtab/components/DraggingFile";
 import { useEventHandler } from "../newtab/hooks/useEventHandler";
+import Search from "../newtab/components/search/Search";
 
 const DESKTOP_TIMESTAMP_ID = `${Date.now()}`;
 
@@ -50,6 +51,7 @@ const Desktop: FC = () => {
       )}
       <FolderManager />
       <ContextMenu />
+      <Search />
     </div>
   );
 };
