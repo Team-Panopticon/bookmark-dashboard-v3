@@ -1,9 +1,9 @@
-import { create } from "zustand";
-import { Bookshelf, Bookmark, BookmarkType, Folders } from "../../types/store";
+import {create} from "zustand";
+import {Bookshelf, Bookmark, BookmarkType, Folders} from "../../types/store";
 import BookmarkApi from "../utils/bookmarkApi";
-import { layoutDB, LayoutMap } from "../utils/layoutDB";
-import { Point } from "../../types/Point";
-import { Z_INDEX, POSITION_OFFSET } from "../utils/constant";
+import {layoutDB, LayoutMap} from "../utils/layoutDB";
+import {Point} from "../../types/Point";
+import {Z_INDEX, POSITION_OFFSET} from "../utils/constant";
 
 type Position = {
   x: number;
@@ -20,7 +20,7 @@ type State = {
   };
   focus: {
     focusedIds: Set<string>;
-    focusCursor?: { targetId?: string; currentBookshelf: string };
+    focusCursor?: {targetId?: string; currentBookshelf: string};
   };
   dragAndDrop?: {
     bookmark?: Bookmark;
@@ -38,8 +38,11 @@ type State = {
   };
 
   edit: {
-    // bookmark?: Bookmark;
     timestampId: string | null;
+  };
+  editDialog: {
+    bookmark?: Bookmark | null;
+    isOpen: boolean;
   };
   layoutMap: LayoutMap;
 };
@@ -52,7 +55,7 @@ type Action = {
   getSubtree: (id: string) => Bookmark | null;
   refreshBookmark: () => Promise<void>;
   updateFilesLayout: (
-    files: { id: string; row: number; col: number; parentId: string }[]
+    files: {id: string; row: number; col: number; parentId: string}[]
   ) => Promise<void>;
 
   // contextMenu
@@ -80,6 +83,8 @@ type Action = {
     folderHeight: number,
     folderWidth: number
   ) => Position;
+
+  setEditDialog: (state: Partial<State["editDialog"]>) => void;
 };
 
 export const rootStore = create<State & Action>()((set, get) => ({
@@ -87,7 +92,11 @@ export const rootStore = create<State & Action>()((set, get) => ({
   edit: {
     timestampId: null,
   },
-  setEdit: (id) => set({ edit: { timestampId: id } }),
+  editDialog: {
+    bookmark: undefined,
+    isOpen: false,
+  },
+  setEdit: (id) => set({edit: {timestampId: id}}),
 
   // bookmark,
   bookmark: {} as Bookmark,
@@ -96,7 +105,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
     const layout = await layoutDB.getAllLayout();
     const bookmark = addRowColToTree(subTree, layout);
 
-    set({ bookmark, layoutMap: layout });
+    set({bookmark, layoutMap: layout});
   },
   getSubtree: (id) => {
     const bookmark = get().bookmark;
@@ -119,10 +128,10 @@ export const rootStore = create<State & Action>()((set, get) => ({
     context: {} as Bookmark,
     isContextMenuVisible: false,
     timestampId: null,
-    contextMenuPosition: { x: 0, y: 0 },
+    contextMenuPosition: {x: 0, y: 0},
   },
   setContextMenu: (nextState) => {
-    set({ contextMenu: { ...get().contextMenu, ...nextState } });
+    set({contextMenu: {...get().contextMenu, ...nextState}});
   },
 
   // focus
@@ -130,7 +139,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
     focusedIds: new Set(),
   },
   addFocus: (timestampIds: string[], bookshelfTimestamp: string) => {
-    const { focusedIds } = get().focus;
+    const {focusedIds} = get().focus;
     const newSet = new Set([...focusedIds, ...timestampIds]);
 
     const timestampId = timestampIds[0] || "";
@@ -153,17 +162,17 @@ export const rootStore = create<State & Action>()((set, get) => ({
       const newFocusedIds = new Set(state.focus.focusedIds);
       ids.forEach((id) => newFocusedIds.delete(id));
 
-      return { focus: { focusedIds: newFocusedIds } };
+      return {focus: {focusedIds: newFocusedIds}};
     }),
-  clearFocus: () => set({ focus: { focusedIds: new Set() } }),
+  clearFocus: () => set({focus: {focusedIds: new Set()}}),
   moveFocus: async (direction: string) => {
-    const { focusCursor } = get().focus;
+    const {focusCursor} = get().focus;
     if (!focusCursor) return;
 
-    const { targetId, currentBookshelf } = focusCursor;
+    const {targetId, currentBookshelf} = focusCursor;
     if (!targetId || !currentBookshelf) return;
 
-    const { parentId, row, col } = get().layoutMap[targetId];
+    const {parentId, row, col} = get().layoutMap[targetId];
 
     const items = getItems({
       layoutMap: get().layoutMap,
@@ -212,7 +221,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
     const next = getNextItem();
 
     if (next) {
-      const { id } = next;
+      const {id} = next;
       const timestampId = `${currentBookshelf}_${id}`;
       set(() => ({
         focus: {
@@ -229,7 +238,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
   // dragAndDrop
   isDragging: () => Boolean(get().dragAndDrop?.bookmark),
   setDragAndDrop: (nextState) => {
-    set({ dragAndDrop: { ...get().dragAndDrop, ...nextState } });
+    set({dragAndDrop: {...get().dragAndDrop, ...nextState}});
   },
   flush: () => {
     set({
@@ -249,7 +258,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
   folder: {
     currentZIndex: Z_INDEX.FOLDER_BASE,
     folders: {},
-    currentPosition: { x: 0, y: 0 },
+    currentPosition: {x: 0, y: 0},
   },
   openFolder: (id) => {
     const timestamp = `${Date.now()}`;
@@ -270,7 +279,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
   },
 
   focusFolder: (timestamp) => {
-    const newFolders = { ...get().folder.folders };
+    const newFolders = {...get().folder.folders};
     newFolders[timestamp].zIndex =
       get().folder.currentZIndex + Z_INDEX.FOLDER_OFFSET;
 
@@ -286,7 +295,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
   },
 
   closeFolder: (timestamp) => {
-    const newFolders = { ...get().folder.folders };
+    const newFolders = {...get().folder.folders};
     delete newFolders[timestamp];
     set({
       folder: {
@@ -305,7 +314,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
         acc[timestamp] = get().folder.folders[timestamp];
         return acc;
       }, {} as Folders);
-    set({ folder: { ...get().folder, folders: newFolders } });
+    set({folder: {...get().folder, folders: newFolders}});
     console.debug("close folder >> ", id);
   },
 
@@ -314,12 +323,12 @@ export const rootStore = create<State & Action>()((set, get) => ({
       x: position.y + POSITION_OFFSET,
       y: position.x + POSITION_OFFSET,
     };
-    set({ folder: { ...get().folder, currentPosition: targetPosition } });
+    set({folder: {...get().folder, currentPosition: targetPosition}});
   },
 
   getFolderCurrentPosition: (folderHeight, folderWidth) => {
-    const { x, y } = get().folder.currentPosition;
-    const { offsetHeight, offsetWidth } = document.body;
+    const {x, y} = get().folder.currentPosition;
+    const {offsetHeight, offsetWidth} = document.body;
 
     const targetPosition: Position = {
       y: y + folderHeight >= offsetHeight ? 0 : y,
@@ -341,7 +350,10 @@ export const rootStore = create<State & Action>()((set, get) => ({
   },
   layoutMap: {},
   setLayoutMap: (layoutMap: LayoutMap) => {
-    set({ layoutMap });
+    set({layoutMap});
+  },
+  setEditDialog: (nextState) => {
+    set({editDialog: {...get().editDialog, ...nextState}});
   },
 }));
 

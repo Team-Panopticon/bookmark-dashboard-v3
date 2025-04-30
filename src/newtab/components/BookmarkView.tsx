@@ -1,7 +1,11 @@
 import {CSSProperties, useEffect, useRef, useState} from "react";
 import {BookmarkType, type Bookmark} from "../../types/store";
 import FolderImage from "../../assets/folder.svg";
+<<<<<<< HEAD
 import {FAVICON_PREFIX} from "../utils/constant";
+=======
+import { FAVICON_PREFIX } from "../utils/constant";
+>>>>>>> refs/rewritten/origin-main-3
 
 type Props = {
   bookmark: Bookmark;
@@ -150,6 +154,10 @@ const BookmarkView = ({
 
               {showImgIcon && (
                 <img
+<<<<<<< HEAD
+=======
+                  className="pointer-events-none"
+>>>>>>> refs/rewritten/origin-main-3
                   src={FAVICON_PREFIX + bookmark.url}
                   onLoad={(e) => {
                     const targetImg = e.target as HTMLImageElement;

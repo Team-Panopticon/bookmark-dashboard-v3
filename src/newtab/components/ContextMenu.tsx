@@ -20,6 +20,7 @@ const ContextMenu = () => {
       context,
     },
     setContextMenu,
+    setEditDialog,
   } = rootStore();
 
   useEffect(() => {
@@ -32,9 +33,15 @@ const ContextMenu = () => {
   const menuList: ContextMenu[] = useMemo(() => {
     const URL수정 = {
       title: "URL수정",
-      onClick: (e: React.MouseEvent) => {
+      onClick: async (e: React.MouseEvent) => {
+        if (!timestampId) return;
         e.stopPropagation();
-        /** 팝업 */
+        const target = await BookmarkApi.get([timestampId.split("_")[1]]);
+        setEditDialog({
+          isOpen: true,
+          bookmark: target[0],
+        });
+        setContextMenu({isContextMenuVisible: false});
       },
     };
     const 이름변경 = {
@@ -77,16 +84,20 @@ const ContextMenu = () => {
       return [폴더생성];
     } else if (focusedIds.size === 1) {
       // 포커스가 1개일 때 -> 수정 / 삭제
-      [...focusedIds][0];
-      const target = [...focusedIds][0];
-      target;
-      return [이름변경, 삭제];
-      // return [이름변경, URL수정, 삭제];
+
+      return [이름변경, URL수정, 삭제];
     } else {
       // 포커스가 여러개일 때 -> 삭제
       return [삭제];
     }
-  }, [context.id, focusedIds, setContextMenu, setEdit, timestampId]);
+  }, [
+    context,
+    focusedIds,
+    setContextMenu,
+    setEdit,
+    setEditDialog,
+    timestampId,
+  ]);
 
   if (!isContextMenuVisible) return null;
   return (
