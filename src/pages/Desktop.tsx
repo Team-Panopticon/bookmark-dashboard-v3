@@ -4,14 +4,9 @@ import FolderManager from "../newtab/components/FolderManager";
 import ContextMenu from "../newtab/components/ContextMenu";
 import {rootStore} from "../newtab/store/rootStore";
 import DraggingFile from "../newtab/components/DraggingFile";
-<<<<<<< HEAD
 import Search from "../newtab/components/search/Search";
 import {useEventHandler} from "../newtab/hooks/useEventHandler";
-=======
 import InfoDialog from "../newtab/components/InfoDialog";
-import {useEventHandler} from "../newtab/hooks/useEventHandler";
-import Search from "../newtab/components/search/Search";
->>>>>>> refs/rewritten/origin-main-3
 
 const DESKTOP_TIMESTAMP_ID = `${Date.now()}`;
 
@@ -67,10 +62,7 @@ const Desktop: FC = () => {
       )}
       <FolderManager />
       <ContextMenu />
-<<<<<<< HEAD
-=======
       <InfoDialog />
->>>>>>> refs/rewritten/origin-main-3
       <Search />
     </div>
   );
