@@ -15,6 +15,7 @@ type Props = {
   setIsEdit?: (isEdit: boolean) => void;
   isDragging?: boolean;
   isDesktop?: boolean;
+  isCurrentFocusCursor?: boolean;
 };
 declare module "react" {
   interface CSSProperties {
@@ -36,6 +37,7 @@ const BookmarkView = ({
   setIsEdit,
   isDragging,
   isDesktop,
+  isCurrentFocusCursor,
 }: Props) => {
   const [newTitle, setNewTitle] = useState<string>(bookmark.title);
 
@@ -51,6 +53,12 @@ const BookmarkView = ({
   useEffect(() => {
     setNewTitle(bookmark.title);
   }, [bookmark.title]);
+
+  useEffect(() => {
+    if (isCurrentFocusCursor) {
+      containerRef.current?.focus();
+    }
+  }, [isCurrentFocusCursor]);
 
   const saveTitle = async () => {
     if (!isEdit) {
@@ -104,7 +112,7 @@ const BookmarkView = ({
       onDoubleClick={() => onDoubleClick?.(bookmark)}
     >
       <button
-        className="relative flex size-full cursor-default flex-col items-center gap-1 bg-transparent"
+        className="relative flex size-full cursor-default flex-col items-center gap-1 bg-transparent focus:outline-none"
         ref={containerRef}
       >
         <div

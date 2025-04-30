@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type FC } from "react";
 import Bookshelf from "./Bookshelf";
 import Moveable from "react-moveable";
 import { Bookmark } from "../../types/store";
-import { MOUSE_CLICK, rootStore } from "../store/rootStore";
+import { rootStore } from "../store/rootStore";
 import CloseIcon from "../../assets/close.svg";
 import BackIcon from "../../assets/back.svg";
 import BackIconLG from "../../assets/back_lg.svg";
