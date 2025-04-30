@@ -1,6 +1,7 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { BookmarkType, type Bookmark } from "../../types/store";
 import FolderImage from "../../assets/folder.svg";
+import { FAVICON_PREFIX } from "../utils/constant";
 
 type Props = {
   bookmark: Bookmark;
@@ -13,6 +14,7 @@ type Props = {
   isEdit?: boolean;
   setIsEdit?: (isEdit: boolean) => void;
   isDragging?: boolean;
+  isCurrentFocusCursor?: boolean;
 };
 declare module "react" {
   interface CSSProperties {
@@ -20,8 +22,6 @@ declare module "react" {
     fieldSizing?: "fixed" | "content";
   }
 }
-
-const PREFIX = "https://www.google.com/s2/favicons?sz=64&domain=";
 
 /** @TODO favicon 그리기 (원래 코드에서 안옮겼음) */
 const BookmarkView = ({
@@ -35,6 +35,7 @@ const BookmarkView = ({
   isEdit,
   setIsEdit,
   isDragging,
+  isCurrentFocusCursor,
 }: Props) => {
   const [newTitle, setNewTitle] = useState<string>(bookmark.title);
 
@@ -50,6 +51,12 @@ const BookmarkView = ({
   useEffect(() => {
     setNewTitle(bookmark.title);
   }, [bookmark.title]);
+
+  useEffect(() => {
+    if (isCurrentFocusCursor) {
+      containerRef.current?.focus();
+    }
+  }, [isCurrentFocusCursor]);
 
   const saveTitle = async () => {
     if (!isEdit) {
@@ -103,7 +110,7 @@ const BookmarkView = ({
       onDoubleClick={() => onDoubleClick?.(bookmark)}
     >
       <button
-        className="relative flex size-full cursor-default flex-col items-center gap-1 bg-transparent"
+        className="relative flex size-full cursor-default flex-col items-center gap-1 bg-transparent focus:outline-none"
         ref={containerRef}
       >
         <div
@@ -136,7 +143,8 @@ const BookmarkView = ({
 
               {showImgIcon && (
                 <img
-                  src={PREFIX + bookmark.url}
+                  className="pointer-events-none"
+                  src={FAVICON_PREFIX + bookmark.url}
                   onLoad={(e) => {
                     const targetImg = e.target as HTMLImageElement;
                     if (targetImg.width <= 16 || targetImg.height <= 16) {
