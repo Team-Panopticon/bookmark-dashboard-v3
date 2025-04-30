@@ -3,7 +3,7 @@
   "description": "Manage your Bookmark",
   "version": "3.0.0",
   "manifest_version": 3,
-  "permissions": ["bookmarks"],
+  "permissions": ["bookmarks", "favicon"],
   "action": {
     "default_title": "Bookmark Dashboard",
     "default_popup": "popup.html"
