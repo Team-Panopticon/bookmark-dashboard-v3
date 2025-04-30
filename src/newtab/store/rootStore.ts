@@ -20,6 +20,7 @@ type State = {
   };
   focus: {
     focusedIds: Set<string>;
+    focusCursor?: { targetId?: string; currentBookshelf: string };
   };
   dragAndDrop?: {
     bookmark?: Bookmark;
@@ -40,6 +41,7 @@ type State = {
     // bookmark?: Bookmark;
     timestampId: string | null;
   };
+  layoutMap: LayoutMap;
 };
 
 type Action = {
@@ -57,9 +59,10 @@ type Action = {
   setContextMenu: (state: Partial<State["contextMenu"]>) => void;
 
   // focus
-  addFocus: (id: string[]) => Set<string>; // 새로운 ID 추가
+  addFocus: (timestampIds: string[], bookshelfTimestamp: string) => Set<string>; // 새로운 ID 추가
   removeFocus: (id: string[]) => void; // 특정 ID 제거
   clearFocus: () => void; // 모든 focus 초기화
+  moveFocus: (direction: string) => Promise<void>; // 키보드로 포커스 이동
 
   // dragndrop
   isDragging: () => boolean;
@@ -93,7 +96,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
     const layout = await layoutDB.getAllLayout();
     const bookmark = addRowColToTree(subTree, layout);
 
-    set({ bookmark });
+    set({ bookmark, layoutMap: layout });
   },
   getSubtree: (id) => {
     const bookmark = get().bookmark;
@@ -126,13 +129,20 @@ export const rootStore = create<State & Action>()((set, get) => ({
   focus: {
     focusedIds: new Set(),
   },
-  addFocus: (ids: string[]) => {
+  addFocus: (timestampIds: string[], bookshelfTimestamp: string) => {
     const { focusedIds } = get().focus;
-    const newSet = new Set([...focusedIds, ...ids]);
+    const newSet = new Set([...focusedIds, ...timestampIds]);
+
+    const timestampId = timestampIds[0] || "";
+    const [, id] = timestampId.split("_");
 
     set(() => ({
       focus: {
-        focusedIds: newSet, // 기존 ID와 새 ID를 병합 후 중복 제거
+        focusedIds: newSet,
+        focusCursor: {
+          targetId: id,
+          currentBookshelf: bookshelfTimestamp,
+        },
       },
     }));
 
@@ -146,6 +156,75 @@ export const rootStore = create<State & Action>()((set, get) => ({
       return { focus: { focusedIds: newFocusedIds } };
     }),
   clearFocus: () => set({ focus: { focusedIds: new Set() } }),
+  moveFocus: async (direction: string) => {
+    const { focusCursor } = get().focus;
+    if (!focusCursor) return;
+
+    const { targetId, currentBookshelf } = focusCursor;
+    if (!targetId || !currentBookshelf) return;
+
+    const { parentId, row, col } = get().layoutMap[targetId];
+
+    const items = getItems({
+      layoutMap: get().layoutMap,
+      parentId,
+    });
+
+    const getNextItem = () => {
+      switch (direction) {
+        case "ArrowUp":
+          return (() => {
+            const targetItems = items.filter((item) => item.col === col);
+            const targetIndex = targetItems.findIndex(
+              (item) => item.row === row
+            );
+            return targetItems[targetIndex - 1];
+          })();
+        case "ArrowDown":
+          return (() => {
+            const targetItems = items.filter((item) => item.col === col);
+            const targetIndex = targetItems.findIndex(
+              (item) => item.row === row
+            );
+            return targetItems[targetIndex + 1];
+          })();
+        case "ArrowLeft":
+          return (() => {
+            const targetItems = items.filter((item) => item.row === row);
+            const targetIndex = targetItems.findIndex(
+              (item) => item.col === col
+            );
+            return targetItems[targetIndex - 1];
+          })();
+        case "ArrowRight":
+          return (() => {
+            const targetItems = items.filter((item) => item.row === row);
+            const targetIndex = targetItems.findIndex(
+              (item) => item.col === col
+            );
+            return targetItems[targetIndex + 1];
+          })();
+        default:
+          return null;
+      }
+    };
+
+    const next = getNextItem();
+
+    if (next) {
+      const { id } = next;
+      const timestampId = `${currentBookshelf}_${id}`;
+      set(() => ({
+        focus: {
+          focusedIds: new Set([timestampId]),
+          focusCursor: {
+            targetId: id,
+            currentBookshelf,
+          },
+        },
+      }));
+    }
+  },
 
   // dragAndDrop
   isDragging: () => Boolean(get().dragAndDrop?.bookmark),
@@ -260,6 +339,10 @@ export const rootStore = create<State & Action>()((set, get) => ({
 
     return targetPosition;
   },
+  layoutMap: {},
+  setLayoutMap: (layoutMap: LayoutMap) => {
+    set({ layoutMap });
+  },
 }));
 
 export function getOffsetBetweenPoints(p1: Point, p2: Point) {
@@ -302,4 +385,19 @@ function addRowColToTree(bookmark: Bookmark, layoutMap: LayoutMap): Bookmark {
     bookmark.children?.forEach((child) => addRowColToTree(child, layoutMap));
   }
   return bookmark;
+}
+
+function getItems({
+  layoutMap,
+  parentId,
+}: {
+  layoutMap: LayoutMap;
+  parentId: string;
+}) {
+  const items = Object.values(layoutMap)
+    .filter((item) => item.parentId === parentId)
+    .sort((a, b) => a.col - b.col)
+    .sort((a, b) => a.row - b.row);
+
+  return items;
 }

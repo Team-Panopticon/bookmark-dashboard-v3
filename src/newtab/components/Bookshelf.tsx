@@ -32,7 +32,7 @@ const Bookshelf: FC<Props> = ({folder, navigateTo, timestamp, isDesktop}) => {
   const {
     updateFilesLayout,
     dragAndDrop = {},
-    focus: {focusedIds},
+    focus: {focusedIds, focusCursor},
     refreshBookmark,
     edit,
     setEdit,
@@ -101,6 +101,9 @@ const Bookshelf: FC<Props> = ({folder, navigateTo, timestamp, isDesktop}) => {
         const draggingFileTimestampId = `${draggingFileTimestamp}_${draggingFile?.id}`;
         const isFoscused = focusedIds.has(timestampId);
         const isDragging = draggingFileTimestampId === timestampId;
+        const isCurrentFocusCursor =
+          focusCursor?.currentBookshelf === timestamp &&
+          file.id === focusCursor?.targetId;
 
         const isEdit = edit.timestampId === timestampId;
 
@@ -110,6 +113,7 @@ const Bookshelf: FC<Props> = ({folder, navigateTo, timestamp, isDesktop}) => {
             isDesktop={isDesktop}
             bookmark={file}
             focused={isFoscused}
+            isCurrentFocusCursor={isCurrentFocusCursor}
             onSave={async (title) => handleSave(file.id, title)}
             onMouseDown={(e) =>
               handleMouseDownBookmark({
