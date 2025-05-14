@@ -1,17 +1,17 @@
-import {useEffect, useRef, useState} from "react";
-import {rootStore} from "../store/rootStore";
+import { useEffect, useRef, useState } from "react";
+import { rootStore } from "../store/rootStore";
 
 import BookmarkApi from "../utils/bookmarkApi";
-import {Z_INDEX} from "../utils/constant";
+import { Z_INDEX } from "../utils/constant";
 
 const InfoDialog = () => {
-  const {editDialog, setEditDialog, refreshBookmark} = rootStore();
-  const {bookmark, isOpen} = editDialog;
+  const { editDialog, setEditDialog, refreshBookmark } = rootStore();
+  const { bookmark, isOpen } = editDialog;
   const titleRef = useRef<HTMLInputElement>(null);
   const urlRef = useRef<HTMLInputElement>(null);
 
   const handleCloseButtonClick = () => {
-    setEditDialog({isOpen: false, bookmark: null});
+    setEditDialog({ isOpen: false, bookmark: null });
   };
   const handleSaveButtonClick = async () => {
     if (!bookmark) {
@@ -25,7 +25,7 @@ const InfoDialog = () => {
     if (!bookmark) {
       return;
     }
-    await BookmarkApi.remove(bookmark.id);
+    await BookmarkApi.recursiveRemove(bookmark.id);
     handleCloseButtonClick();
     refreshBookmark();
   };
