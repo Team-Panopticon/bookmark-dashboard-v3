@@ -97,7 +97,6 @@ export const useEventHandler = ({
         row,
         col,
       });
-      await BookmarkApi.move(id, parentId);
 
       flush();
       refreshBookmark();
