@@ -3,6 +3,7 @@ import { rootStore } from "../store/rootStore";
 
 import BookmarkApi from "../utils/bookmarkApi";
 import { Z_INDEX } from "../utils/constant";
+import { layoutDB } from "../utils/layoutDB";
 
 const InfoDialog = () => {
   const { editDialog, setEditDialog, refreshBookmark } = rootStore();
@@ -26,6 +27,7 @@ const InfoDialog = () => {
       return;
     }
     await BookmarkApi.recursiveRemove(bookmark.id);
+    await layoutDB.deleteItemLayoutById(bookmark.id);
     handleCloseButtonClick();
     refreshBookmark();
   };
