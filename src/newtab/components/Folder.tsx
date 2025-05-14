@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState, type FC } from "react";
+import {useEffect, useRef, useState, type FC} from "react";
 import Bookshelf from "./Bookshelf";
 import Moveable from "react-moveable";
-import { Bookmark } from "../../types/store";
-import { rootStore } from "../store/rootStore";
+import {Bookmark} from "../../types/store";
+import {rootStore} from "../store/rootStore";
 import CloseIcon from "../../assets/close.svg";
 import BackIcon from "../../assets/back.svg";
 import BackIconLG from "../../assets/back_lg.svg";
@@ -10,7 +10,7 @@ import ForwardIcon from "../../assets/forward.svg";
 import ForwardIconLG from "../../assets/forward_lg.svg";
 
 import Resize from "../../assets/Resize.svg";
-import { useEventHandler } from "../hooks/useEventHandler";
+import {useEventHandler} from "../hooks/useEventHandler";
 
 const Folder = ({
   id,
@@ -21,9 +21,9 @@ const Folder = ({
   zIndex: number;
   timestamp: string;
 }) => {
-  const { getSubtree, bookmark } = rootStore();
+  const {getSubtree, bookmark} = rootStore();
   const {
-    folderEventHanlder: { handleMouseDown, handleCloseButtonClick },
+    folderEventHanlder: {handleMouseDown, handleCloseButtonClick},
   } = useEventHandler({});
   const targetRef = useRef<HTMLDivElement>(null);
   const dragTargetRef = useRef<HTMLDivElement>(null);
@@ -48,7 +48,7 @@ const Folder = ({
   };
 
   // 폴더 이동 시 호출
-  const navigateTo = ({ id: folderId }: Bookmark) => {
+  const navigateTo = ({id: folderId}: Bookmark) => {
     const newHistory = history.slice(0, historyCursor + 1); // 현재 이후 기록 제거
     setHistory([...newHistory, folderId]);
     setHistoryCursor(newHistory.length); // 새로운 위치로 이동
@@ -77,7 +77,7 @@ const Folder = ({
     <div className="container">
       <div
         onMouseDown={() => handleMouseDown(timestamp)}
-        className="absolute flex size-[500px] flex-col rounded-lg border border-gray-200 bg-neutral-50 shadow-2xl"
+        className="absolute flex size-[514px] flex-col rounded-lg border border-gray-200 bg-neutral-50 shadow-2xl"
         style={{
           top: "10px",
           left: 0,
