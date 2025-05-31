@@ -14,3 +14,4 @@ export const POSITION_OFFSET = 50;
 
 export const FAVICON_PREFIX =
   "https://www.google.com/s2/favicons?sz=64&domain=";
+export const DESKTOP_ID = 1;
