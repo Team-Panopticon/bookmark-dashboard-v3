@@ -106,11 +106,11 @@ const BookmarkView = ({
           setIsEdit?.(true);
         }
       }}
-      className='h-item w-item select-none overflow-visible'
+      className="h-item w-item select-none overflow-visible"
       onDoubleClick={() => onDoubleClick?.(bookmark)}
     >
       <button
-        className='relative flex size-full cursor-default flex-col items-center gap-1 bg-transparent focus:outline-none'
+        className="relative flex size-full cursor-default flex-col items-center gap-1 bg-transparent focus:outline-none"
         ref={containerRef}
       >
         <div
@@ -138,12 +138,12 @@ const BookmarkView = ({
               />
             </div>
           ) : (
-            <div className='flex size-[95%] items-center justify-center rounded text-[10px] text-gray-800'>
+            <div className="flex size-[95%] items-center justify-center rounded text-[10px] text-gray-800">
               {!showImgIcon && bookmark.title.slice(0, 3)}
 
               {showImgIcon && (
                 <img
-                  className='pointer-events-none'
+                  className="pointer-events-none"
                   src={getFaviconURI(bookmark.url ?? "", 48)}
                   onLoad={(e) => {
                     const targetImg = e.target as HTMLImageElement;
@@ -151,14 +151,14 @@ const BookmarkView = ({
                       setShowImgIcon(false);
                     }
                   }}
-                  alt=''
+                  alt=""
                 />
               )}
             </div>
           )}
         </div>
 
-        <div className='break-all text-center leading-3 text-black'>
+        <div className="break-all text-center leading-3 text-black">
           {!isEdit ? (
             <div
               style={{
@@ -181,7 +181,7 @@ const BookmarkView = ({
               style={{
                 fieldSizing: "content",
               }}
-              className='max-h-9 resize-none overflow-hidden break-words rounded-sm border border-[#5BA1FA] bg-[#B3D7FE] px-0.5 caret-white outline-none ring ring-[#81B5FB]'
+              className="max-h-9 resize-none overflow-hidden break-words rounded-sm border border-[#5BA1FA] bg-[#B3D7FE] px-0.5 caret-white outline-none ring ring-[#81B5FB]"
               onChange={(e) => {
                 setNewTitle(e.target.value.replace(/[\n|\r\n|\r|]/g, ""));
               }}

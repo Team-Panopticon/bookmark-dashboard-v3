@@ -17,9 +17,6 @@ export default {
   // 한 줄로 작성할 수 있으면 1줄로 처리
   proseWrap: "always", // 긴 문장이 자동으로 줄 바꿈
 
-  // JSX에서 속성 값이 문자열일 때 따옴표의 종류 설정
-  jsxSingleQuote: true, // JSX에서 작은 따옴표(') 사용
-
   // 개행을 할 때 설정
   bracketSpacing: true, // 객체 리터럴의 중괄호 안에 공백을 추가 (ex. `{ foo: bar }`)
 

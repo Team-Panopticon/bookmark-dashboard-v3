@@ -104,7 +104,7 @@ const ContextMenu = () => {
   if (!isContextMenuVisible) return null;
   return (
     <div
-      className='flex w-[150px] flex-col rounded-md border-[0.5px] border-solid border-[#b8b8b8] bg-[#eaeaeac9] p-1 text-xs shadow-md backdrop-blur-md'
+      className="flex w-[150px] flex-col rounded-md border-[0.5px] border-solid border-[#b8b8b8] bg-[#eaeaeac9] p-1 text-xs shadow-md backdrop-blur-md"
       style={{
         position: "absolute",
         left: contextMenuPosition.x,
@@ -116,7 +116,7 @@ const ContextMenu = () => {
       {menuList.map((menu) => {
         return (
           <button
-            className='flex h-6 cursor-default items-center justify-start rounded-md px-2.5 py-1 hover:bg-[#4898ff] hover:text-white'
+            className="flex h-6 cursor-default items-center justify-start rounded-md px-2.5 py-1 hover:bg-[#4898ff] hover:text-white"
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => menu.onClick(e)}
           >

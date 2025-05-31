@@ -73,47 +73,47 @@ const SearchBar = ({
 
   return (
     <div
-      className='absolute left-1/2 top-[20%] flex max-h-[60vh] w-[600px] -translate-x-1/2 flex-col overflow-hidden rounded-2xl border border-gray-300 bg-[rgba(253,253,253,0.5)]  backdrop-blur-2xl'
+      className="absolute left-1/2 top-[20%] flex max-h-[60vh] w-[600px] -translate-x-1/2 flex-col overflow-hidden rounded-2xl border border-gray-300 bg-[rgba(253,253,253,0.5)]  backdrop-blur-2xl"
       style={{
         boxShadow:
           "0 4px 30px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)",
         zIndex: Z_INDEX.SEARCH,
       }}
     >
-      <div className='flex h-[52px] items-center px-3 py-2'>
+      <div className="flex h-[52px] items-center px-3 py-2">
         <img
-          className='opacity-70'
+          className="opacity-70"
           src={SearchIcon}
           width={24}
-          alt='Search Icon'
+          alt="Search Icon"
         />
         <input
           ref={searchInputRef}
-          type='text'
-          placeholder='Search'
+          type="text"
+          placeholder="Search"
           value={searchText}
           onChange={handleInputChange}
-          className='w-full bg-transparent pl-1 text-[26px] font-medium leading-[26px] text-gray-800 outline-none placeholder:text-gray-500'
+          className="w-full bg-transparent pl-1 text-[26px] font-medium leading-[26px] text-gray-800 outline-none placeholder:text-gray-500"
         />
       </div>
       {results.length > 0 && (
-        <div className='relative flex max-h-96 flex-1 flex-col overflow-hidden border-t p-2'>
-          <div className='scrollbar-thin-custom h-full overflow-y-auto'>
+        <div className="relative flex max-h-96 flex-1 flex-col overflow-hidden border-t p-2">
+          <div className="scrollbar-thin-custom h-full overflow-y-auto">
             {results.map((result, idx) => (
               <div
                 key={idx}
-                className='flex cursor-pointer items-center rounded-md px-2.5 py-1.5 hover:bg-black/10'
+                className="flex cursor-pointer items-center rounded-md px-2.5 py-1.5 hover:bg-black/10"
                 onClick={() => onClickBookmark(result)}
               >
                 {result.type === BookmarkType.FOLDER ? (
-                  <img src={FolderImage} className='mr-3 size-5' />
+                  <img src={FolderImage} className="mr-3 size-5" />
                 ) : (
                   <img
                     src={getFaviconURI(result.url ?? "", 32)}
-                    className='mr-3 size-5'
+                    className="mr-3 size-5"
                   />
                 )}
-                <span className='text-xs text-gray-800'>{result.title}</span>
+                <span className="text-xs text-gray-800">{result.title}</span>
               </div>
             ))}
           </div>

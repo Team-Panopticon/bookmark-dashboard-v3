@@ -83,7 +83,7 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
 
   return (
     <div
-      className='relative grid size-full overflow-y-auto p-gridContainerPadding'
+      className="relative grid size-full overflow-y-auto p-gridContainerPadding"
       style={{
         gridTemplateColumns: `repeat(auto-fill, ${ITEM_WIDTH}px)`,
         gridAutoRows: `${ITEM_HEIGHT}px`,

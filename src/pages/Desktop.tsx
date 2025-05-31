@@ -75,7 +75,7 @@ const Desktop: FC = () => {
   }, [handleKeyDown]);
 
   return (
-    <div className='size-full'>
+    <div className="size-full">
       {isDragging() && <DraggingFile />}
       {bookmark && (
         <Bookshelf
