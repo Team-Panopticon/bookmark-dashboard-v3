@@ -48,6 +48,13 @@ export const useEventHandler = ({
         moveFocus(e.key);
       }
     },
+    handleMouseUp: async (e: MouseEvent) => {
+      const { pageX, pageY } = e;
+      if (pageX <= 0 || pageY <= 0) {
+        await refreshBookmark();
+        flush();
+      }
+    },
   };
 
   const bookshelfEventHandler = {
