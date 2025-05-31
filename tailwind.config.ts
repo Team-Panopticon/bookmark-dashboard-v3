@@ -1,14 +1,14 @@
-import type { Config } from "tailwindcss";
+import type { Config } from 'tailwindcss';
 
 import {
   GRID_CONTAINER_PADDING,
   ITEM_HEIGHT,
   ITEM_WIDTH,
-} from "./src/newtab/utils/constant";
+} from './src/newtab/utils/constant';
 
 export default {
-  darkMode: "selector",
-  content: ["./newtab.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  darkMode: 'selector',
+  content: ['./newtab.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       width: {
@@ -21,7 +21,7 @@ export default {
         gridContainerPadding: `${GRID_CONTAINER_PADDING}px`,
       },
       gridTemplateColumns: {
-        "auto-fill-item": `repeat(auto-fill, ${ITEM_WIDTH})`,
+        'auto-fill-item': `repeat(auto-fill, ${ITEM_WIDTH})`,
       },
     },
   },

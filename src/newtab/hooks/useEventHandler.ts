@@ -1,12 +1,12 @@
-import { Bookshelf, Bookmark, BookmarkType } from "../../types/store";
-import BookmarkApi from "../utils/bookmarkApi";
-import { layoutDB } from "../utils/layoutDB";
+import { Bookshelf, Bookmark, BookmarkType } from '../../types/store';
+import BookmarkApi from '../utils/bookmarkApi';
+import { layoutDB } from '../utils/layoutDB';
 import {
   getOffsetBetweenPoints,
   MOUSE_CLICK,
   rootStore,
-} from "../store/rootStore";
-import { getRowColFromMouseEvent } from "../utils/getRowColUpdatedFiles";
+} from '../store/rootStore';
+import { getRowColFromMouseEvent } from '../utils/getRowColUpdatedFiles';
 
 export const useEventHandler = ({
   bookshelf,
@@ -43,7 +43,7 @@ export const useEventHandler = ({
         return;
       }
 
-      if (e.key.startsWith("Arrow")) {
+      if (e.key.startsWith('Arrow')) {
         e.preventDefault();
         moveFocus(e.key);
       }
@@ -245,7 +245,7 @@ export const useEventHandler = ({
         return;
       }
 
-      window.open(bookmark.url, "_blank")?.focus();
+      window.open(bookmark.url, '_blank')?.focus();
     },
   };
 

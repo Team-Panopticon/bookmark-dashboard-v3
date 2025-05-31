@@ -1,5 +1,5 @@
-import { Bookmark } from "../../types/store";
-import { GRID_CONTAINER_PADDING, ITEM_HEIGHT, ITEM_WIDTH } from "./constant";
+import { Bookmark } from '../../types/store';
+import { GRID_CONTAINER_PADDING, ITEM_HEIGHT, ITEM_WIDTH } from './constant';
 
 // row, col이 DB에 없는 애들의 row, col을 계산해서 DB에 저장해줌 + 스타일 추가 (위치 고정)
 const getRowCol = (id: string, elItem: HTMLDivElement, parentId: string) => {

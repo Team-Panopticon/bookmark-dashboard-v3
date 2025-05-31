@@ -1,7 +1,7 @@
-import { type FC } from "react";
-import { rootStore } from "../store/rootStore";
+import { type FC } from 'react';
+import { rootStore } from '../store/rootStore';
 
-import Folder from "./Folder";
+import Folder from './Folder';
 
 const FolderManager: FC = () => {
   const {

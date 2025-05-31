@@ -1,6 +1,6 @@
 export enum BookmarkType {
-  FOLDER = "FOLDER",
-  PAGE = "PAGE",
+  FOLDER = 'FOLDER',
+  PAGE = 'PAGE',
 }
 
 // bookmar - page

@@ -1,16 +1,16 @@
-import { useEffect, useRef, useState, type FC } from "react";
-import Bookshelf from "./Bookshelf";
-import Moveable from "react-moveable";
-import { Bookmark } from "../../types/store";
-import { rootStore } from "../store/rootStore";
-import CloseIcon from "../../assets/close.svg";
-import BackIcon from "../../assets/back.svg";
-import BackIconLG from "../../assets/back_lg.svg";
-import ForwardIcon from "../../assets/forward.svg";
-import ForwardIconLG from "../../assets/forward_lg.svg";
+import { useEffect, useRef, useState, type FC } from 'react';
+import Bookshelf from './Bookshelf';
+import Moveable from 'react-moveable';
+import { Bookmark } from '../../types/store';
+import { rootStore } from '../store/rootStore';
+import CloseIcon from '../../assets/close.svg';
+import BackIcon from '../../assets/back.svg';
+import BackIconLG from '../../assets/back_lg.svg';
+import ForwardIcon from '../../assets/forward.svg';
+import ForwardIconLG from '../../assets/forward_lg.svg';
 
-import Resize from "../../assets/Resize.svg";
-import { useEventHandler } from "../hooks/useEventHandler";
+import Resize from '../../assets/Resize.svg';
+import { useEventHandler } from '../hooks/useEventHandler';
 
 const Folder = ({
   id,
@@ -74,34 +74,34 @@ const Folder = ({
     }
   };
   return (
-    <div className="container">
+    <div className='container'>
       <div
         onMouseDown={() => handleMouseDown(timestamp)}
-        className="absolute flex size-[500px] flex-col rounded-lg border border-gray-200 bg-neutral-50 shadow-2xl"
+        className='absolute flex size-[500px] flex-col rounded-lg border border-gray-200 bg-neutral-50 shadow-2xl'
         style={{
-          top: "10px",
+          top: '10px',
           left: 0,
-          maxWidth: "auto",
-          maxHeight: "auto",
-          minWidth: "200px",
-          minHeight: "auto",
+          maxWidth: 'auto',
+          maxHeight: 'auto',
+          minWidth: '200px',
+          minHeight: 'auto',
           zIndex,
         }}
         ref={targetRef}
       >
         <div
           ref={dragTargetRef}
-          className="flex h-12 w-full items-center justify-between  rounded-t-lg border-b border-transparent p-2 hover:border-gray-200 hover:shadow-sm"
+          className='flex h-12 w-full items-center justify-between  rounded-t-lg border-b border-transparent p-2 hover:border-gray-200 hover:shadow-sm'
         >
-          <div className="flex w-full items-center">
+          <div className='flex w-full items-center'>
             <button
               onClick={() => {
                 handleCloseButtonClick(timestamp);
               }}
-              className="group ml-2 flex aspect-square size-3 items-center justify-center rounded-full border-[0.5px] border-black/10 bg-[#FF5F57] text-center text-[9px] font-semibold transition-all duration-300"
+              className='group ml-2 flex aspect-square size-3 items-center justify-center rounded-full border-[0.5px] border-black/10 bg-[#FF5F57] text-center text-[9px] font-semibold transition-all duration-300'
             >
               <img
-                className="flex items-center justify-center opacity-0 duration-500 group-hover:opacity-100"
+                className='flex items-center justify-center opacity-0 duration-500 group-hover:opacity-100'
                 src={CloseIcon}
               />
             </button>
@@ -109,36 +109,36 @@ const Folder = ({
               onClick={() => {
                 toggleFullscreen();
               }}
-              className="group ml-2 flex aspect-square size-3 items-center justify-center rounded-full border-[0.5px] border-black/10 bg-[#28C840] text-center text-[9px] font-semibold transition-all duration-300"
+              className='group ml-2 flex aspect-square size-3 items-center justify-center rounded-full border-[0.5px] border-black/10 bg-[#28C840] text-center text-[9px] font-semibold transition-all duration-300'
             >
               <img
-                className="flex items-center justify-center opacity-0 duration-500 group-hover:opacity-100"
+                className='flex items-center justify-center opacity-0 duration-500 group-hover:opacity-100'
                 src={Resize}
               />
             </button>
             <button
               className={`ml-2 flex size-8 shrink-0 items-center justify-center rounded-md border-none transition-all  duration-500
-                  ${canGoBack && "hover:bg-gray-200"}`}
+                  ${canGoBack && 'hover:bg-gray-200'}`}
               disabled={!canGoBack}
               onClick={goBack}
             >
               <img
-                className="mr-[-8px] w-5"
+                className='mr-[-8px] w-5'
                 src={canGoBack ? BackIcon : BackIconLG}
               />
             </button>
             <button
               className={`flex size-8 shrink-0 items-center justify-center rounded-md border-none transition-all duration-500
-                  ${canGoForward && "hover:bg-gray-200"}`}
+                  ${canGoForward && 'hover:bg-gray-200'}`}
               disabled={!canGoForward}
               onClick={goForward}
             >
               <img
-                className="mr-[-2px] w-5"
+                className='mr-[-2px] w-5'
                 src={canGoForward ? ForwardIcon : ForwardIconLG}
               />
             </button>
-            <div className="ml-2 overflow-hidden text-ellipsis font-semibold">
+            <div className='ml-2 overflow-hidden text-ellipsis font-semibold'>
               {folder?.title}
             </div>
           </div>

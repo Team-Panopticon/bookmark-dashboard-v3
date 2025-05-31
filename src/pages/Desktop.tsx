@@ -1,14 +1,14 @@
-import { FC, useCallback, useEffect } from "react";
-import Bookshelf from "../newtab/components/Bookshelf";
-import FolderManager from "../newtab/components/FolderManager";
-import ContextMenu from "../newtab/components/ContextMenu";
-import { rootStore } from "../newtab/store/rootStore";
-import DraggingFile from "../newtab/components/DraggingFile";
-import InfoDialog from "../newtab/components/InfoDialog";
-import { useEventHandler } from "../newtab/hooks/useEventHandler";
-import Search from "../newtab/components/search/Search";
-import { layoutDB } from "../newtab/utils/layoutDB";
-import BookmarkApi from "../newtab/utils/bookmarkApi";
+import { FC, useCallback, useEffect } from 'react';
+import Bookshelf from '../newtab/components/Bookshelf';
+import FolderManager from '../newtab/components/FolderManager';
+import ContextMenu from '../newtab/components/ContextMenu';
+import { rootStore } from '../newtab/store/rootStore';
+import DraggingFile from '../newtab/components/DraggingFile';
+import InfoDialog from '../newtab/components/InfoDialog';
+import { useEventHandler } from '../newtab/hooks/useEventHandler';
+import Search from '../newtab/components/search/Search';
+import { layoutDB } from '../newtab/utils/layoutDB';
+import BookmarkApi from '../newtab/utils/bookmarkApi';
 
 const DESKTOP_TIMESTAMP_ID = `${Date.now()}`;
 
@@ -44,7 +44,7 @@ const Desktop: FC = () => {
           BookmarkApi.getSubTree(item.id)
             .then(() => res(undefined))
             .catch((e) => {
-              if (e instanceof Error && "message" in e) {
+              if (e instanceof Error && 'message' in e) {
                 if (e.message.includes("Can't find bookmark for id.")) {
                   res(item.id);
                 }
@@ -56,7 +56,7 @@ const Desktop: FC = () => {
       });
 
       const deletedIds = (await Promise.allSettled(deleteIdPromises))
-        .filter((settledResult) => settledResult.status === "fulfilled")
+        .filter((settledResult) => settledResult.status === 'fulfilled')
         .map((settledResult) => settledResult.value)
         .filter((id) => id !== undefined);
 
@@ -68,14 +68,14 @@ const Desktop: FC = () => {
   }, []);
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, [handleKeyDown]);
 
   return (
-    <div className="size-full">
+    <div className='size-full'>
       {isDragging() && <DraggingFile />}
       {bookmark && (
         <Bookshelf
