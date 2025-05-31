@@ -1,4 +1,4 @@
-import {FC, useCallback, useEffect} from "react";
+import {FC, useCallback, useEffect, useState} from "react";
 import Bookshelf from "../newtab/components/Bookshelf";
 import FolderManager from "../newtab/components/FolderManager";
 import ContextMenu from "../newtab/components/ContextMenu";
@@ -8,10 +8,12 @@ import Search from "../newtab/components/search/Search";
 import {useEventHandler} from "../newtab/hooks/useEventHandler";
 import InfoDialog from "../newtab/components/InfoDialog";
 
+import {settingStore} from "../newtab/store/settingStore";
 const DESKTOP_TIMESTAMP_ID = `${Date.now()}`;
 
 const Desktop: FC = () => {
   const {bookmark, refreshBookmark, isDragging} = rootStore();
+  const {theme, setTheme} = settingStore();
   const {
     globalEventHandelr: {handleKeyDown},
   } = useEventHandler({});
@@ -41,11 +43,22 @@ const Desktop: FC = () => {
     };
   }, [handleKeyDown]);
 
+  useEffect(() => {
+    const listener = (message: {type: string; theme: "wallpaper" | "none"}) => {
+      if (message.type === "updateConfig") {
+        setTheme(message.theme);
+      }
+    };
+    chrome.runtime.onMessage.addListener(listener);
+    return () => {
+      chrome.runtime.onMessage.removeListener(listener);
+    };
+  }, [setTheme]);
   return (
     <div
       className="size-full"
       style={{
-        backgroundImage: "url(catalina.jpg)",
+        backgroundImage: theme === "wallpaper" ? "url(catalina.jpg)" : "none",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
