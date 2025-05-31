@@ -1,6 +1,17 @@
-import { version } from "../../package.json";
+import {useEffect, useState} from "react";
+import {version} from "../../package.json";
 
 const PopUp = () => {
+  const [theme, setTheme] = useState<"wallpaper" | "none">("wallpaper");
+  useEffect(() => {
+    chrome.storage?.local.get("theme", (result) => {
+      if (result.theme) {
+        setTheme(result.theme);
+      } else {
+        setTheme("wallpaper");
+      }
+    });
+  }, []);
   return (
     <div className="flex w-[260px] flex-col bg-white p-3 text-xs shadow-md backdrop-blur-md">
       <div className="flex flex-col gap-1">
@@ -28,6 +39,22 @@ const PopUp = () => {
           >
             Suggestions
           </a>
+        </div>
+        <div className="mt-2 flex items-center gap-1 text-[12px]">
+          <input
+            type="checkbox"
+            checked={theme === "wallpaper"}
+            onChange={(e) => {
+              const newTheme = e.target.checked ? "wallpaper" : "none";
+              setTheme(newTheme);
+
+              chrome.runtime.sendMessage({
+                theme: newTheme,
+                type: "updateConfig",
+              });
+            }}
+          />
+          wallpaper
         </div>
       </div>
     </div>

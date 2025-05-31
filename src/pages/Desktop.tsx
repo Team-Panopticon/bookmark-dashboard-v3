@@ -1,21 +1,24 @@
-import { FC, useCallback, useEffect } from "react";
+import {FC, useCallback, useEffect} from "react";
 import Bookshelf from "../newtab/components/Bookshelf";
 import FolderManager from "../newtab/components/FolderManager";
 import ContextMenu from "../newtab/components/ContextMenu";
-import { rootStore } from "../newtab/store/rootStore";
+import {rootStore} from "../newtab/store/rootStore";
 import DraggingFile from "../newtab/components/DraggingFile";
-import InfoDialog from "../newtab/components/InfoDialog";
-import { useEventHandler } from "../newtab/hooks/useEventHandler";
 import Search from "../newtab/components/search/Search";
-import { layoutDB } from "../newtab/utils/layoutDB";
+import {useEventHandler} from "../newtab/hooks/useEventHandler";
+import InfoDialog from "../newtab/components/InfoDialog";
+
+import {layoutDB} from "../newtab/utils/layoutDB";
 import BookmarkApi from "../newtab/utils/bookmarkApi";
 
+import {settingStore} from "../newtab/store/settingStore";
 const DESKTOP_TIMESTAMP_ID = `${Date.now()}`;
 
 const Desktop: FC = () => {
-  const { bookmark, refreshBookmark, isDragging } = rootStore();
+  const {bookmark, refreshBookmark, isDragging} = rootStore();
+  const {theme, setTheme} = settingStore();
   const {
-    globalEventHandelr: { handleKeyDown },
+    globalEventHandelr: {handleKeyDown},
   } = useEventHandler({});
 
   const setBookmarksEventHandlers = useCallback(() => {
@@ -74,13 +77,34 @@ const Desktop: FC = () => {
     };
   }, [handleKeyDown]);
 
+  useEffect(() => {
+    const listener = (message: {type: string; theme: "wallpaper" | "none"}) => {
+      if (message.type === "updateConfig") {
+        setTheme(message.theme);
+      }
+    };
+    chrome.runtime.onMessage.addListener(listener);
+    return () => {
+      chrome.runtime.onMessage.removeListener(listener);
+    };
+  }, [setTheme]);
   return (
-    <div className="size-full">
+    <div
+      className="size-full"
+      style={{
+        backgroundImage: theme === "wallpaper" ? "url(catalina.jpg)" : "none",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed",
+      }}
+    >
       {isDragging() && <DraggingFile />}
       {bookmark && (
         <Bookshelf
           folder={bookmark}
           timestamp={DESKTOP_TIMESTAMP_ID}
+          isDesktop={true}
         ></Bookshelf>
       )}
       <FolderManager />
