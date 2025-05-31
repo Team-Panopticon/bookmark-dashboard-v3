@@ -3,6 +3,7 @@ import { useEffect, useMemo } from "react";
 import { rootStore } from "../store/rootStore";
 import BookmarkApi from "../utils/bookmarkApi";
 import { Z_INDEX } from "../utils/constant";
+import { layoutDB } from "../utils/layoutDB";
 
 interface ContextMenu {
   title: string;
@@ -41,7 +42,7 @@ const ContextMenu = () => {
           isOpen: true,
           bookmark: target[0],
         });
-        setContextMenu({isContextMenuVisible: false});
+        setContextMenu({ isContextMenuVisible: false });
       },
     };
     const 이름변경 = {
@@ -61,6 +62,7 @@ const ContextMenu = () => {
           /** 다 삭제 */
           const bookmarkId = timestampId.split("_")[1];
           bookmarkId && BookmarkApi.recursiveRemove(bookmarkId);
+          bookmarkId && layoutDB.deleteItemLayoutById(bookmarkId);
         });
         setContextMenu({ isContextMenuVisible: false });
       },
