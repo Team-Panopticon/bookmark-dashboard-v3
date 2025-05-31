@@ -17,7 +17,10 @@ const searchBookmarks = (bookmark: Bookmark, keyword: string) => {
   const results: Bookmark[] = [];
 
   const doSearch = (bookmark: Bookmark, keyword: string) => {
-    if (bookmark.title && bookmark.title.includes(keyword)) {
+    if (
+      bookmark.title &&
+      bookmark.title.toLowerCase().includes(keyword.toLowerCase())
+    ) {
       results.push(bookmark);
     }
 
