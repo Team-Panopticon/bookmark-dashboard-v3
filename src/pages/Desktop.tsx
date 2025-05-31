@@ -40,7 +40,7 @@ const Desktop: FC = () => {
       const layoutMap = await layoutDB.getAllLayout();
 
       const deleteIdPromises = Object.values(layoutMap).map((item) => {
-        return new Promise<string | undefined>((res) =>
+        return new Promise<string | undefined>((res, rej) =>
           BookmarkApi.getSubTree(item.id)
             .then(() => res(undefined))
             .catch((e) => {
@@ -48,14 +48,17 @@ const Desktop: FC = () => {
                 if (e.message.includes("Can't find bookmark for id.")) {
                   res(item.id);
                 }
+              } else {
+                rej(e);
               }
             })
         );
       });
 
-      const deletedIds = (await Promise.all(deleteIdPromises)).filter(
-        (id) => id !== undefined
-      );
+      const deletedIds = (await Promise.allSettled(deleteIdPromises))
+        .filter((settledResult) => settledResult.status === "fulfilled")
+        .map((settledResult) => settledResult.value)
+        .filter((id) => id !== undefined);
 
       deletedIds.forEach((id) => {
         layoutDB.deleteItemLayoutById(id);
