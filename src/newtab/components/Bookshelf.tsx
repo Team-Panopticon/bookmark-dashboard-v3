@@ -89,8 +89,6 @@ const Bookshelf: FC<Props> = ({folder, navigateTo, timestamp, isDesktop}) => {
         gridTemplateColumns: `repeat(auto-fill, ${ITEM_WIDTH}px)`,
         gridAutoRows: `${ITEM_HEIGHT}px`,
         backgroundImage: folder.id === "1" ? "transparent" : "white",
-        gridRowGap: "8px",
-        gridColumnGap: "8px",
       }}
       ref={originGridContainerRef}
       onMouseUp={handleMouseUpBookshelf}
