@@ -1,4 +1,4 @@
-import { openDB, IDBPDatabase } from 'idb';
+import { openDB, IDBPDatabase } from "idb";
 
 export interface LayoutMap {
   [id: string]: ItemLayout; // key는 Item의 id, desktop === 1
@@ -11,9 +11,9 @@ export interface ItemLayout {
   col: number;
 }
 
-const DB_NAME = 'DesktopBookshelfDB';
+const DB_NAME = "DesktopBookshelfDB";
 const DB_VERSION = 1;
-const OBJECT_STORE_NAME = 'desktop';
+const OBJECT_STORE_NAME = "desktop";
 
 const parseLayoutData = (layoutDataArray: ItemLayout[]) => {
   const layoutMap: LayoutMap = {};
@@ -31,12 +31,12 @@ class LayoutDB {
     this.db = await openDB<LayoutMap>(DB_NAME, DB_VERSION, {
       upgrade(db) {
         const objectStore = db.createObjectStore(OBJECT_STORE_NAME, {
-          keyPath: 'id',
+          keyPath: "id",
         });
-        objectStore.createIndex('id', 'id', { unique: true });
-        objectStore.createIndex('parentId', 'parentId', { unique: false });
-        objectStore.createIndex('row', 'row', { unique: false });
-        objectStore.createIndex('col', 'col', { unique: false });
+        objectStore.createIndex("id", "id", { unique: true });
+        objectStore.createIndex("parentId", "parentId", { unique: false });
+        objectStore.createIndex("row", "row", { unique: false });
+        objectStore.createIndex("col", "col", { unique: false });
       },
     });
   }

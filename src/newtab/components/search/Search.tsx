@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
-import SearchBar from './SearchBar';
-import SearchButton from './SearchButton';
+import { useEffect, useRef, useState } from "react";
+import SearchBar from "./SearchBar";
+import SearchButton from "./SearchButton";
 
 const Search = () => {
   const [show, setShow] = useState(false);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const searchBarRef = useRef<HTMLDivElement>(null);
   const searchButtonRef = useRef<HTMLDivElement>(null);
 
@@ -22,26 +22,26 @@ const Search = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside, true);
+    document.addEventListener("mousedown", handleClickOutside, true);
     return () =>
-      document.removeEventListener('mousedown', handleClickOutside, true);
+      document.removeEventListener("mousedown", handleClickOutside, true);
   }, []);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key != 'Escape') {
+      if (e.key != "Escape") {
         return;
       }
 
-      if (searchText == '') {
+      if (searchText == "") {
         hideSearchBar();
       } else {
-        setSearchText('');
+        setSearchText("");
       }
     };
 
-    document.addEventListener('keydown', handleEsc);
-    return () => document.removeEventListener('keydown', handleEsc);
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
   }, [searchText]);
 
   const toggleSearchBar = () => {

@@ -1,9 +1,9 @@
-import { create } from 'zustand';
-import { Bookshelf, Bookmark, BookmarkType, Folders } from '../../types/store';
-import BookmarkApi from '../utils/bookmarkApi';
-import { layoutDB, LayoutMap } from '../utils/layoutDB';
-import { Point } from '../../types/Point';
-import { Z_INDEX, POSITION_OFFSET } from '../utils/constant';
+import { create } from "zustand";
+import { Bookshelf, Bookmark, BookmarkType, Folders } from "../../types/store";
+import BookmarkApi from "../utils/bookmarkApi";
+import { layoutDB, LayoutMap } from "../utils/layoutDB";
+import { Point } from "../../types/Point";
+import { Z_INDEX, POSITION_OFFSET } from "../utils/constant";
 
 type Position = {
   x: number;
@@ -59,7 +59,7 @@ type Action = {
   ) => Promise<void>;
 
   // contextMenu
-  setContextMenu: (state: Partial<State['contextMenu']>) => void;
+  setContextMenu: (state: Partial<State["contextMenu"]>) => void;
 
   // focus
   addFocus: (timestampIds: string[], bookshelfTimestamp: string) => Set<string>; // 새로운 ID 추가
@@ -69,7 +69,7 @@ type Action = {
 
   // dragndrop
   isDragging: () => boolean;
-  setDragAndDrop: (state: Partial<State['dragAndDrop']>) => void;
+  setDragAndDrop: (state: Partial<State["dragAndDrop"]>) => void;
   flush: () => void;
 
   // folder
@@ -84,7 +84,7 @@ type Action = {
     folderWidth: number
   ) => Position;
 
-  setEditDialog: (state: Partial<State['editDialog']>) => void;
+  setEditDialog: (state: Partial<State["editDialog"]>) => void;
 };
 
 export const rootStore = create<State & Action>()((set, get) => ({
@@ -101,7 +101,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
   // bookmark,
   bookmark: {} as Bookmark,
   refreshBookmark: async () => {
-    const subTree = await BookmarkApi.getSubTree('1');
+    const subTree = await BookmarkApi.getSubTree("1");
     const layout = await layoutDB.getAllLayout();
     const bookmark = addRowColToTree(subTree, layout);
 
@@ -142,8 +142,8 @@ export const rootStore = create<State & Action>()((set, get) => ({
     const { focusedIds } = get().focus;
     const newSet = new Set([...focusedIds, ...timestampIds]);
 
-    const timestampId = timestampIds[0] || '';
-    const [, id] = timestampId.split('_');
+    const timestampId = timestampIds[0] || "";
+    const [, id] = timestampId.split("_");
 
     set(() => ({
       focus: {
@@ -181,7 +181,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
 
     const getNextItem = () => {
       switch (direction) {
-        case 'ArrowUp':
+        case "ArrowUp":
           return (() => {
             const targetItems = items.filter((item) => item.col === col);
             const targetIndex = targetItems.findIndex(
@@ -189,7 +189,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
             );
             return targetItems[targetIndex - 1];
           })();
-        case 'ArrowDown':
+        case "ArrowDown":
           return (() => {
             const targetItems = items.filter((item) => item.col === col);
             const targetIndex = targetItems.findIndex(
@@ -197,7 +197,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
             );
             return targetItems[targetIndex + 1];
           })();
-        case 'ArrowLeft':
+        case "ArrowLeft":
           return (() => {
             const targetItems = items.filter((item) => item.row === row);
             const targetIndex = targetItems.findIndex(
@@ -205,7 +205,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
             );
             return targetItems[targetIndex - 1];
           })();
-        case 'ArrowRight':
+        case "ArrowRight":
           return (() => {
             const targetItems = items.filter((item) => item.row === row);
             const targetIndex = targetItems.findIndex(
@@ -275,7 +275,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
         currentZIndex: get().folder.currentZIndex + Z_INDEX.FOLDER_OFFSET,
       },
     });
-    console.debug('open folder >> ', timestamp);
+    console.debug("open folder >> ", timestamp);
   },
 
   focusFolder: (timestamp) => {
@@ -291,7 +291,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
       },
     });
 
-    console.debug('focus folder >> ', timestamp);
+    console.debug("focus folder >> ", timestamp);
   },
 
   closeFolder: (timestamp) => {
@@ -303,7 +303,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
         folders: newFolders,
       },
     });
-    console.debug('close folder >> ', timestamp);
+    console.debug("close folder >> ", timestamp);
   },
 
   /** @TODO 미사용?  */
@@ -315,7 +315,7 @@ export const rootStore = create<State & Action>()((set, get) => ({
         return acc;
       }, {} as Folders);
     set({ folder: { ...get().folder, folders: newFolders } });
-    console.debug('close folder >> ', id);
+    console.debug("close folder >> ", id);
   },
 
   updateFolderCurrentPosition: (position) => {

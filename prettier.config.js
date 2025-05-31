@@ -2,9 +2,6 @@ export default {
   // 세미콜론을 붙일지 말지 설정
   semi: true, // 세미콜론을 항상 사용
 
-  // 작은 따옴표 사용
-  singleQuote: true, // 작은 따옴표(') 사용, 기본은 큰 따옴표(")
-
   // 객체의 마지막 항목에 컴마 추가
   trailingComma: "es5", // ES5에서 유효한 곳에만 trailing comma를 추가 (객체나 배열 항목 등)
 

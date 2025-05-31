@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import { rootStore } from '../store/rootStore';
+import { useEffect, useRef, useState } from "react";
+import { rootStore } from "../store/rootStore";
 
-import BookmarkApi from '../utils/bookmarkApi';
-import { Z_INDEX } from '../utils/constant';
-import { layoutDB } from '../utils/layoutDB';
+import BookmarkApi from "../utils/bookmarkApi";
+import { Z_INDEX } from "../utils/constant";
+import { layoutDB } from "../utils/layoutDB";
 
 const InfoDialog = () => {
   const { editDialog, setEditDialog, refreshBookmark } = rootStore();
@@ -31,13 +31,13 @@ const InfoDialog = () => {
     handleCloseButtonClick();
     refreshBookmark();
   };
-  const [title, setTitle] = useState<string>('');
-  const [url, setUrl] = useState<string>('');
+  const [title, setTitle] = useState<string>("");
+  const [url, setUrl] = useState<string>("");
 
   useEffect(() => {
     if (bookmark) {
       setTitle(bookmark.title);
-      setUrl(bookmark.url || '');
+      setUrl(bookmark.url || "");
     }
   }, [bookmark]);
 
@@ -59,7 +59,7 @@ const InfoDialog = () => {
         style={{
           zIndex: Z_INDEX.CONTEXT_MENU,
           boxShadow:
-            'inset 0 0 3px rgba(0, 0, 0, 0.1) ,  0 0 3px rgba(0, 0, 0, 0.5), 0 8px 40px rgba(0, 0, 0, 0.25)',
+            "inset 0 0 3px rgba(0, 0, 0, 0.1) ,  0 0 3px rgba(0, 0, 0, 0.5), 0 8px 40px rgba(0, 0, 0, 0.25)",
         }}
       >
         <div className='z-10 m-5 flex flex-col gap-5'>
@@ -74,7 +74,7 @@ const InfoDialog = () => {
                     className='flex-1 rounded px-[7px] py-[3px] focus:outline-[#007BFF80]'
                     style={{
                       boxShadow:
-                        ' 0px 0.5px 2.5px rgba(0, 0, 0, 0.3), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.05)',
+                        " 0px 0.5px 2.5px rgba(0, 0, 0, 0.3), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.05)",
                     }}
                     onChange={(e) => {
                       setTitle(e.target.value);
@@ -96,7 +96,7 @@ const InfoDialog = () => {
                     className='flex-1 rounded px-[7px] py-[3px] focus:outline-[#007BFF80]'
                     style={{
                       boxShadow:
-                        ' 0px 0.5px 2.5px rgba(0, 0, 0, 0.3), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.05)',
+                        " 0px 0.5px 2.5px rgba(0, 0, 0, 0.3), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.05)",
                     }}
                     value={url}
                     onChange={(e) => {
@@ -112,8 +112,8 @@ const InfoDialog = () => {
               <button
                 style={{
                   boxShadow:
-                    '0px 0px 0px 0.5px rgba(0, 0, 0, 0.05),  0px 0.5px 2.5px 0px rgba(0, 0, 0, 0.3)',
-                  background: 'white',
+                    "0px 0px 0px 0.5px rgba(0, 0, 0, 0.05),  0px 0.5px 2.5px 0px rgba(0, 0, 0, 0.3)",
+                  background: "white",
                 }}
                 onClick={handleRemoveButtonClick}
                 className='h-[22px] w-14 rounded-md px-[7px] py-[3px] text-[#FF3B30]'
@@ -125,8 +125,8 @@ const InfoDialog = () => {
               <button
                 style={{
                   boxShadow:
-                    '0px 0px 0px 0.5px rgba(0, 0, 0, 0.05),  0px 0.5px 2.5px 0px rgba(0, 0, 0, 0.3)',
-                  background: 'white',
+                    "0px 0px 0px 0.5px rgba(0, 0, 0, 0.05),  0px 0.5px 2.5px 0px rgba(0, 0, 0, 0.3)",
+                  background: "white",
                 }}
                 onClick={handleCloseButtonClick}
                 className='h-[22px] w-14 rounded-md px-[7px] py-[3px] text-black'
@@ -136,9 +136,9 @@ const InfoDialog = () => {
               <button
                 style={{
                   boxShadow:
-                    '0px 0px 0px 0.5px rgba(0, 122, 255, 0.12),  0px 1px 2.5px 0px rgba(0, 122, 255, 0.24)',
+                    "0px 0px 0px 0.5px rgba(0, 122, 255, 0.12),  0px 1px 2.5px 0px rgba(0, 122, 255, 0.24)",
                   background:
-                    ' linear-gradient(to bottom, rgba(255,255,255,0.17), rgba(255,255,255,0)), #007AFF',
+                    " linear-gradient(to bottom, rgba(255,255,255,0.17), rgba(255,255,255,0)), #007AFF",
                 }}
                 onClick={handleSaveButtonClick}
                 className='h-[22px] w-11 rounded-md px-[7px] py-[3px] text-white'

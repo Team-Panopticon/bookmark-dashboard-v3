@@ -1,12 +1,12 @@
-import type { FC } from 'react';
-import { useEffect, useMemo, useRef } from 'react';
-import { type Bookmark } from '../../types/store';
-import { ITEM_HEIGHT, ITEM_WIDTH } from '../utils/constant';
-import BookmarkView from './BookmarkView';
-import { getRowColUpdatedFiles } from '../utils/getRowColUpdatedFiles';
-import { useEventHandler } from '../hooks/useEventHandler';
-import { rootStore } from '../store/rootStore';
-import BookmarkApi from '../utils/bookmarkApi';
+import type { FC } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import { type Bookmark } from "../../types/store";
+import { ITEM_HEIGHT, ITEM_WIDTH } from "../utils/constant";
+import BookmarkView from "./BookmarkView";
+import { getRowColUpdatedFiles } from "../utils/getRowColUpdatedFiles";
+import { useEventHandler } from "../hooks/useEventHandler";
+import { rootStore } from "../store/rootStore";
+import BookmarkApi from "../utils/bookmarkApi";
 
 export interface DarkModeEvent {
   darkMode: boolean;
@@ -14,7 +14,7 @@ export interface DarkModeEvent {
 
 // eslint-disable-next-line
 export const isDarkModeEvent = (event: any): event is DarkModeEvent => {
-  if (typeof event?.darkMode === 'boolean') {
+  if (typeof event?.darkMode === "boolean") {
     return true;
   }
   return false;
@@ -123,7 +123,7 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
             }}
             onDoubleClick={handleDoubleClickBookmark}
             style={{
-              boxShadow: isDragging ? ' rgba(0, 0, 0, 0.04) 0px 3px 5px;' : '',
+              boxShadow: isDragging ? " rgba(0, 0, 0, 0.04) 0px 3px 5px;" : "",
             }}
             isEdit={isEdit}
             setIsEdit={(newIsEdit) => {

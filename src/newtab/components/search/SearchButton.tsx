@@ -1,5 +1,5 @@
-import SearchIcon from '../../../assets/search.svg';
-import { Z_INDEX } from '../../utils/constant';
+import SearchIcon from "../../../assets/search.svg";
+import { Z_INDEX } from "../../utils/constant";
 
 interface Props {
   onClick: () => void;

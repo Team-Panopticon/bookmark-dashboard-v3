@@ -1,16 +1,16 @@
-import { useEffect, useRef, useState, type FC } from 'react';
-import Bookshelf from './Bookshelf';
-import Moveable from 'react-moveable';
-import { Bookmark } from '../../types/store';
-import { rootStore } from '../store/rootStore';
-import CloseIcon from '../../assets/close.svg';
-import BackIcon from '../../assets/back.svg';
-import BackIconLG from '../../assets/back_lg.svg';
-import ForwardIcon from '../../assets/forward.svg';
-import ForwardIconLG from '../../assets/forward_lg.svg';
+import { useEffect, useRef, useState, type FC } from "react";
+import Bookshelf from "./Bookshelf";
+import Moveable from "react-moveable";
+import { Bookmark } from "../../types/store";
+import { rootStore } from "../store/rootStore";
+import CloseIcon from "../../assets/close.svg";
+import BackIcon from "../../assets/back.svg";
+import BackIconLG from "../../assets/back_lg.svg";
+import ForwardIcon from "../../assets/forward.svg";
+import ForwardIconLG from "../../assets/forward_lg.svg";
 
-import Resize from '../../assets/Resize.svg';
-import { useEventHandler } from '../hooks/useEventHandler';
+import Resize from "../../assets/Resize.svg";
+import { useEventHandler } from "../hooks/useEventHandler";
 
 const Folder = ({
   id,
@@ -79,12 +79,12 @@ const Folder = ({
         onMouseDown={() => handleMouseDown(timestamp)}
         className='absolute flex size-[500px] flex-col rounded-lg border border-gray-200 bg-neutral-50 shadow-2xl'
         style={{
-          top: '10px',
+          top: "10px",
           left: 0,
-          maxWidth: 'auto',
-          maxHeight: 'auto',
-          minWidth: '200px',
-          minHeight: 'auto',
+          maxWidth: "auto",
+          maxHeight: "auto",
+          minWidth: "200px",
+          minHeight: "auto",
           zIndex,
         }}
         ref={targetRef}
@@ -118,7 +118,7 @@ const Folder = ({
             </button>
             <button
               className={`ml-2 flex size-8 shrink-0 items-center justify-center rounded-md border-none transition-all  duration-500
-                  ${canGoBack && 'hover:bg-gray-200'}`}
+                  ${canGoBack && "hover:bg-gray-200"}`}
               disabled={!canGoBack}
               onClick={goBack}
             >
@@ -129,7 +129,7 @@ const Folder = ({
             </button>
             <button
               className={`flex size-8 shrink-0 items-center justify-center rounded-md border-none transition-all duration-500
-                  ${canGoForward && 'hover:bg-gray-200'}`}
+                  ${canGoForward && "hover:bg-gray-200"}`}
               disabled={!canGoForward}
               onClick={goForward}
             >

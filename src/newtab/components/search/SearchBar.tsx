@@ -1,11 +1,11 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import SearchIcon from '../../../assets/search.svg';
-import FolderImage from '../../../assets/folder.svg';
-import { rootStore } from '../../store/rootStore';
-import { Bookmark, BookmarkType } from '../../../types/store';
-import { useEventHandler } from '../../hooks/useEventHandler';
-import { Z_INDEX } from '../../utils/constant';
-import { getFaviconURI } from '../../utils/getFaviconURI';
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import SearchIcon from "../../../assets/search.svg";
+import FolderImage from "../../../assets/folder.svg";
+import { rootStore } from "../../store/rootStore";
+import { Bookmark, BookmarkType } from "../../../types/store";
+import { useEventHandler } from "../../hooks/useEventHandler";
+import { Z_INDEX } from "../../utils/constant";
+import { getFaviconURI } from "../../utils/getFaviconURI";
 
 function isFolder(
   bookmark: Bookmark
@@ -54,7 +54,7 @@ const SearchBar = ({
   }, []);
 
   useEffect(() => {
-    if (searchText != '') {
+    if (searchText != "") {
       setResults(searchBookmarks(bookmark, searchText));
     } else {
       setResults([]);
@@ -76,7 +76,7 @@ const SearchBar = ({
       className='absolute left-1/2 top-[20%] flex max-h-[60vh] w-[600px] -translate-x-1/2 flex-col overflow-hidden rounded-2xl border border-gray-300 bg-[rgba(253,253,253,0.5)]  backdrop-blur-2xl'
       style={{
         boxShadow:
-          '0 4px 30px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)',
+          "0 4px 30px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)",
         zIndex: Z_INDEX.SEARCH,
       }}
     >
@@ -109,7 +109,7 @@ const SearchBar = ({
                   <img src={FolderImage} className='mr-3 size-5' />
                 ) : (
                   <img
-                    src={getFaviconURI(result.url ?? '', 32)}
+                    src={getFaviconURI(result.url ?? "", 32)}
                     className='mr-3 size-5'
                   />
                 )}
