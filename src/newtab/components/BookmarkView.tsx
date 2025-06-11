@@ -194,7 +194,7 @@ const BookmarkView = ({
               style={{
                 fieldSizing: "content",
               }}
-              className="max-h-9 resize-none overflow-hidden break-words rounded-sm border border-[#5BA1FA] bg-[#B3D7FE] px-0.5 caret-white outline-none ring ring-[#81B5FB]"
+              className="max-h-9 resize-none text-black overflow-hidden break-words rounded-sm border border-[#5BA1FA] bg-[#B3D7FE] px-0.5 caret-white outline-none ring ring-[#81B5FB]"
               onChange={(e) => {
                 setNewTitle(e.target.value.replace(/[\n|\r\n|\r|]/g, ""));
               }}
