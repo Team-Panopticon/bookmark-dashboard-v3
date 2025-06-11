@@ -72,7 +72,7 @@ const SearchBar = ({hideSearchBar, searchText, onChangeSearchInput}: Props) => {
 
   return (
     <div
-      className="absolute left-1/2 top-[20%] flex max-h-[60vh] w-[600px] -translate-x-1/2 flex-col overflow-hidden rounded-2xl border border-gray-300 bg-[rgba(253,253,253,0.5)]  backdrop-blur-2xl"
+      className="absolute left-1/2 top-[20%] flex max-h-[60vh] w-[600px] -translate-x-1/2 flex-col overflow-hidden rounded-2xl border-[0.1px] border-gray-400 bg-[rgba(253,253,253,0.5)]  backdrop-blur-2xl"
       style={{
         boxShadow:
           "0 4px 30px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)",
@@ -81,7 +81,7 @@ const SearchBar = ({hideSearchBar, searchText, onChangeSearchInput}: Props) => {
     >
       <div className="flex h-[52px] items-center px-3 py-2">
         <img
-          className="opacity-70"
+          className="opacity-80"
           src={SearchIcon}
           width={24}
           alt="Search Icon"
