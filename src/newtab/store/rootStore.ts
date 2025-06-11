@@ -262,19 +262,25 @@ export const rootStore = create<State & Action>()((set, get) => ({
   },
   openFolder: (id) => {
     const timestamp = `${Date.now()}`;
+    const { folder, updateFolderCurrentPosition, getFolderCurrentPosition } =
+      get();
     set({
       folder: {
-        ...get().folder,
+        ...folder,
         folders: {
-          ...get().folder.folders,
+          ...folder.folders,
           [timestamp]: {
             id,
-            zIndex: get().folder.currentZIndex + Z_INDEX.FOLDER_OFFSET,
+            zIndex: folder.currentZIndex + Z_INDEX.FOLDER_OFFSET,
           },
         },
-        currentZIndex: get().folder.currentZIndex + Z_INDEX.FOLDER_OFFSET,
+        currentZIndex: folder.currentZIndex + Z_INDEX.FOLDER_OFFSET,
       },
     });
+
+    const folderCurrentPosition = getFolderCurrentPosition(0, 0);
+    updateFolderCurrentPosition(folderCurrentPosition);
+
     console.debug("open folder >> ", timestamp);
   },
 
@@ -320,8 +326,8 @@ export const rootStore = create<State & Action>()((set, get) => ({
 
   updateFolderCurrentPosition: (position) => {
     const targetPosition = {
-      x: position.y + POSITION_OFFSET,
-      y: position.x + POSITION_OFFSET,
+      x: position.x + POSITION_OFFSET,
+      y: position.y + POSITION_OFFSET,
     };
     set({ folder: { ...get().folder, currentPosition: targetPosition } });
   },
@@ -334,17 +340,6 @@ export const rootStore = create<State & Action>()((set, get) => ({
       y: y + folderHeight >= offsetHeight ? 0 : y,
       x: x + folderWidth >= offsetWidth ? 0 : x,
     };
-
-    /** @TODO: set과 get을 분리 */
-    set({
-      folder: {
-        ...get().folder,
-        currentPosition: {
-          y: targetPosition.y + POSITION_OFFSET,
-          x: targetPosition.x + POSITION_OFFSET,
-        },
-      },
-    });
 
     return targetPosition;
   },

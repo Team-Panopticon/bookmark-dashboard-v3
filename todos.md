@@ -13,6 +13,10 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
   - [x] favicon
   - [ ] search
     - [ ] search 에서 키보드로 위아래 선택가능
+      1. 좌 / 우 이동 시 입력 텍스트 커서 위치가 변경되어야함 (현재는 바깥 파일 focus가 바뀜)
+      2. 상 / 하 이동 시 focus를 변경하지 말고, focusedIndex같은 내부 변수를 가지고 변경하기
+          - input 영역 때문에 focus를 줄 수가 없음
+          - focusedIndex와 같은 검색 결과에 스타일을 적용하고, 엔터 눌렀을 때 랜딩하게 내부 로직으로 구현
     - [ ] 단축키 cmd k + a
   - 팝업
     - [ ] 바탕화면
