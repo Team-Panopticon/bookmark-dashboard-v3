@@ -56,7 +56,7 @@ body {
 }
 
 html {
-  overflow-y: auto !important;
+  overflow: hidden;
 }
 
 .moveable-line {
