@@ -11,12 +11,11 @@ import InfoDialog from "../newtab/components/InfoDialog";
 import {layoutDB} from "../newtab/utils/layoutDB";
 import BookmarkApi from "../newtab/utils/bookmarkApi";
 
-import {settingStore} from "../newtab/store/settingStore";
 const DESKTOP_TIMESTAMP_ID = `${Date.now()}`;
 
 const Desktop: FC = () => {
   const {bookmark, refreshBookmark, isDragging} = rootStore();
-  const {theme, setTheme} = settingStore();
+
   const {
     globalEventHandelr: {handleKeyDown, handleMouseUp},
   } = useEventHandler({});
@@ -79,22 +78,11 @@ const Desktop: FC = () => {
     };
   }, [handleKeyDown, handleMouseUp]);
 
-  useEffect(() => {
-    const listener = (message: {type: string; theme: "wallpaper" | "none"}) => {
-      if (message.type === "updateConfig") {
-        setTheme(message.theme);
-      }
-    };
-    chrome.runtime.onMessage.addListener(listener);
-    return () => {
-      chrome.runtime.onMessage.removeListener(listener);
-    };
-  }, [setTheme]);
   return (
     <div
       className="size-full"
       style={{
-        backgroundImage: theme === "wallpaper" ? "url(catalina.jpg)" : "none",
+        backgroundImage: "url(catalina.jpg)",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
