@@ -18,7 +18,7 @@ const Desktop: FC = () => {
   const {bookmark, refreshBookmark, isDragging} = rootStore();
   const {theme, setTheme} = settingStore();
   const {
-    globalEventHandelr: {handleKeyDown},
+    globalEventHandelr: {handleKeyDown, handleMouseUp},
   } = useEventHandler({});
 
   const setBookmarksEventHandlers = useCallback(() => {
@@ -72,10 +72,12 @@ const Desktop: FC = () => {
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("mouseup", handleMouseUp);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [handleKeyDown]);
+  }, [handleKeyDown, handleMouseUp]);
 
   useEffect(() => {
     const listener = (message: {type: string; theme: "wallpaper" | "none"}) => {

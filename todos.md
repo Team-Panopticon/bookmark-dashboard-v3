@@ -10,7 +10,16 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
   - [x] ellipsis 색상 표현 오류
   - [x] text area 줄수 제한
   - [x] 타이틀 3글자 검토
-  - [ ] favicon
+  - [x] favicon
+  - [ ] search
+    - [ ] search 에서 키보드로 위아래 선택가능
+    - [ ] 단축키 cmd k + a
+  - 팝업
+    - [ ] 바탕화면
+    - [ ] 다크모드
+  - [ ] url 수정 팝업에서 favicon 수정
+  - [ ] 북마크 드래그해서 폴더위로 호버시 폴더 focus 처리
+  - [ ] 폴더 열리는 위치 수정 (같은 위치에 계속 열리고 있음)
 
 - 버그만 핵심적인것만 고치고 배포일정
 
@@ -32,24 +41,41 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
 - [x] 마우스 down 하고 그자리에서 up 시 드래그 상태가 유지됨
 - [x] 마우스 클릭 시에 드래깅 표시(bg 회색)이 잠깐 보임
   - 마우스 다운 시에 보이는건데, 드래깅이 아니면 안보여야됨
+- [x] Bookmark 삭제 시 LayoutDB와 동기화 안됨
+- [x] 폴더 드래그해서 화면밖으로 나가는거 방지()
+      기존(vue)에는 document에 mouseup을 추가해서 화면 밖에서 mouseup을 해도 mouseup을 감지할 수 있었음. 지금은 component에 이벤트를 추가해서 감지할 수 없음
+- [x] 이동 시 북마크가 새로 생성됨 (브라우저 북마크 탭에서 이동됨) -> 이동되지 않도록
+- [ ] 수정 창 ESC 클릭 시 닫히도록
+- [ ] 폴더 아래로 스크롤하면 화면 전체가 아래로 내려감
 
 ### 추가 기능
 
-- [ ] 컨텍스트메뉴 주소바꾸기 구현(optional),URL 수정
+- [x] 컨텍스트메뉴 주소바꾸기 구현(optional),URL 수정
       버튼 이름은 `정보 수정`?
       mac save dialog 디자인 / title, url 수정, 버튼들은 그대로, 상단에 favicon (없으면 안보여줌)
-- [ ] 검색기능
+- [x] 검색기능
       float button + spotlight ui
-- [ ] focus keyboard 이동
-- [ ] favicon api 적용
+- [x] focus keyboard 이동
+- [x] favicon api 적용
 
 - [ ] 폴더 타이틀 아래에 북마크 갯수 표시
 - [ ] 바탕화면
 - [ ] 드래깅 파일이 폴더위에 올렸을때 - 폴더에 대한 포커싱
 
+- [ ] 실행 취소, 취소를 취소
+
+  - 행동별로 이벤트를 저장해서 반대로 실행 (DELETE, MOVE, CREATE, ....)
+
 - [ ] 삭제 할 때 알림? (폴더를 삭제하면 하위 북마크들도 다 삭제된다는...)
-  - mac은 안해준다 -> 휴지통이 있으니까
+  - ~~mac은 안해준다 -> 휴지통이 있으니까~~
   - soft delete? 휴지통? ...
+    1. 검색버튼 옆에 `...` 버튼 만들고 휴지통 드랍다운
+    2. 검색버튼 옆에 휴지통 버튼
+  - 폴더 삭제할 때
+    전체 search 해서 다 저장하고....?
+  - 복원할 때
+    - 되돌아갈 위치가 차있으면 -> auto로 넣고 자동 배치 받기
+    - 되돌아갈 부모 폴더가 없으면 -> 바탕화면에 집어넣기
 - [x] 바탕화면에서 북마크 포커스후 빈공간에 우클릭시 메뉴표기가 북마크 메뉴표기로 나오는 현상
 
 ## 25-03-08
