@@ -1,15 +1,15 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import {ChangeEvent, useEffect, useRef, useState} from "react";
 import SearchIcon from "../../../assets/search.svg";
 import FolderImage from "../../../assets/folder.svg";
-import { rootStore } from "../../store/rootStore";
-import { Bookmark, BookmarkType } from "../../../types/store";
-import { useEventHandler } from "../../hooks/useEventHandler";
-import { Z_INDEX } from "../../utils/constant";
-import { getFaviconURI } from "../../utils/getFaviconURI";
+import {rootStore} from "../../store/rootStore";
+import {Bookmark, BookmarkType} from "../../../types/store";
+import {useEventHandler} from "../../hooks/useEventHandler";
+import {Z_INDEX} from "../../utils/constant";
+import {getFaviconURI} from "../../utils/getFaviconURI";
 
 function isFolder(
   bookmark: Bookmark
-): bookmark is Bookmark & { children: Bookmark[] } {
+): bookmark is Bookmark & {children: Bookmark[]} {
   return Array.isArray(bookmark.children);
 }
 
@@ -17,7 +17,10 @@ const searchBookmarks = (bookmark: Bookmark, keyword: string) => {
   const results: Bookmark[] = [];
 
   const doSearch = (bookmark: Bookmark, keyword: string) => {
-    if (bookmark.title && bookmark.title.includes(keyword)) {
+    if (
+      bookmark.title &&
+      bookmark.title.toLowerCase().includes(keyword.toLowerCase())
+    ) {
       results.push(bookmark);
     }
 
@@ -36,14 +39,10 @@ interface Props {
   onChangeSearchInput: (value: string) => void;
 }
 
-const SearchBar = ({
-  hideSearchBar,
-  searchText,
-  onChangeSearchInput,
-}: Props) => {
-  const { bookmark } = rootStore();
+const SearchBar = ({hideSearchBar, searchText, onChangeSearchInput}: Props) => {
+  const {bookmark} = rootStore();
   const {
-    bookmarkEventHandler: { handleDoubleClickBookmark: handleClickBookmark },
+    bookmarkEventHandler: {handleDoubleClickBookmark: handleClickBookmark},
   } = useEventHandler({});
   const [results, setResults] = useState<Bookmark[]>([]);
 

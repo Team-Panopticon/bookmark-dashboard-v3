@@ -1,11 +1,11 @@
-import type { FC } from "react";
-import { useEffect, useMemo, useRef } from "react";
-import { type Bookmark } from "../../types/store";
-import { ITEM_HEIGHT, ITEM_WIDTH } from "../utils/constant";
+import type {FC} from "react";
+import {useEffect, useMemo, useRef} from "react";
+import {type Bookmark} from "../../types/store";
+import {ITEM_HEIGHT, ITEM_WIDTH} from "../utils/constant";
 import BookmarkView from "./BookmarkView";
-import { getRowColUpdatedFiles } from "../utils/getRowColUpdatedFiles";
-import { useEventHandler } from "../hooks/useEventHandler";
-import { rootStore } from "../store/rootStore";
+import {getRowColUpdatedFiles} from "../utils/getRowColUpdatedFiles";
+import {useEventHandler} from "../hooks/useEventHandler";
+import {rootStore} from "../store/rootStore";
 import BookmarkApi from "../utils/bookmarkApi";
 
 export interface DarkModeEvent {
@@ -24,19 +24,20 @@ type Props = {
   folder: Bookmark;
   navigateTo?: (bookmark: Bookmark) => void;
   timestamp: string;
+  isDesktop?: boolean;
 };
 
-const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
-  const { children: files = [] } = folder;
+const Bookshelf: FC<Props> = ({folder, navigateTo, timestamp, isDesktop}) => {
+  const {children: files = []} = folder;
   const {
     updateFilesLayout,
     dragAndDrop = {},
-    focus: { focusedIds, focusCursor },
+    focus: {focusedIds, focusCursor},
     refreshBookmark,
     edit,
     setEdit,
   } = rootStore();
-  const { bookmark: draggingFile, timestamp: draggingFileTimestamp } =
+  const {bookmark: draggingFile, timestamp: draggingFileTimestamp} =
     dragAndDrop;
 
   const originGridContainerRef = useRef<HTMLDivElement>(null);
@@ -47,7 +48,7 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
       handleMouseDownBookmark,
       handleMouseUpBookmark,
     },
-    bookshelfEventHandler: { handleMouseDownBookshelf, handleMouseUpBookshelf },
+    bookshelfEventHandler: {handleMouseDownBookshelf, handleMouseUpBookshelf},
   } = useEventHandler({
     bookshelf: folder,
     navigateTo,
@@ -87,6 +88,7 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
       style={{
         gridTemplateColumns: `repeat(auto-fill, ${ITEM_WIDTH}px)`,
         gridAutoRows: `${ITEM_HEIGHT}px`,
+        backgroundImage: folder.id === "1" ? "transparent" : "white",
       }}
       ref={originGridContainerRef}
       onMouseUp={handleMouseUpBookshelf}
@@ -106,6 +108,7 @@ const Bookshelf: FC<Props> = ({ folder, navigateTo, timestamp }) => {
         return (
           <BookmarkView
             key={timestampId}
+            isDesktop={isDesktop}
             bookmark={file}
             focused={isFoscused}
             isCurrentFocusCursor={isCurrentFocusCursor}

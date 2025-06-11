@@ -1,6 +1,6 @@
 export const GRID_CONTAINER_PADDING = 20;
 export const ITEM_HEIGHT = 108;
-export const ITEM_WIDTH = 88;
+export const ITEM_WIDTH = 92;
 
 export const Z_INDEX = {
   DRAGGING_FILE: 9999,
@@ -11,3 +11,7 @@ export const Z_INDEX = {
 };
 
 export const POSITION_OFFSET = 50;
+
+export const FAVICON_PREFIX =
+  "https://www.google.com/s2/favicons?sz=64&domain=";
+export const DESKTOP_ID = 1;
