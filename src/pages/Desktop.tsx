@@ -1,23 +1,23 @@
-import {FC, useCallback, useEffect} from "react";
+import { FC, useCallback, useEffect } from "react";
 import Bookshelf from "../newtab/components/Bookshelf";
 import FolderManager from "../newtab/components/FolderManager";
 import ContextMenu from "../newtab/components/ContextMenu";
-import {rootStore} from "../newtab/store/rootStore";
+import { rootStore } from "../newtab/store/rootStore";
 import DraggingFile from "../newtab/components/DraggingFile";
 import Search from "../newtab/components/search/Search";
-import {useEventHandler} from "../newtab/hooks/useEventHandler";
+import { useEventHandler } from "../newtab/hooks/useEventHandler";
 import InfoDialog from "../newtab/components/InfoDialog";
 
-import {layoutDB} from "../newtab/utils/layoutDB";
+import { layoutDB } from "../newtab/utils/layoutDB";
 import BookmarkApi from "../newtab/utils/bookmarkApi";
 
 const DESKTOP_TIMESTAMP_ID = `${Date.now()}`;
 
 const Desktop: FC = () => {
-  const {bookmark, refreshBookmark, isDragging} = rootStore();
+  const { bookmark, refreshBookmark, isDragging } = rootStore();
 
   const {
-    globalEventHandelr: {handleKeyDown, handleMouseUp},
+    globalEventHandelr: { handleKeyDown, handleMouseUp },
   } = useEventHandler({});
 
   const setBookmarksEventHandlers = useCallback(() => {

@@ -1,7 +1,7 @@
-import {CSSProperties, useEffect, useRef, useState} from "react";
-import {BookmarkType, type Bookmark} from "../../types/store";
+import { CSSProperties, useEffect, useRef, useState } from "react";
+import { BookmarkType, type Bookmark } from "../../types/store";
 import FolderImage from "../../assets/folder.svg";
-import {FAVICON_PREFIX} from "../utils/constant";
+import { getFaviconURI } from "../utils/getFaviconURI";
 
 type Props = {
   bookmark: Bookmark;
@@ -141,7 +141,7 @@ const BookmarkView = ({
                 src={FolderImage}
                 width={64}
                 height={64}
-                style={{pointerEvents: "none"}}
+                style={{ pointerEvents: "none" }}
               />
             </div>
           ) : (
@@ -151,7 +151,7 @@ const BookmarkView = ({
               {showImgIcon && (
                 <img
                   className="pointer-events-none"
-                  src={FAVICON_PREFIX + bookmark.url}
+                  src={getFaviconURI(bookmark.url ?? "", 52)}
                   onLoad={(e) => {
                     const targetImg = e.target as HTMLImageElement;
                     if (targetImg.width <= 16 || targetImg.height <= 16) {
@@ -194,7 +194,7 @@ const BookmarkView = ({
               style={{
                 fieldSizing: "content",
               }}
-              className="max-h-9 resize-none text-black overflow-hidden break-words rounded-sm border border-[#5BA1FA] bg-[#B3D7FE] px-0.5 caret-white outline-none ring ring-[#81B5FB]"
+              className="max-h-9 resize-none overflow-hidden break-words rounded-sm border border-[#5BA1FA] bg-[#B3D7FE] px-0.5 text-black caret-white outline-none ring ring-[#81B5FB]"
               onChange={(e) => {
                 setNewTitle(e.target.value.replace(/[\n|\r\n|\r|]/g, ""));
               }}
