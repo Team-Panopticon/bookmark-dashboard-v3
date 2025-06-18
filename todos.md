@@ -4,8 +4,7 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
 
 - ## ui 개선 사항
 
-  - [x] 폴더 헤더에서 아래 파일에 대한 컨텍스트 잡히는 현상 -> 컨텍스트 안되도록
-        수정
+  - [x] 폴더 헤더에서 아래 파일에 대한 컨텍스트 잡히는 현상 -> 컨텍스트 안되도록 수정
   - [x] folder header border height 늘어나는 현상
   - [x] 드래깅중 드래깅 파일에 대한 포커싱 - 제목만, 투명도
   - [x] ellipsis 색상 표현 오류
@@ -14,13 +13,10 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
   - [x] favicon
   - [ ] search
     - [ ] search 에서 키보드로 위아래 선택가능
-      1. 좌 / 우 이동 시 입력 텍스트 커서 위치가 변경되어야함 (현재는 바깥 파일
-         focus가 바뀜)
-      2. 상 / 하 이동 시 focus를 변경하지 말고, focusedIndex같은 내부 변수를
-         가지고 변경하기
-         - input 영역 때문에 focus를 줄 수가 없음
-         - focusedIndex와 같은 검색 결과에 스타일을 적용하고, 엔터 눌렀을 때
-           랜딩하게 내부 로직으로 구현
+      1. 좌 / 우 이동 시 입력 텍스트 커서 위치가 변경되어야함 (현재는 바깥 파일 focus가 바뀜)
+      2. 상 / 하 이동 시 focus를 변경하지 말고, focusedIndex같은 내부 변수를 가지고 변경하기
+          - input 영역 때문에 focus를 줄 수가 없음
+          - focusedIndex와 같은 검색 결과에 스타일을 적용하고, 엔터 눌렀을 때 랜딩하게 내부 로직으로 구현
     - [ ] 단축키 cmd k + a
   - 팝업
     - [ ] 바탕화면
@@ -36,36 +32,33 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
 ### Bugfix List
 
 - [ ] 생성 시 간헐적으로 첫 번째 위치에 겹쳐서 생성됨 (조건은 모름)
-- [x] 이름 변경 시 이전 아이콘에 변경창이 뜸 -> useMemo 디펜던시 배열에
-      timestampId가 없어서 이전 값을 참조하여 생긴 문제
+- [x] 이름 변경 시 이전 아이콘에 변경창이 뜸 -> useMemo 디펜던시 배열에 timestampId가 없어서 이전 값을 참조하여 생긴 문제
   1. 1번 아이템 우클릭 + 이름변경
   2. 2번 아이템 클릭
   3. 2번 아이템 우클릭 + 이름변경
   4. 1번 아이템에 이름변경 input
 - [ ] 새로고침 직후 간헐적으로 이름변경이 안됨
-- [x] ~~폴더 내에서 navigation이 표시가 안됨~~ ~~breadcrumb 구현~~ => MAC에
-      없으므로 구현하지 않는걸로 결정함
-- [x] 폴더 title쪽에 우클릭할 때 아래 폴더 기준으로 context menu가 생성됨
-      (우클릭 안되도록)
+- [x] ~~폴더 내에서 navigation이 표시가 안됨~~
+      ~~breadcrumb 구현~~ => MAC에 없으므로 구현하지 않는걸로 결정함
+- [x] 폴더 title쪽에 우클릭할 때 아래 폴더 기준으로 context menu가 생성됨 (우클릭 안되도록)
 - [x] mouseup 시에 원래 위치에 아이콘이 살짝 보임
 - [x] 마우스 down 하고 그자리에서 up 시 드래그 상태가 유지됨
 - [x] 마우스 클릭 시에 드래깅 표시(bg 회색)이 잠깐 보임
   - 마우스 다운 시에 보이는건데, 드래깅이 아니면 안보여야됨
 - [x] Bookmark 삭제 시 LayoutDB와 동기화 안됨
-- [x] 폴더 드래그해서 화면밖으로 나가는거 방지() 기존(vue)에는 document에
-      mouseup을 추가해서 화면 밖에서 mouseup을 해도 mouseup을 감지할 수 있었음.
-      지금은 component에 이벤트를 추가해서 감지할 수 없음
-- [x] 이동 시 북마크가 새로 생성됨 (브라우저 북마크 탭에서 이동됨) -> 이동되지
-      않도록
+- [x] 폴더 드래그해서 화면밖으로 나가는거 방지()
+      기존(vue)에는 document에 mouseup을 추가해서 화면 밖에서 mouseup을 해도 mouseup을 감지할 수 있었음. 지금은 component에 이벤트를 추가해서 감지할 수 없음
+- [x] 이동 시 북마크가 새로 생성됨 (브라우저 북마크 탭에서 이동됨) -> 이동되지 않도록
 - [ ] 수정 창 ESC 클릭 시 닫히도록
 - [ ] 폴더 아래로 스크롤하면 화면 전체가 아래로 내려감
 
 ### 추가 기능
 
-- [x] 컨텍스트메뉴 주소바꾸기 구현(optional),URL 수정 버튼 이름은 `정보 수정`?
-      mac save dialog 디자인 / title, url 수정, 버튼들은 그대로, 상단에 favicon
-      (없으면 안보여줌)
-- [x] 검색기능 float button + spotlight ui
+- [x] 컨텍스트메뉴 주소바꾸기 구현(optional),URL 수정
+      버튼 이름은 `정보 수정`?
+      mac save dialog 디자인 / title, url 수정, 버튼들은 그대로, 상단에 favicon (없으면 안보여줌)
+- [x] 검색기능
+      float button + spotlight ui
 - [x] focus keyboard 이동
 - [x] favicon api 적용
 
@@ -82,12 +75,12 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
   - soft delete? 휴지통? ...
     1. 검색버튼 옆에 `...` 버튼 만들고 휴지통 드랍다운
     2. 검색버튼 옆에 휴지통 버튼
-  - 폴더 삭제할 때 전체 search 해서 다 저장하고....?
+  - 폴더 삭제할 때
+    전체 search 해서 다 저장하고....?
   - 복원할 때
     - 되돌아갈 위치가 차있으면 -> auto로 넣고 자동 배치 받기
     - 되돌아갈 부모 폴더가 없으면 -> 바탕화면에 집어넣기
-- [x] 바탕화면에서 북마크 포커스후 빈공간에 우클릭시 메뉴표기가 북마크
-      메뉴표기로 나오는 현상
+- [x] 바탕화면에서 북마크 포커스후 빈공간에 우클릭시 메뉴표기가 북마크 메뉴표기로 나오는 현상
 
 ## 25-03-08
 
@@ -100,15 +93,15 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
 
 ## 25-03-01
 
-- [x] ~~폴더 내에서 navigation이 표시가 안됨~~ (구현 안함) breadcrumb 구현
+- [x] ~~폴더 내에서 navigation이 표시가 안됨~~ (구현 안함)
+      breadcrumb 구현
 - [x] 생성 시 간헐적으로 첫 번째 위치에 겹쳐서 생성됨 (조건은 모름)
 
 ## 25-02-26
 
 - [x] 컨텍스트메뉴 폴더 생성 구현
 - [x] 컨텍스트메뉴 멀티포커스 구현
-  - focusedId가 저장되는 시점이랑 다시 focus를 클릭 할 때 시점이 달라서
-    timestamp가 달라서 포커스 해제가 불가함.
+  - focusedId가 저장되는 시점이랑 다시 focus를 클릭 할 때 시점이 달라서 timestamp가 달라서 포커스 해제가 불가함.
   - timestamp를 동일하게 할 수 있도록 수정
 
 ## 25-02-19(수)
@@ -119,8 +112,7 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
 
 - [x] edit 모드에서 수정 후 외부 클릭 시 저장을 해야됨
 
-  현재 blur가 동작 안하고 있고, mousedown에서 focus가 바뀌면서 edit이 취소되고
-  있음
+  현재 blur가 동작 안하고 있고, mousedown에서 focus가 바뀌면서 edit이 취소되고 있음
 
 - ~~[ ] focus는 우리가 정의한 상태로만 관리~~
 - ~~[ ] window에서 enter keyevent 를 수신하도록 수정~~
@@ -128,8 +120,7 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
 ## 25-02-05(수)
 
 - [x] 현재 focus를 전역 상태로 옮기기
-  - [x] 버그)한 아이콘을 엔터로 수정하고, 다른 아이콘 클릭 후 엔터 시에 첫
-        아이콘이 수정모드로 변경됨
+  - [x] 버그)한 아이콘을 엔터로 수정하고, 다른 아이콘 클릭 후 엔터 시에 첫 아이콘이 수정모드로 변경됨
 - [x] 전역상태로 Edit 상태 관리하도록 수정
 - [ ] focus는 우리가 정의한 상태로만 관리
 - [ ] window에서 enter keyevent 를 수신하도록 수정
@@ -164,8 +155,7 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
 
 ## 24-11-27
 
-- useFolderUp 만들다가 folder에서 mouseup 시에 이벤트가 발생 안하는 이슈
-  수정해야함
+- useFolderUp 만들다가 folder에서 mouseup 시에 이벤트가 발생 안하는 이슈 수정해야함
 
 ## 24-11-30
 
@@ -187,7 +177,9 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
 
 - ContextMenu - 우클릭 처리
 
-  - 빈 공간일 때 CreateFolder --> 폴더 생기고, 아이콘 밑에 input CreateBookmark
+  - 빈 공간일 때
+    CreateFolder --> 폴더 생기고, 아이콘 밑에 input
+    CreateBookmark
   - 파일일 때
     - Edit
       - 폴더일 때 -> 이름만 변경 가능
@@ -204,7 +196,9 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
 
 - ContextMenu - 우클릭 처리
 
-  - 빈 공간일 때 CreateFolder --> 폴더 생기고, 아이콘 밑에 input CreateBookmark
+  - 빈 공간일 때
+    CreateFolder --> 폴더 생기고, 아이콘 밑에 input
+    CreateBookmark
   - 파일일 때
 
     - 포커스가 포함된 파일 일때
@@ -223,12 +217,15 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
 
   - 파일일 때
 
-    - 포커스가 1개일 때 수정 삭제
+    - 포커스가 1개일 때
+      수정
+      삭제
 
-    - 포커스가 여러개일 때 삭제
+    - 포커스가 여러개일 때
+      삭제
 
-    - 포커스가 안된 파일일 때 새로운 파일을 포커스로 설정하고, "포커스가 1개일
-      때" 케이스 처리
+    - 포커스가 안된 파일일 때
+      새로운 파일을 포커스로 설정하고, "포커스가 1개일 때" 케이스 처리
 
 ## 24-12-21
 
@@ -238,13 +235,16 @@ https://www.figma.com/design/0OMnLwnx8dWrKzhyGZe1nA/Apple-Design-Resources---mac
 
 - 리팩토링 제안
   - 앱 구석구석 박혀있는 이벤트들을 종합해서 관리할 필요성을 느낌
-  - 여러개로 나뉘어져 있는 스토어들의 값이 결국에 한번에 쓰이고 있는데 이
-    스토어들이 굳이? 나뉘어져 있어야하는가? 에 대한 고민
+  - 여러개로 나뉘어져 있는 스토어들의 값이 결국에 한번에 쓰이고 있는데 이 스토어들이 굳이? 나뉘어져 있어야하는가? 에 대한 고민
     - 일단 스토어를 하나로 합쳐보고 액션(이벤트)들을 새로 정의하면 좋을것 같음.
 
-specific click event -> observer -> Folder(subscriber) -> method ->
-Modal(subscriber) -> method -> Desktop(subscriber) -> method ->
-Something(subscriber) -> method context
+specific click event ->
+observer
+-> Folder(subscriber) -> method
+-> Modal(subscriber) -> method
+-> Desktop(subscriber) -> method
+-> Something(subscriber) -> method
+context
 
 1. 이벤트가 너무 흩어져 있다.
 2. 이벤트가 처리하는 데이터의 흐름이 파악이 안된다.
@@ -281,16 +281,27 @@ isEditing => 타겟 1개를 input
 - 놓치는 곳 없이 다 걸 수 있는가?
 - 현재 구조로 되지 않겠다.
 - 1. event를 관리해야하지 않을까?
-- 2. 원본 상태가 있는데 각 스토어에서는 원본 상태가아니라 원본 상태를 기준으로
-     한 파생 상태를 사용하고 있다.
+- 2. 원본 상태가 있는데 각 스토어에서는 원본 상태가아니라 원본 상태를 기준으로 한 파생 상태를 사용하고 있다.
      - 이걸 해결하고 싶다.
      - focuseStore id만 가지고 있어서 -> getTree(id)
 
-fileList : // a - b -c -d -e { [a-id]: a [b-id]: b [c-id]: c [d-id]: d [e-id] }
+fileList : // a - b -c -d -e
+{
+[a-id]: a
+[b-id]: b
+[c-id]: c
+[d-id]: d
+[e-id]
+}
 
-{ isEditing: [id-id-id], isDragging: ["1-B`", "2-B`"] }
+{
+isEditing: [id-id-id],
+isDragging: ["1-B`", "2-B`"]
+}
 
-isEditing(){ return Object.entry.flatmap.foreach }
+isEditing(){
+return Object.entry.flatmap.foreach
+}
 
 ```
 
@@ -335,8 +346,16 @@ const customHook = () => {
 }
 ```
 
-onContextClick = () => { // } contextStore = { subscribeWithSelector({ position,
-setPosition, }) } useEffect(()=>{},[data])
+onContextClick = () => {
+//
+}
+contextStore = {
+subscribeWithSelector({
+position,
+setPosition,
+})
+}
+useEffect(()=>{},[data])
 
 // contextStore.subscribe(state => state.flag, 다른 스토어의 액션)
 
